@@ -8,10 +8,10 @@ objetivo = Blueprint('objetivo', __name__)
 def ACrearObjetivo():
     #POST/PUT parameters
     params = request.get_json()
-    results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
+    results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    iObjetivo = model.Objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    iObjetivo = objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
     session.add(iObjetivo)
     session.commit()
 
@@ -36,8 +36,8 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     
-    iObjetivo = Objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
-    session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo).\
+    iObjetivo = objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    session.query(objetivo).filter(objetivo.idObjetivo == idObjetivo).\
         update({'descripcion' : (iObjetivo.descripcion) })
     session.commit()
         
@@ -61,6 +61,7 @@ def VCrearObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+    res['idPila'] = [{'idPila':idPila}]
 
     #Action code ends here
     return json.dumps(res)
@@ -74,12 +75,12 @@ def VObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
-    iObjetivo = Objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
-    vObj = session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo).all()
-    return vObj
+    idObjetivo = int(request.args['idObjetivo'])
+    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
+    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
     
-    res['idPila'] = 1 
-
+    
+    
     #Action code ends here
     return json.dumps(res)
 

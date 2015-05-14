@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, Blueprint, json
-from model import accion
+#from base import db, Actor, Accion, Objetivo
+#from base import *
 
 accion = Blueprint('accion', __name__)
 
@@ -59,7 +60,10 @@ def VAccion():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
-    res['idPila'] = 1 
+    idAccion = int(request.args['idAccion'])
+    acc = accion.query.filter_by(idAccion=idAccion).first()
+    res['accion'] =  {'idAccion':acc.idAccion, 'descripcion':acc.descripcion}
+    
 
     #Action code ends here
     return json.dumps(res)

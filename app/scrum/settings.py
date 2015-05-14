@@ -8,7 +8,7 @@ DATABASE = {
             'drivername': 'postgres',
             'host': 'localhost',
             'port': '5432',
-            'username': 'postgres',
-            'password': 'meggie123',
-            'database': 'mydb'
+            'username': 'apmwsc',
+            'password': 'safepassword',
+            'database': 'apmwsc'
             }
