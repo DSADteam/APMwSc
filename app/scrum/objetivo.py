@@ -8,9 +8,12 @@ objetivo = Blueprint('objetivo', __name__)
 def ACrearObjetivo():
     #POST/PUT parameters
     params = request.get_json()
-    results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
+    results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    iObjetivo = objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    session.add(iObjetivo)
+    session.commit()
 
     idPila = 1
     res['label'] = res['label'] + '/' + str(idPila)
@@ -32,7 +35,12 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    
+    iObjetivo = objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    session.query(objetivo).filter(objetivo.idObjetivo == idObjetivo).\
+        update({'descripcion' : (iObjetivo.descripcion) })
+    session.commit()
+        
     idPila = 1
     res['label'] = res['label'] + '/' + str(idPila)
 
@@ -53,6 +61,7 @@ def VCrearObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+    res['idPila'] = [{'idPila':idPila}]
 
     #Action code ends here
     return json.dumps(res)
@@ -65,9 +74,13 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-    res['idPila'] = 1 
-
+    
+    idObjetivo = int(request.args['idObjetivo'])
+    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
+    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
+    
+    
+    
     #Action code ends here
     return json.dumps(res)
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+#yyession, Blueprint, json
+#from base import *
 from flask import request, session, Blueprint, json
-
 actor = Blueprint('actor', __name__)
 
 
@@ -11,8 +12,11 @@ def ACrearActor():
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
-    idPila = 1
+    from base import db, Actor
+    oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
+    session.add(oActor)
+    session.commit()
+  
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
@@ -32,8 +36,16 @@ def AModifActor():
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    from base import db, Actor
+    oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
+    session.query(actor).filter(actor.idactor == oActor.idactor).\
+        update({'descripcion' : (oActor.descripcion) })
+    session.commit()
 
-    idPila = 1
+    session.query(actor).filter(accion.idactor == oActor.idactor).\
+        update({'nombre' : (oActor.nombre) })
+    session.commit()
+
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
@@ -52,8 +64,11 @@ def VActor():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    from base import db, Actor
 
-    res['idPila'] = 1 
+    idActor = int(request.args['idActor'])
+    act = actor.query.filter_by(idActor=idActor).first()
+    res['actor'] =  {'idActor':act.idActor, 'descripcion':act.descripcion}
 
     #Action code ends here
     return json.dumps(res)
@@ -66,6 +81,7 @@ def VCrearActor():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    from base import db, Actor
 
 
     #Action code ends here

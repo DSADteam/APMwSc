@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, Blueprint, json
+#from base import db, Actor, Accion, Objetivo
+#from base import *
 
 accion = Blueprint('accion', __name__)
 
@@ -11,8 +13,10 @@ def ACrearAccion():
     results = [{'label':'/VProducto', 'msg':['Acción creada']}, {'label':'/VCrearAccion', 'msg':['Error al crear acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    oAccion = accion(params['descripcion'],params['idAccion'], params['idPila'])
+    session.add(oAccion)
+    session.commit()
 
-    idPila = 1
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
@@ -32,7 +36,10 @@ def AModifAccion():
     results = [{'label':'/VProducto', 'msg':['Acción actualizada']}, {'label':'/VAccion', 'msg':['Error al modificar acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    oAccion = accion(params['descripcion'],params['idAccion'], params['idPila'])
+    session.query(accion).filter(accion.idAccion == oAccion.idAccion).\
+        update({'descripcion' : (oAccion.descripcion) })
+    session.commit()
     idPila = 1
     res['label'] = res['label'] + '/' + str(idPila)
 
@@ -53,7 +60,10 @@ def VAccion():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
-    res['idPila'] = 1 
+    idAccion = int(request.args['idAccion'])
+    acc = accion.query.filter_by(idAccion=idAccion).first()
+    res['accion'] =  {'idAccion':acc.idAccion, 'descripcion':acc.descripcion}
+    
 
     #Action code ends here
     return json.dumps(res)
