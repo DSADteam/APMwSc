@@ -11,6 +11,9 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    iObjetivo = model.Objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    session.add(iObjetivo)
+    session.commit()
 
     idPila = 1
     res['label'] = res['label'] + '/' + str(idPila)
@@ -32,7 +35,12 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    
+    iObjetivo = Objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo).\
+        update({'descripcion' : (iObjetivo.descripcion) })
+    session.commit()
+        
     idPila = 1
     res['label'] = res['label'] + '/' + str(idPila)
 
@@ -65,7 +73,11 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
+    
+    iObjetivo = Objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
+    vObj = session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo).all()
+    return vObj
+    
     res['idPila'] = 1 
 
     #Action code ends here
