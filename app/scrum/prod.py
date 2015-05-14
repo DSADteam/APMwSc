@@ -22,7 +22,8 @@ def ACrearProducto():
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    
+    #En descripcion esta el contenido
 
     #Action code ends here
     if "actor" in res:
@@ -41,7 +42,10 @@ def AModifProducto():
     results = [{'label':'/VProductos', 'msg':['Producto actualizado']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    print(params)
+    producto = product(description=params['descripcion'])
+    session.add(producto)
+    session.commit()
 
     #Action code ends here
     if "actor" in res:
@@ -59,8 +63,8 @@ def VCrearProducto():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-
+    params = request.get_json()
+    print(params)
     #Action code ends here
     return json.dumps(res)
 
@@ -92,19 +96,18 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
+
     res['actor']=session['actor'] #Forzado de actor
 
     res['data0'] = []
     result = engine.execute("select * from \"Products\";")
     if result!="":
         for row in result:
-            print(type(row.idproduct))
             res['data0'].append({'idPila':row.idproduct,'nombre':row.description})
     else:
             print("Empty query!")
     
-    #res['data0'] = [{'idPila':1, 'nombre':'Pagos en línea'}, {'idPila':2, 'nombre':'Recomendaciones de playas'}, {'idPila':3, 'nombre':'Tu taxi seguro'}, ]
-    print(res)
     #Action code ends here
     return json.dumps(res)
 
@@ -113,6 +116,5 @@ def VProductos():
 
 
 #Use case code starts here
-
 
 #Use case code ends here
