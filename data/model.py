@@ -4,7 +4,7 @@ from flask import Flask
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint,UniqueConstraint
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint, UniqueConstraint, Sequence
 
 
 
@@ -17,7 +17,7 @@ db = declarative_base()
 #Clase para pila de productos
 class product(db):
     __tablename__ = 'Products'
-    idproduct     = Column(Integer, primary_key = True)
+    idproduct     = Column(Integer, primary_key = True) #autoincremento
     description   = Column(String(255),  unique = True)
 
     #Backrefs
@@ -25,8 +25,8 @@ class product(db):
     # actions    = relationship('ProductActions'   ,backref='Products')
     # objectives = relationship('ProductObjectives',backref='Products')
 
-    def __init__(self,idproduct,description):
-        self.idproduct   = idproduct
+    def __init__(self,description):
+        #self.idproduct   = idproduct
         self.description = description
 
 
@@ -79,7 +79,7 @@ class productObjectives(db):
 
 
 def main():
-    engine = create_engine(URL(*data.settings.DATABASE))
+    engine = create_engine(URL(**data.settings.DATABASE))
     db.metadata.drop_all(engine)
     db.metadata.create_all(engine)
 
@@ -87,7 +87,7 @@ def main():
     session = DBSession()
     for i in range(1,5):
         mensaje = "Soy el producto "+ str(i)
-        producto = product(idproduct=i,description=mensaje)
+        producto = product(description=mensaje)
         session.add(producto)
         session.commit()
 
