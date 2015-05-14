@@ -45,7 +45,8 @@ scrumModule.controller('VProductosController',
       };
 
       $scope.VProducto0 = function(idPila) {
-        $location.path('/VProducto/'+((typeof idPila === 'object')?JSON.stringify(idPila):idPila));
+        $location.path('/VProducto/'+
+          ((typeof idPila === 'object')?JSON.stringify(idPila):idPila));
       };
 
     }]);

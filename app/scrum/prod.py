@@ -1,13 +1,24 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, Blueprint, json
+import data.model 
+import data.settings
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+
 
 prod = Blueprint('prod', __name__)
 
+
+engine = create_engine(URL(**data.settings.DATABASE))
+DBSession = sessionmaker(bind = engine)
+s = DBSession()
 
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
     #POST/PUT parameters
     params = request.get_json()
+
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
@@ -81,9 +92,19 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    res['actor']=session['actor'] #Forzado de actor
 
-    res['data0'] = [{'idPila':1, 'nombre':'Pagos en línea'}, {'idPila':2, 'nombre':'Recomendaciones de playas'}, {'idPila':3, 'nombre':'Tu taxi seguro'}, ]
-
+    res['data0'] = []
+    result = engine.execute("select * from \"Products\";")
+    if result!="":
+        for row in result:
+            print(type(row.idproduct))
+            res['data0'].append({'idPila':row.idproduct,'nombre':row.description})
+    else:
+            print("Empty query!")
+    
+    #res['data0'] = [{'idPila':1, 'nombre':'Pagos en línea'}, {'idPila':2, 'nombre':'Recomendaciones de playas'}, {'idPila':3, 'nombre':'Tu taxi seguro'}, ]
+    print(res)
     #Action code ends here
     return json.dumps(res)
 
