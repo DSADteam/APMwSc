@@ -27,6 +27,20 @@ def make_session_permanent():
 def root():
     return app.send_static_file('index.html')
 
+@manager.command
+def createdb():
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy import create_engine
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy.orm import sessionmaker
+
+    engine = create_engine(URL(**app.config['DATABASE']))
+    db.metadata.drop_all(engine)
+    db.metadata.create_all(engine)
+
+    DBSession = sessionmaker(bind = engine)
+    session = DBSession()
+
 from app.scrum.ident import ident
 app.register_blueprint(ident)
 from app.scrum.prod import prod
@@ -57,42 +71,41 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
+
+#Clase para pila de productos
+
 class Producto(db.Model):
-    
     __tablename__ = 'Productos'
-    idPila = db.Column(db.Integer, primary_key = True)
-    descripcion = db.Column(db.String(500), unique = True)
-    
-    
-    
-    ''' Metodo init
-        Constructor del producto
-    ''' 
-    
-    def __init__(self, idPila, descripcion):
-        
-        self.idPila = idPila
-        self.descripcion = descripcion
+    idProducto    = db.Column(Integer, primary_key = True) #autoincremento
+    descripcion   = db.Column(String(500),  unique = True)
+
+    #Backrefs
+    # roles      = relationship('ProductRoles'     ,backref='Products')
+    # actions    = relationship('ProductActions'   ,backref='Products')
+    # objectives = relationship('ProductObjectives',backref='Products')
+
+    def __init__(self,descripcion):
+        self.description = descripcion
 
 # Clase Accion
 
 class Accion(db.Model):
     
     __tablename__ = 'Acciones'
-    idAccion = db.Column(db.Integer, primary_key = True)
-    descripcion = db.Column(db.String(500), unique = True)
-    idPila = db.Column(db.Integer, db.ForeignKey('Productos.idPila'))
-    producto = db.relationship('Producto', backref = db.backref('acciones', lazy = 'dynamic'))
+    idAccion      = db.Column(db.Integer, primary_key = True)
+    descripcion   = db.Column(db.String(500), unique = True)
+    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    producto      = db.relationship('Producto', backref = db.backref('acciones', lazy = 'dynamic'))
     
     ''' Metodo init
         Constructor de accion
     ''' 
     
-    def __init__(self, idAccion, descripcion, idPila):
+    def __init__(self, idAccion, descripcion, idProducto):
         
         self.idAccion = idAccion
         self.descripcion = descripcion
-        self.idPila = idPila
+        self.idProducto = idProducto
 
 # Clase Actor
 
@@ -102,18 +115,18 @@ class Actor(db.Model):
     idActor = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(50), unique = True)
     descripcion = db.Column(db.String(500), unique = True)
-    idPila = db.Column(db.Integer, db.ForeignKey('Productos.idPila'))
+    idProducto = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
         Constructor del actor
     ''' 
     
-    def __init__(self, idActor, nombre, descripcion, idPila):
+    def __init__(self, idActor, nombre, descripcion, idProducto):
         
         self.idActor = idActor
         self.nombre = nombre
         self.descripcion = descripcion
-        self.idPila = idPila
+        self.idProducto = idProducto
      
 # Clase Usuario
 
@@ -122,23 +135,26 @@ class Objetivo(db.Model):
     __tablename__ = 'Objetivos'
     idObjetivo = db.Column(db.Integer, primary_key = True)
     descripcion = db.Column(db.String(500), unique = True)
-    idPila = db.Column(db.Integer, db.ForeignKey('Productos.idPila'))
+    idProducto = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
     
     ''' Metodo init
         Constructor del objetivo
     ''' 
     
-    def __init__(self, idObjetivo, descripcion, idPila):
+    def __init__(self, idObjetivo, descripcion, idProducto):
         
         self.idObjetivo = idObjetivo
         self.descripcion = descripcion
-        self.idPila = idPila
+        self.idProducto = idProducto
 
-#Application code ends here
+
+
+
 
 if __name__ == '__main__':
     app.config.update(
       SECRET_KEY = repr(SystemRandom().random())
     )
     manager.run()
+
