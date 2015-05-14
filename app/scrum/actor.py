@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, Blueprint, json
+from model import actor
 
 actor = Blueprint('actor', __name__)
 
@@ -11,8 +12,10 @@ def ACrearActor():
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
-    idPila = 1
+    oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
+    session.add(oActor)
+    session.commit()
+  
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
@@ -32,8 +35,15 @@ def AModifActor():
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
+    session.query(actor).filter(actor.idactor == oActor.idactor).\
+        update({'descripcion' : (oActor.descripcion) })
+    session.commit()
 
-    idPila = 1
+    session.query(actor).filter(accion.idactor == oActor.idactor).\
+        update({'nombre' : (oActor.nombre) })
+    session.commit()
+
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
