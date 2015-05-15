@@ -13,11 +13,11 @@ def ACrearAccion():
     results = [{'label':'/VProducto', 'msg':['Acción creada']}, {'label':'/VCrearAccion', 'msg':['Error al crear acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    oAccion = accion(params['descripcion'],params['idAccion'], params['idPila'])
-    session.add(oAccion)
-    session.commit()
-
-    res['label'] = res['label'] + '/' + str(idPila)
+  
+    print(params)
+    acc=clsAccion(session=session)
+    acc.insertar(params['idAccion'],params['descripcion'])
+   
 
     #Action code ends here
     if "actor" in res:
@@ -36,12 +36,14 @@ def AModifAccion():
     results = [{'label':'/VProducto', 'msg':['Acción actualizada']}, {'label':'/VAccion', 'msg':['Error al modificar acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    oAccion = accion(params['descripcion'],params['idAccion'], params['idPila'])
-    session.query(accion).filter(accion.idAccion == oAccion.idAccion).\
-        update({'descripcion' : (oAccion.descripcion) })
+    
+    session.query(Accion).filter(Accion.idAccion == int(params['idAccion'])).\
+        update({'descripcion' : (params['descripcion']) })
     session.commit()
-    idPila = 1
-    res['label'] = res['label'] + '/' + str(idPila)
+    
+    
+    #idPila = 1
+    #res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -83,7 +85,27 @@ def VCrearAccion():
 
 
 
+class clsAccion():
+        def __init__(self,engine=None,session=None):
+            self.engine  = engine
+            self.session = session
 
+        def insertar(self,descripcion,idProducto):
+            
+            newAccion = Accion(descripcion,idProducto)
+            session.add(newAccion)
+            session.commit()
+        
+        def listarAcciones(self):
+            res = []
+            result = self.engine.execute("select * from \"Acciones\";")
+            if result!="":
+                for row in result:
+                    res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
+                else:
+                    print("Empty query!")
+            
+            return res
 
 #Use case code starts here
 
