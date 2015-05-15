@@ -83,8 +83,8 @@ engine = create_engine(URL(**app.config['DATABASE']))
 
 class Producto(db.Model):
     __tablename__ = 'Productos'
-    idProducto= db.Column(Integer, primary_key = True) #autoincremento
-    descripcion= db.Column(String(500),  unique = True)
+    idProducto  = db.Column(Integer, primary_key = True) #autoincremento
+    descripcion = db.Column(String(500),  unique = True)
 
     #Backrefs
     # roles      = relationship('ProductRoles'     ,backref='Products')
@@ -103,7 +103,7 @@ class Accion(db.Model):
     
     __tablename__ = 'Acciones'
     idAccion      = db.Column(db.Integer, primary_key = True)
-    descripcion   = db.Column(db.String(500), unique = True)
+    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
     idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('acciones', lazy = 'dynamic'))
     
@@ -111,52 +111,46 @@ class Accion(db.Model):
         Constructor de accion
     ''' 
     
-    def __init__(self, idAccion, descripcion, idProducto):
-        
-        self.idAccion = idAccion
-        self.descripcioodun = descripcion
-        self.idProducto = idPrcto
+    def __init__(self, descripcion, idProducto):
+        self.descripcion = descripcion
+        self.idProducto  = idProducto
 
 # Clase Actor
 
 class Actor(db.Model):
     
     __tablename__ = 'Actores'
-    idActor = db.Column(db.Integer, primary_key = True)
-    nombre = db.Column(db.String(50), unique = True)
-    descripcion = db.Column(db.String(500), unique = True)
-    idProducto = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
-    producto = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
+    idActor       = db.Column(db.Integer    , primary_key = True)
+    nombre        = db.Column(db.String(50) , unique = False, nullable=False)
+    descripcion   = db.Column(db.String(500), unique = True)
+    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
         Constructor del actor
     ''' 
     
-    def __init__(self, idActor, nombre, descripcion, idProducto):
-        
-        self.idActor = idActor
-        self.nombre = nombre
+    def __init__(self, nombre, descripcion, idProducto):
+        self.nombre      = nombre
         self.descripcion = descripcion
-        self.idProducto = idProducto
+        self.idProducto  = idProducto
      
 # Clase Usuario
 
 class Objetivo(db.Model):
-    
     __tablename__ = 'Objetivos'
-    idObjetivo = db.Column(db.Integer, primary_key = True)
-    descripcion = db.Column(db.String(500), unique = True)
-    idProducto = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
-    producto = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
+    idObjetivo    = db.Column(db.Integer, primary_key = True)
+    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
+    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    producto      = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
     
     ''' Metodo init
         Constructor del objetivo
     ''' 
     
     def __init__(self, idObjetivo, descripcion, idProducto):
-        
-        self.idObjetivo = idObjetivo
+        self.idObjetivo  = idObjetivo
         self.descripcion = descripcion
-        self.idProducto = idProducto
+        self.idProducto  = idProducto
 
 
 

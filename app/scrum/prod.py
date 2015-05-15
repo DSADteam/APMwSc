@@ -30,9 +30,12 @@ def ACrearProducto():
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    newProd = Producto(params['descripcion'])
-    session.add(newProd)
-    session.commit()
+    # newProd = Producto(params['descripcion'])
+    # session.add(newProd)
+    # session.commit()
+    print(params)
+    prd=clsProducto(session=session)
+    prd.insertar(params['descripcion'])
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -94,6 +97,9 @@ def VProducto():
     res['data7'] = [{'idObjetivo':1, 'descripcion':'Objetivo 1'}, {'idObjetivo':2, 'descripcion':'Objetivo 2'}, {'idObjetivo':3, 'descripcion':'Objetivo 3'}, {'idObjetivo':4, 'descripcion':'Objetivo 4'}, {'idObjetivo':5, 'descripcion':'Objetivo 5'},  ]
     res['idPila'] = idPila    
 
+    clsActor()
+    res['data3']
+
     #Action code ends here
     return json.dumps(res)
 
@@ -105,18 +111,15 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-
-    #res['data0'] = [{'idPila':1, 'nombre':'Pagos en línea'}, {'idPila':2, 'nombre':'Recomendaciones de playas'}, {'idPila':3, 'nombre':'Tu taxi seguro'}, ]
     
-
-     #cAUSANTE DEL CONFICLTO
-    #res['actor']=session['actor'] #Forzado de actor
-    
+<<<<<<< HEAD
     prd=clsProducto(engine)
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     print(prd)
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+=======
+    prd=clsProducto(engine=engine)
+>>>>>>> origin/Javier
     res['data0'] = prd.listarProductos()
     
     #res['data0'].append({'idPila':"WTF",'nombre':"otroWTF"})
@@ -124,10 +127,23 @@ def VProductos():
     return json.dumps(res)
 
 class clsProducto():
+<<<<<<< HEAD
         def __init__(self, engine):
             self.engine=engine
         
         def listarProductos(self  ):
+=======
+        def __init__(self,engine=None,session=None):
+            self.engine  = engine
+            self.session = session
+
+        def insertar(self,descripcion):
+            newProd = Producto(descripcion)
+            session.add(newProd)
+            session.commit()
+        
+        def listarProductos(self):
+>>>>>>> origin/Javier
             res = []
             result = self.engine.execute("select * from \"Productos\";")
             if result!="":
