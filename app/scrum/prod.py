@@ -30,9 +30,11 @@ def ACrearProducto():
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    newProd = Producto(params['descripcion'])
-    session.add(newProd)
-    session.commit()
+    # newProd = Producto(params['descripcion'])
+    # session.add(newProd)
+    # session.commit()
+    prd=clsProducto(session=session)
+    prd.insertar(params['descripcion'])
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -105,30 +107,27 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-
-    #res['data0'] = [{'idPila':1, 'nombre':'Pagos en línea'}, {'idPila':2, 'nombre':'Recomendaciones de playas'}, {'idPila':3, 'nombre':'Tu taxi seguro'}, ]
     
-
-     #cAUSANTE DEL CONFICLTO
-    #res['actor']=session['actor'] #Forzado de actor
-    
-    prd=clsProducto()
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    print(prd)
-    res['data0'] = prd.listarProductos(engine)
+    prd=clsProducto(engine=engine)
+    res['data0'] = prd.listarProductos()
     
     #res['data0'].append({'idPila':"WTF",'nombre':"otroWTF"})
     #Action code ends here'''
     return json.dumps(res)
 
-def clsProducto():
-        def __init__(self):
-            pass
+class clsProducto():
+        def __init__(self,engine=None,session=None):
+            self.engine  = engine
+            self.session = session
+
+        def insertar(self,descripcion):
+            newProd = Producto(descripcion)
+            session.add(newProd)
+            session.commit()
         
-        def listarProductos(self, engine ):
+        def listarProductos(self):
             res = []
-            result = engine.execute("select * from \"Productos\";")
+            result = self.engine.execute("select * from \"Productos\";")
             if result!="":
                 for row in result:
                     res.append({'idPila':row.idProducto,'nombre':row.descripcion})
