@@ -1,17 +1,36 @@
 # -*- coding: utf-8 -*-
+
+#Agregando proyect root
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+print(dir)
+sys.path.append(dir)
+
+#Dependencias flask
 from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
 
+#Definicion de blueprint y bd
 prod = Blueprint('prod', __name__)
+from base import Producto
 
+#engine = create_engine(URL(**data.settings.DATABASE))
+#DBSession = sessionmaker(bind = engine)
+#s = DBSession()
 
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
     #POST/PUT parameters
     params = request.get_json()
+
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    
+    #En descripcion esta el contenido
 
     #Action code ends here
     if "actor" in res:
