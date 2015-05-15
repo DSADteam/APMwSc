@@ -113,22 +113,23 @@ def VProductos():
      #cAUSANTE DEL CONFICLTO
     #res['actor']=session['actor'] #Forzado de actor
     
-    prd=clsProducto()
+    prd=clsProducto(engine)
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     print(prd)
-    res['data0'] = prd.listarProductos(engine)
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    res['data0'] = prd.listarProductos()
     
     #res['data0'].append({'idPila':"WTF",'nombre':"otroWTF"})
     #Action code ends here'''
     return json.dumps(res)
 
-def clsProducto():
-        def __init__(self):
-            pass
+class clsProducto():
+        def __init__(self, engine):
+            self.engine=engine
         
-        def listarProductos(self, engine ):
+        def listarProductos(self  ):
             res = []
-            result = engine.execute("select * from \"Productos\";")
+            result = self.engine.execute("select * from \"Productos\";")
             if result!="":
                 for row in result:
                     res.append({'idPila':row.idProducto,'nombre':row.descripcion})
