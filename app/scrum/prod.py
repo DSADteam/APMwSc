@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
+
+#Agregando proyect root
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+print(dir)
+sys.path.append(dir)
+
+#Dependencias flask
 from flask import request, session, Blueprint, json
-import data.model 
-import data.settings
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 
-
+#Definicion de blueprint y bd
 prod = Blueprint('prod', __name__)
+from base import Producto
 
-
-engine = create_engine(URL(**data.settings.DATABASE))
-DBSession = sessionmaker(bind = engine)
-s = DBSession()
+#engine = create_engine(URL(**data.settings.DATABASE))
+#DBSession = sessionmaker(bind = engine)
+#s = DBSession()
 
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
@@ -97,7 +104,7 @@ def VProductos():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
-
+    """
     res['actor']=session['actor'] #Forzado de actor
 
     res['data0'] = []
@@ -107,6 +114,7 @@ def VProductos():
             res['data0'].append({'idPila':row.idproduct,'nombre':row.description})
     else:
             print("Empty query!")
+    """
     
     #Action code ends here
     return json.dumps(res)
