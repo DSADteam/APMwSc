@@ -8,6 +8,10 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 from flask.ext.migrate import Migrate, MigrateCommand
+####
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import relationship, backref, sessionmaker
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint, UniqueConstraint, Sequence
 
 app = Flask(__name__, static_url_path='')
 manager = Manager(app)
@@ -16,6 +20,8 @@ manager.add_command("runserver", Server(
     use_reloader = True,
     host = '127.0.0.1')
 )
+
+#
 
 @app.before_request
 def make_session_permanent():
@@ -71,13 +77,14 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
+engine = create_engine(URL(**app.config['DATABASE']))
 
 #Clase para pila de productos
 
 class Producto(db.Model):
     __tablename__ = 'Productos'
-    idProducto    = db.Column(Integer, primary_key = True) #autoincremento
-    descripcion   = db.Column(String(500),  unique = True)
+    idProducto= db.Column(Integer, primary_key = True) #autoincremento
+    descripcion= db.Column(String(500),  unique = True)
 
     #Backrefs
     # roles      = relationship('ProductRoles'     ,backref='Products')
@@ -86,6 +93,9 @@ class Producto(db.Model):
 
     def __init__(self,descripcion):
         self.description = descripcion
+        
+    def getALL(self):
+        return engine.execute("select * from \"Products\";")
 
 # Clase Accion
 
@@ -104,8 +114,8 @@ class Accion(db.Model):
     def __init__(self, idAccion, descripcion, idProducto):
         
         self.idAccion = idAccion
-        self.descripcion = descripcion
-        self.idProducto = idProducto
+        self.descripcioodun = descripcion
+        self.idProducto = idPrcto
 
 # Clase Actor
 
