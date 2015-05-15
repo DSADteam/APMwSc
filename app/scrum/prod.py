@@ -112,21 +112,30 @@ def VProductos():
 
      #cAUSANTE DEL CONFICLTO
     #res['actor']=session['actor'] #Forzado de actor
-
-    res['data0'] = []
-    result = engine.execute("select * from \"Productos\";")
-    if result!="":
-        for row in result:
-            res['data0'].append({'idPila':row.idProducto,'nombre':row.descripcion})
-    else:
-            print("Empty query!")
+    
+    prd=clsProducto()
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print(prd)
+    res['data0'] = prd.listarProductos(engine)
     
     #res['data0'].append({'idPila':"WTF",'nombre':"otroWTF"})
     #Action code ends here'''
     return json.dumps(res)
 
-
-
+def clsProducto():
+        def __init__(self):
+            pass
+        
+        def listarProductos(self, engine ):
+            res = []
+            result = engine.execute("select * from \"Productos\";")
+            if result!="":
+                for row in result:
+                    res.append({'idPila':row.idProducto,'nombre':row.descripcion})
+                else:
+                    print("Empty query!")
+            
+            return res
 
 
 #Use case code starts here
