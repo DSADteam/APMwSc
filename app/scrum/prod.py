@@ -112,14 +112,7 @@ def VProductos():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
-<<<<<<< HEAD
-    prd=clsProducto(engine)
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    print(prd)
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-=======
     prd=clsProducto(engine=engine)
->>>>>>> origin/Javier
     res['data0'] = prd.listarProductos()
     
     #res['data0'].append({'idPila':"WTF",'nombre':"otroWTF"})
@@ -127,12 +120,6 @@ def VProductos():
     return json.dumps(res)
 
 class clsProducto():
-<<<<<<< HEAD
-        def __init__(self, engine):
-            self.engine=engine
-        
-        def listarProductos(self  ):
-=======
         def __init__(self,engine=None,session=None):
             self.engine  = engine
             self.session = session
@@ -143,7 +130,6 @@ class clsProducto():
             session.commit()
         
         def listarProductos(self):
->>>>>>> origin/Javier
             res = []
             result = self.engine.execute("select * from \"Productos\";")
             if result!="":
