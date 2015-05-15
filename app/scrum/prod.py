@@ -33,9 +33,13 @@ def ACrearProducto():
     # newProd = Producto(params['descripcion'])
     # session.add(newProd)
     # session.commit()
+    '''
     print(params)
     prd=clsProducto(session=session)
-    prd.insertar(params['descripcion'])
+    prd.insertar(params['descripcion'])'''
+    
+    prod=clsProducto(engine=engine)
+    
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:

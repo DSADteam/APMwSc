@@ -23,11 +23,11 @@ INSERT INTO "Productos" (descripcion) VALUES ('Ingenieria de software');
 INSERT INTO "Acciones" VALUES (1,'Crear repositorio',1);
 INSERT INTO "Acciones" VALUES (2,'Documentar todo',1);
 
-INSERT INTO "Acciones" VALUES (1,'Crear repositorio divertido',2);
-INSERT INTO "Acciones" VALUES (2,'Documentar tablas',2);
+INSERT INTO "Acciones" VALUES (3,'Crear repositorio divertido',2);
+INSERT INTO "Acciones" VALUES (4,'Documentar tablas',2);
 
-INSERT INTO "Acciones" VALUES (3,'Crear repositorio volador',3);
-INSERT INTO "Acciones" VALUES (4,'Documentar cosas',3);
+INSERT INTO "Acciones" VALUES (5,'Crear repositorio volador',3);
+INSERT INTO "Acciones" VALUES (6,'Documentar cosas',3);
 
 INSERT INTO "Actores" VALUES (1,'Developer','Desarrolador de proyecto',1);
 INSERT INTO "Actores" VALUES (2,'Scrum Master','Guia del grupo',1);

@@ -122,7 +122,7 @@ class Actor(db.Model):
     __tablename__ = 'Actores'
     idActor       = db.Column(db.Integer    , primary_key = True)
     nombre        = db.Column(db.String(50) , unique = False, nullable=False)
-    descripcion   = db.Column(db.String(500), unique = True)
+    descripcion   = db.Column(db.String(500), unique = False)
     idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
