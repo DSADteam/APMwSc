@@ -109,7 +109,7 @@ class clsObjetivo():
         
     def obtenerObjProd(self, idProducto):
         res = []
-        result = self.engine.execute("select * from \"Objetivos\" where idProducto = "+str(idProducto)";")
+        result = self.engine.execute("select * from \"Objetivos\" where idProducto = \"+str(idProducto)\" ;")
         if result!="":
             for row in result:
                 res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
