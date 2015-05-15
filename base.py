@@ -77,6 +77,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
+engine = create_engine(URL(**app.config['DATABASE']))
 
 #Clase para pila de productos
 

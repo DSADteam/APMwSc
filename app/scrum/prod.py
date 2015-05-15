@@ -15,53 +15,12 @@ from sqlalchemy.orm import sessionmaker
 
 #Definicion de blueprint y bd
 prod = Blueprint('prod', __name__)
-from base import Producto
-
-
-from flask import Flask, request, session
-from flask.ext.script import Manager, Server
-from random import SystemRandom
-from datetime import timedelta
-import os
-from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy import Column, Integer, String, ForeignKey
-
-from flask.ext.migrate import Migrate, MigrateCommand
-####
-from sqlalchemy.engine.url import URL
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint, UniqueConstraint, Sequence
-
-
-app = Flask(__name__, static_url_path='')
-manager = Manager(app)
-manager.add_command("runserver", Server(
-    use_debugger = True,
-    use_reloader = True,
-    host = '127.0.0.1')
-)
-
-
-app.config['DATABASE'] = {
-            'drivername': 'postgres',
-            'host': 'localhost',
-            'port': '5432',
-            'username': 'apmwsc',
-            'password': 'safepassword',
-            'database': 'apmwsc'
-            }
-
-
+from base import *
 
 #engine = create_engine(URL(**data.settings.DATABASE))
 #DBSession h= sessionmaker(bind = engine)
 #s = DBSession()
 
-engine = create_engine(URL(**app.config['DATABASE']))
-DBSession = sessionmaker(bind = engine)
-
-session = DBSession()
 
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
@@ -155,7 +114,7 @@ def VProductos():
     #res['actor']=session['actor'] #Forzado de actor
 
     res['data0'] = []
-    result = engine.execute("select * from \"Products\";")
+    result = engine.execute("select * from \"Productos\";")
     if result!="":
         for row in result:
             res['data0'].append({'idPila':row.idProducto,'nombre':row.descripcion})
