@@ -26,19 +26,17 @@ from base import *
 def ACrearProducto():
     #POST/PUT parameters
     params = request.get_json()
-
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
     # newProd = Producto(params['descripcion'])
     # session.add(newProd)
     # session.commit()
-    '''
+
     print(params)
-    prd=clsProducto(session=session)
-    prd.insertar(params['descripcion'])'''
-    
-    prod=clsProducto(engine=engine)
+    prd=clsProducto(session=sessionDB)
+    prd.insertar(params['descripcion'])
     
     #Action code ends here
     if "actor" in res:
@@ -47,6 +45,7 @@ def ACrearProducto():
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
+
 
 
 
