@@ -76,10 +76,9 @@ def VObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
-    idObjetivo = int(request.args['idObjetivo'])
-    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
-    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
-    
+   
+    obj = clsObjetivo()
+    obj.obtenerObj(params['idObjetivo'])
     
     
     #Action code ends here
@@ -93,8 +92,9 @@ def VObjetivo():
 class clsObjetivo():
     
     def __init__(self,engine=None,session=None):
-            self.engine  = engine
-            self.session = session
+        
+        self.engine  = engine
+        self.session = session
     
     def insertarObj(self, idObjetivo, descripcion):
         
@@ -103,31 +103,28 @@ class clsObjetivo():
         session.commit()
         
     def modificarObj(self,idObjetivo,descripcion):
+        
         session.query(base.Objetivo).filter(base.Objetivo.idobjetivo == idObjetivo).\
              update({'descripcion' : (descripcion) })
         session.commit()
         
     def obtenerObjProd(self, idProducto):
+        
         res = []
         result = self.engine.execute("select * from \"Objetivos\" where idProducto = \"+str(idProducto)\" ;")
         if result!="":
             for row in result:
                 res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
             
         return res
     
-    def obtenerObj(self, idProducto):
-        res = []
-        result = self.engine.execute("select * from \"Objetivos\";")
-        if result!="":
-            for row in result:
-                res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
-            
+    def obtenerObj(self, idObjetivo):
+        
+        idObjetivo = int(request.args['idObjetivo'])
+        obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
+        res['data7'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
+        
         return res
-    
+
 
 #Use case code ends here
