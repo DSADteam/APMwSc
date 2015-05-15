@@ -23,6 +23,8 @@ manager.add_command("runserver", Server(
 
 #
 
+
+
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -78,6 +80,8 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 engine = create_engine(URL(**app.config['DATABASE']))
+DBSession = sessionmaker(bind = engine)
+sessionDB = DBSession()
 
 #Clase para pila de productos
 
