@@ -33,6 +33,7 @@ def ACrearProducto():
     # newProd = Producto(params['descripcion'])
     # session.add(newProd)
     # session.commit()
+    print(params)
     prd=clsProducto(session=session)
     prd.insertar(params['descripcion'])
     #Action code ends here
@@ -95,6 +96,9 @@ def VProducto():
     res['data5'] = [{'idAccion':1, 'descripcion':'Accion 1'}, {'idAccion':2, 'descripcion':'Accion 2'}, {'idAccion':3, 'descripcion':'Accion 3'}, {'idAccion':4, 'descripcion':'Accion 4'}, ]
     res['data7'] = [{'idObjetivo':1, 'descripcion':'Objetivo 1'}, {'idObjetivo':2, 'descripcion':'Objetivo 2'}, {'idObjetivo':3, 'descripcion':'Objetivo 3'}, {'idObjetivo':4, 'descripcion':'Objetivo 4'}, {'idObjetivo':5, 'descripcion':'Objetivo 5'},  ]
     res['idPila'] = idPila    
+
+    clsActor()
+    res['data3']
 
     #Action code ends here
     return json.dumps(res)
