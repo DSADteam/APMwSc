@@ -27,20 +27,20 @@ class MdlTest(unittest.TestCase):
     #Insert con limite interno en maximo de caracteres
     def testInsertAlmostBig(self):
         string = 'a' * 500
-        self.prod.insertar(string)
-        self.assertTrue(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
+        self.prod.insertar(nombre=string)
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
     
     #Insert con limite externo de maximo de caracteres
     def testInsertNoWayTooBig(self):
         string = 'a' * 501
         self.prod.insertar(string)
-        self.assertFalse(self.prod.existeProducto(descript=string),"Error, producto insertado y encontrado")
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, producto insertado y encontrado")
 
     #Insert con caracteres de utf-8
     def testInsertNiangara(self):
         string = "Producto de investigación de ñandúes y pingüinos para ñiños que usan las letras áéíóúü y @!$*& 888"
         self.prod.insertar(string)
-        self.assertTrue(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
 
     """
         Casos esquina
@@ -49,7 +49,7 @@ class MdlTest(unittest.TestCase):
     def testTildeToTheSquare(self):
         string = "á" * 500
         self.prod.insertar(string)
-        self.assertTrue(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
 
     """
         Casos maliciosos

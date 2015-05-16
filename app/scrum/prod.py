@@ -140,7 +140,7 @@ class clsProducto():
             if comentarioNulo:
                 return False
 
-            estaEnBd       = self.existeProducto(nombre=descripcion)
+            estaEnBd       = self.existeProducto(nombre=nombre)
             longCharValido = len(nombre) <= 500
 
             if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
@@ -154,11 +154,11 @@ class clsProducto():
                 return False
 
         #Funcion booleana, dada un id o descripcion, o ambos, se indica si el objeto esta en la tabla
-        def existeProducto(self,id=None,nombre=None,descript=None):
+        def existeProducto(self,id=None,nombre=None):
             if(id != None and nombre==None):
                 result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+";")
             elif(id ==None and nombre!=None):
-                result  = self.engine.execute("select * from \"Productos\" where nombre=\'"+descript+"\';")
+                result  = self.engine.execute("select * from \"Productos\" where nombre=\'"+nombre+"\';")
             elif(id !=None and nombre!=None):
                 result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+" and nombre=\'"+nombre+"\';")
             else:

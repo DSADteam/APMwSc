@@ -88,7 +88,7 @@ sessionDB = DBSession()
 class Producto(db.Model):
     __tablename__ = 'Productos'
     idProducto  = db.Column(Integer, primary_key = True) #autoincremento
-    nombre = db.Column(String(500),  unique = True, nullable = False)
+    nombre      = db.Column(String(500),  unique = True, nullable = False)
     descripcion = db.Column(String(500),  unique = False)
 
     #Backrefs
