@@ -17,11 +17,6 @@ from sqlalchemy.sql.expression import text
 prod = Blueprint('prod', __name__)
 from base import *
 
-#engine = create_engine(URL(**data.settings.DATABASE))
-#DBSession h= sessionmaker(bind = engine)
-#s = DBSession()
-
-
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
     #POST/PUT parameters
