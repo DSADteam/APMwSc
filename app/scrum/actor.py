@@ -117,13 +117,15 @@ class clsActor():
             result = self.engine.execute("select * from \"Actores\";")
             if result!="":
                 for row in result:
+
                     res.append({'idActor':row.idActor,'descripcion':row.descripcion})
                 else:
                     print("Empty query!")
                     
         def listarActoresprod(self,idProducto):
             res = []
-            result = self.engine.execute("select * from \"Actores\" where idProducto= "+str(idProducto)+" ;")
+            #result = self.engine.execute("select * from \"Actores\" where \'idProducto\'="+str(idProducto)+" ;")
+            result = self.session.query(Actor).filter(Actor.idProducto == idProducto)
             if result!="":
                 for row in result:
                     res.append({'idActor':row.idActor,'descripcion':row.descripcion})

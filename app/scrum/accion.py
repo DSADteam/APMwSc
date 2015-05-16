@@ -116,10 +116,11 @@ class clsAccion():
                     
         def listarAccionesprod(self,idProducto):
             res = []
-            result = self.engine.execute("select * from \"Acciones\" where idProducto= "+str(idProducto)+" ;")
+            #result = self.engine.execute("select * from \"Acciones\" where idProducto= "+str(idProducto)+" ;")
+            result = self.session.query(Accion).filter(Accion.idProducto == idProducto)
             if result!="":
                 for row in result:
-                    res.append({'idAccion':row.idActor,'descripcion':row.descripcion})
+                    res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
                 else:
                     print("Empty query!")
             

@@ -1,7 +1,23 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, Blueprint, json
 
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+sys.path.append(dir)
+
+#Dependencias flask
+from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
+
+#Definicion de blueprint y bd
 objetivo = Blueprint('objetivo', __name__)
+from base import *
+
+
+
 
 
 @objetivo.route('/objetivo/ACrearObjetivo', methods=['POST'])
@@ -109,10 +125,11 @@ class clsObjetivo():
         
     def obtenerObjProd(self, idProducto):
         res = []
-        result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
         if result!="":
             for row in result:
-                res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
             else:
                 print("Empty query!")
             
