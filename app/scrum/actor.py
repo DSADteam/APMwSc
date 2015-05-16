@@ -1,9 +1,21 @@
 # -*- coding: utf-8 -*-
-#yyession, Blueprint, json
-#from base import *
-from flask import request, session, Blueprint, json
-actor = Blueprint('actor', __name__)
 
+#Agregando proyect root
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+sys.path.append(dir)
+
+#Dependencias flask
+from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
+
+#Definicion de blueprint y bd
+actor = Blueprint('actor', __name__)
+from base import *
 
 @actor.route('/actor/ACrearActor', methods=['POST'])
 def ACrearActor():
@@ -97,7 +109,6 @@ class clsActor():
             self.session = session
 
         def insertar(self,idActor, nombre,descripcion):
-            
             newActor = Actor(idActor,nombre,descripcion)
             session.add(newActor)
             session.commit()

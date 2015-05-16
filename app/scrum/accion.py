@@ -1,9 +1,20 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, Blueprint, json
-#from base import db, Actor, Accion, Objetivo
-#from base import *
 
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+sys.path.append(dir)
+
+#Dependencias flask
+from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
+
+#Definicion de blueprint y bd
 accion = Blueprint('accion', __name__)
+from base import *
 
 
 @accion.route('/accion/ACrearAccion', methods=['POST'])
@@ -90,8 +101,7 @@ class clsAccion():
             self.engine  = engine
             self.session = session
 
-        def insertar(self,descripcion,idAccion):
-            
+        def insertar(self,descripcion,idAccion): #####Revisar base.py insertar lleva otro campos
             newAccion = Accion(idAccion, descripcion)
             session.add(newAccion)
             session.commit()
