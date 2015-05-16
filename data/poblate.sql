@@ -15,19 +15,19 @@
 -- INSERT INTO "Users" VALUES('Ascander'    ,'ascander'   ,'holahola7','ascander@correo.com',1,3);
 -- INSERT INTO "Users" VALUES('Jean Carlos' ,'jeanc'      ,'holahola8','jeanc@correo.com'   ,2,2);
 
-INSERT INTO "Productos" (descripcion) VALUES ('Proyecto APMwSc');
-INSERT INTO "Productos" (descripcion) VALUES ('Surfeadores divertido');
-INSERT INTO "Productos" (descripcion) VALUES ('Piedreros asociados');
-INSERT INTO "Productos" (descripcion) VALUES ('Ingenieria de software');
+INSERT INTO "Productos" (nombre,descripcion) VALUES ('Proyecto APMwSc','Metere la cadena de software');
+INSERT INTO "Productos" (nombre,descripcion) VALUES ('Surfeadores divertido','De pana que si');
+INSERT INTO "Productos" (nombre,descripcion) VALUES ('Piedreros asociados','Adoro esta materia');
+INSERT INTO "Productos" (nombre,descripcion) VALUES ('Ingenieria de software','Ojala la abrieran todos los trimestres');
 
 INSERT INTO "Acciones" VALUES (1,'Crear repositorio',1);
 INSERT INTO "Acciones" VALUES (2,'Documentar todo',1);
 
-INSERT INTO "Acciones" VALUES (1,'Crear repositorio divertido',2);
-INSERT INTO "Acciones" VALUES (2,'Documentar tablas',2);
+INSERT INTO "Acciones" VALUES (3,'Crear repositorio divertido',2);
+INSERT INTO "Acciones" VALUES (4,'Documentar tablas',2);
 
-INSERT INTO "Acciones" VALUES (3,'Crear repositorio volador',3);
-INSERT INTO "Acciones" VALUES (4,'Documentar cosas',3);
+INSERT INTO "Acciones" VALUES (5,'Crear repositorio volador',3);
+INSERT INTO "Acciones" VALUES (6,'Documentar cosas',3);
 
 INSERT INTO "Actores" VALUES (1,'Developer','Desarrolador de proyecto',1);
 INSERT INTO "Actores" VALUES (2,'Scrum Master','Guia del grupo',1);

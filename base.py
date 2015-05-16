@@ -23,6 +23,8 @@ manager.add_command("runserver", Server(
 
 #
 
+
+
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -78,21 +80,25 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 engine = create_engine(URL(**app.config['DATABASE']))
+DBSession = sessionmaker(bind = engine)
+sessionDB = DBSession()
 
 #Clase para pila de productos
 
 class Producto(db.Model):
     __tablename__ = 'Productos'
     idProducto  = db.Column(Integer, primary_key = True) #autoincremento
-    descripcion = db.Column(String(500),  unique = True)
+    nombre      = db.Column(String(500),  unique = True, nullable = False)
+    descripcion = db.Column(String(500),  unique = False)
 
     #Backrefs
     # roles      = relationship('ProductRoles'     ,backref='Products')
     # actions    = relationship('ProductActions'   ,backref='Products')
     # objectives = relationship('ProductObjectives',backref='Products')
 
-    def __init__(self,descripcion):
-        self.description = descripcion
+    def __init__(self,nombre,descripcion=None):
+        self.nombre = nombre
+        self.descripcion = descripcion
         
     def getALL(self):
         return engine.execute("select * from \"Products\";")
@@ -122,7 +128,7 @@ class Actor(db.Model):
     __tablename__ = 'Actores'
     idActor       = db.Column(db.Integer    , primary_key = True)
     nombre        = db.Column(db.String(50) , unique = False, nullable=False)
-    descripcion   = db.Column(db.String(500), unique = True)
+    descripcion   = db.Column(db.String(500), unique = False)
     idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
@@ -152,8 +158,29 @@ class Objetivo(db.Model):
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
+# Class User, used at login for now.
 
-
+class dbuser(db.Model):
+    
+    __tablename__ = 'dbuser'
+    fullname = Column(String(50))
+    username = Column(String(16), primary_key = True)
+    password = Column(String(100)) #para que pueda aceptar hash
+    email = Column(String(30))
+    idActor = Column(Integer, ForeignKey('Actores.idActor'))
+    
+    ''' Metodo init
+        Constructor del usuario
+    ''' 
+    
+    def __init__(self, fullname, username, password, email, idActor):
+        
+        self.fullname = fullname
+        self.username = username
+        self.password = password
+        self.email = email
+        self.iddpt = iddpt 
+        self.idActor = idActor
 
 
 if __name__ == '__main__':

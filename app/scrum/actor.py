@@ -13,11 +13,13 @@ def ACrearActor():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     from base import db, Actor
-    oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    session.add(oActor)
-    session.commit()
-  
-    res['label'] = res['label'] + '/' + str(idPila)
+    #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
+    #session.add(oActor)
+    #session.commit()
+    print(params)
+    act=clsActor(session=session)
+    act.insertar(params['idActor'],params['descripcion'])
+    #res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -37,16 +39,16 @@ def AModifActor():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     from base import db, Actor
-    oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    session.query(actor).filter(actor.idactor == oActor.idactor).\
-        update({'descripcion' : (oActor.descripcion) })
+    #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
+    session.query(Actor).filter(Actor.idActor == int(params['idActor'])).\
+        update({'descripcion' : (params['descripcion']) })
     session.commit()
 
-    session.query(actor).filter(accion.idactor == oActor.idactor).\
-        update({'nombre' : (oActor.nombre) })
+    session.query(Actor).filter(Actor.idActor == int(params['idActor'])).\
+        update({'nombre' : (params['nombre']) })
     session.commit()
 
-    res['label'] = res['label'] + '/' + str(idPila)
+    #res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -89,9 +91,37 @@ def VCrearActor():
 
 
 
+class clsActor():
+        def __init__(self,engine=None,session=None):
+            self.engine  = engine
+            self.session = session
 
+        def insertar(self,idActor, nombre,descripcion):
+            
+            newActor = Actor(idActor,nombre,descripcion)
+            session.add(newActor)
+            session.commit()
+        
+        def listarActores(self):
+            res = []
+            result = self.engine.execute("select * from \"Actores\";")
+            if result!="":
+                for row in result:
+                    res.append({'idActor':row.idActor,'descripcion':row.descripcion})
+                else:
+                    print("Empty query!")
+                    
+        def listarActoresprod(self,idProducto):
+            res = []
+            result = self.engine.execute("select * from \"Actores\" where idProducto= "+str(idProducto)+" ;")
+            if result!="":
+                for row in result:
+                    res.append({'idActor':row.idActor,'descripcion':row.descripcion})
+                else:
+                    print("Empty query!")
+            
+            return res
 
 #Use case code starts here
-
 
 #Use case code ends here
