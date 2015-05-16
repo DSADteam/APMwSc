@@ -3,7 +3,7 @@ import os
 import sys
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
 sys.path.append(dir)
-from app.scrum.actor import *
+from app.scrum.actor import clsActor
 from base import *
 
 
@@ -375,5 +375,6 @@ class actorTester(unittest.TestCase):
         test = act.modificar(pIdActor2,pdescripcion2)
         self.assertFalse(test)
 
-if __name__ == "__main__":
-        unittest.main()
+
+unittest.main()
+        

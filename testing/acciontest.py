@@ -3,7 +3,7 @@ import os
 import sys
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
 sys.path.append(dir)
-from app.scrum.accion import *
+from app.scrum.accion import clsAccion
 from base import *
 
 class accionTester(unittest.TestCase):
@@ -48,7 +48,7 @@ class accionTester(unittest.TestCase):
         test = acc.insertar(pIdAccion,pdescripcion)
         self.assertTrue(test)
 
-    def testNumEnDescrip(self)
+    def testNumEnDescrip(self):
         acc = clsAccion()
         pIdAccion = 4
         pdescripcion = 234
@@ -80,7 +80,7 @@ class accionTester(unittest.TestCase):
 
     def testCharEnIdyDecripNum(self):
         acc = clsAccion()
-        pIdAccion = 'bruja'
+        pIdAccion = 'bruxw'
         pdescripcion = 345346
         test = acc.insertar(pIdAccion,pdescripcion)
         self.assertFalse(test)
@@ -227,7 +227,7 @@ class accionTester(unittest.TestCase):
         pdescripcion2 = 'Accion nula'
         test = acc.modificar(pIdAccion2,pdescripcion2)
         self.assertFalse(test)
-    
-if __name__ == "__main__":
-        unittest.main()
+
+
+unittest.main()
     
