@@ -30,9 +30,9 @@ def ACrearProducto():
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    # newProd = Producto(params['descripcion'])
-    # session.add(newProd)
-    # session.commit()
+    newProd = Producto(params['descripcion'])
+    session.add(newProd)
+    session.commit()
     print(params)
     prd=clsProducto(session=session)
     prd.insertar(params['descripcion'])
