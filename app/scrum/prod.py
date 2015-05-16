@@ -36,7 +36,7 @@ def ACrearProducto():
 
     print(params)
     prd=clsProducto(session=sessionDB)
-    prd.insertar(params['descripcion'])
+    prd.insertar(nombre=params['descripcion'])
     
     #Action code ends here
     if "actor" in res:
@@ -58,7 +58,7 @@ def AModifProducto():
     #Action code goes here, res should be a list with a label and a message
     print(params) #Borrar
     prd=clsProducto(session=sessionDB)
-    prd.modificar(params['descripcion'])
+    prd.modificar(params['idPila'],params['descripcion'])
         
     #Action code ends here
     if "actor" in res:
@@ -177,7 +177,10 @@ class clsProducto():
             result = self.engine.execute("select * from \"Productos\";")
             if result!="":
                 for row in result:
-                    res.append({'idPila':row.idProducto,'nombre':row.nombre, 'descripcion':row.descripcion})
+                    if (row.descripcion):
+                        res.append({'idPila':row.idProducto,'nombre':row.nombre, 'descripcion':row.descripcion})
+                    else:
+                        res.append({'idPila':row.idProducto,'nombre':row.nombre, 'descripcion':''})
                 #else:
                 #    print("Empty query!")
             
@@ -189,12 +192,12 @@ class clsProducto():
             self.session.commit()
         
         #Funcion que permite actualizar una descripcion
-        def modificar(self,nombre=None):
-            if (not nombre):
-                nombre==""
+        def modificar(self,id=None,descripcion=None):
+            if (not descripcion):
+                descripcion==""
             if id:
-                self.session.query(Producto).filter(Producto.nombre == nombre).\
-                    update({'nombre' : nombre })
+                self.session.query(Producto).filter(Producto.idProducto == id).\
+                    update({'descripcion' : descripcion })
                 self.session.commit()
                 print(descripcion+"Oh yeahhhhhhhhhhhhhhhh")
                 return True
