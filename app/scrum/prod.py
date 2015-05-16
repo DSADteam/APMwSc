@@ -25,7 +25,7 @@ def ACrearProducto():
     res = results[0]
     
     #Action code goes here, res should be a list with a label and a message
-    prd=clsProducto(session=sessionDB)
+    prd=clsProducto(session=sessionDB,engine=engine)
     prd.insertar(nombre=params['descripcion'])
     
     #Action code ends here
@@ -47,7 +47,7 @@ def AModifProducto():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     print(params) #Borrar
-    prd=clsProducto(session=sessionDB)
+    prd=clsProducto(session=sessionDB,engine=engine)
     prd.modificar(params['idPila'],params['descripcion'])
         
     #Action code ends here
@@ -120,7 +120,7 @@ class clsProducto():
             if(engine==None and session==None):
                 print("Error en creacion de objeto")
             else:
-                self.engine  = engine  #Necesario para realizar consultas
+                self.engine  = engine  #Necesario para realizar consultas e insertar
                 self.session = session #Necesario para insertar/borrar columnas
 
         #Funcion para insertar un producto. Indice agregado automaticamente

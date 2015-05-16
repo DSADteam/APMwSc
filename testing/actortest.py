@@ -1,13 +1,3 @@
-"""
-import unittest
-import os
-import sys
-dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
-sys.path.append(dir)
-from app.scrum.actor import clsActor
-from app.scrum.prod  import clsProducto
-from base import *
-"""
 import sys
 import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
@@ -15,9 +5,8 @@ sys.path.append(dir)
 
 from app.scrum.prod  import clsProducto
 from app.scrum.actor import clsActor
-from base import *
+from base import sessionDB,engine
 import unittest
-
 
 class actorTester(unittest.TestCase):
      
@@ -36,7 +25,7 @@ class actorTester(unittest.TestCase):
         aDescripcion = 'Actor 1'
         test = self.act.insertar(nombre=aNombre,descripcion=aDescripcion,idProducto=self.idP)
         self.assertTrue(test)
-    """
+    
     def testinsertar2(self):
         act = clsActor()
         pIdActor = 2
@@ -391,7 +380,7 @@ class actorTester(unittest.TestCase):
         pdescripcion2 = 'Actor 3'
         test = act.modificar(pIdActor2,pdescripcion2)
         self.assertFalse(test)
-    """
+
 
 if __name__ == "__main__":
-        unittest.main()
+    unittest.main()

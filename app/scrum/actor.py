@@ -11,12 +11,11 @@ from flask import request, session, Blueprint, json
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
 
 #Definicion de blueprint y bd
 actor = Blueprint('actor', __name__)
-
 from base import *
-
 
 @actor.route('/actor/ACrearActor', methods=['POST'])
 def ACrearActor():
@@ -103,16 +102,15 @@ def VCrearActor():
     return json.dumps(res)
 
 
-
 class clsActor():
         def __init__(self,engine=None,session=None):
             self.engine  = engine
             self.session = session
 
         def insertar(self,nombre,descripcion,idProducto):
-            newActor = Actor(nombre=nombre,descripcion=descripcion,idProducto=idProducto)
-            session.add(newActor)
-            session.commit()
+            blah = Actor(nombre,descripcion,idProducto)
+            self.session.add(blah)
+            self.session.commit()
         
         def listarActores(self):
             res = []
