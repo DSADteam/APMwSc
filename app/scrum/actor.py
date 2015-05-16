@@ -96,9 +96,9 @@ class clsActor():
             self.engine  = engine
             self.session = session
 
-        def insertar(self,nombre,descripcion,idProducto):
+        def insertar(self,idActor, nombre,descripcion):
             
-            newActor = Actor(nombre,descripcion,idProducto)
+            newActor = Actor(idActor,nombre,descripcion)
             session.add(newActor)
             session.commit()
         

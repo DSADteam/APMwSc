@@ -90,9 +90,9 @@ class clsAccion():
             self.engine  = engine
             self.session = session
 
-        def insertar(self,descripcion,idProducto):
+        def insertar(self,descripcion,idAccion):
             
-            newAccion = Accion(descripcion,idProducto)
+            newAccion = Accion(idAccion, descripcion)
             session.add(newAccion)
             session.commit()
         
