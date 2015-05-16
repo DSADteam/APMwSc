@@ -4,7 +4,6 @@
 import sys
 import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
-print(dir)
 sys.path.append(dir)
 
 #Dependencias flask
@@ -26,16 +25,18 @@ from base import *
 def ACrearProducto():
     #POST/PUT parameters
     params = request.get_json()
-
     results = [{'label':'/VProductos', 'msg':['Producto creado']}, {'label':'/VCrearProducto', 'msg':['Error al crear producto']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
     # newProd = Producto(params['descripcion'])
     # session.add(newProd)
     # session.commit()
+
     print(params)
-    prd=clsProducto(session=session)
+    prd=clsProducto(session=sessionDB)
     prd.insertar(params['descripcion'])
+    
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -43,6 +44,7 @@ def ACrearProducto():
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
+
 
 
 
@@ -120,15 +122,48 @@ def VProductos():
     return json.dumps(res)
 
 class clsProducto():
+        #Inicializacion 
         def __init__(self,engine=None,session=None):
-            self.engine  = engine
-            self.session = session
 
+            if(engine==None and session==None):
+                print("Error en creacion de objeto")
+            else:
+                self.engine  = engine  #Necesario para realizar consultas
+                self.session = session #Necesario para insertar en bd
+
+        #Funcion para insertar un producto. Indice agregado automaticamente
         def insertar(self,descripcion):
-            newProd = Producto(descripcion)
-            session.add(newProd)
-            session.commit()
-        
+            comentarioNulo = descripcion == None
+            if comentarioNulo:
+                return None
+
+            estaEnBd       = self.existeProducto(descript=descripcion)
+            longCharValido = len(descripcion) <= 500
+
+            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+                newProd = Producto(descripcion)
+                self.session.add(newProd)
+                self.session.commit()
+
+        #Funcion booleana, dada un id o descripcion, o ambos, se indica si el objeto esta en la tabla
+        def existeProducto(self,id=None,descript=None):
+            if(id != None and descript==None):
+                result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+";")
+            elif(id ==None and descript!=None):
+                result  = self.engine.execute("select * from \"Productos\" where descripcion=\'"+descript+"\';")
+            elif(id !=None and descript!=None):
+                result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+" and descripcion=\'"+descripcion+"\';")
+            else:
+                return False
+            
+            contador = 0
+            for row in result:
+                contador += 1
+
+            return contador != 0
+
+        #Funcion que lista los productos en una lista de diccionarios
+        #compatible con json
         def listarProductos(self):
             res = []
             result = self.engine.execute("select * from \"Productos\";")
@@ -139,8 +174,3 @@ class clsProducto():
                     print("Empty query!")
             
             return res
-
-
-#Use case code starts here
-
-#Use case code ends here

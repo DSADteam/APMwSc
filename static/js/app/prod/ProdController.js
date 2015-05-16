@@ -45,8 +45,7 @@ scrumModule.controller('VProductosController',
       };
 
       $scope.VProducto0 = function(idPila) {
-        $location.path('/VProducto/'+
-          ((typeof idPila === 'object')?JSON.stringify(idPila):idPila));
+        $location.path('/VProducto/'+((typeof idPila === 'object')?JSON.stringify(idPila):idPila));
       };
 
     }]);
@@ -149,7 +148,7 @@ scrumModule.controller('VProductoController',
     }]);
 scrumModule.controller('VCrearProductoController', 
    ['$scope', '$location', '$route', 'flash', 'accionService', 'actorService', 'identService', 'objetivoService', 'prodService',
-    function ($scope, $location, $route, $http, flash, accionService, actorService, identService, objetivoService, prodService) {
+    function ($scope, $location, $route, flash, accionService, actorService, identService, objetivoService, prodService) {
       $scope.msg = '';
       $scope.fPila = {};
 
@@ -169,20 +168,22 @@ scrumModule.controller('VCrearProductoController',
         $location.path('/VLogin');
       };
 
-
-      $scope.crearProducto = function(description) {
-        var data = {}
-        data["description"] = description;
-
-        console.log("me llamaron");
-
-
-        $http.post("/VCrearProducto", angular.fromJson(data)).success(
-            function(data){
-                $scope.gists = data;
-            }
-        );
+      $scope.fPilaSubmitted = false;
+      $scope.ACrearProducto0 = function(isValid) {
+        $scope.fPilaSubmitted = true;
+        if (isValid) {
+          
+          prodService.ACrearProducto($scope.fPila).then(function (object) {
+              var msg = object.data["msg"];
+              if (msg) flash(msg);
+              var label = object.data["label"];
+              if (label == '/VCrearProducto') {
+                  $route.reload();
+              } else {
+                  $location.path(label);
+              }
+          });
+        }
       };
-
 
     }]);

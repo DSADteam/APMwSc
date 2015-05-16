@@ -23,6 +23,8 @@ manager.add_command("runserver", Server(
 
 #
 
+
+
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -78,6 +80,8 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 engine = create_engine(URL(**app.config['DATABASE']))
+DBSession = sessionmaker(bind = engine)
+sessionDB = DBSession()
 
 #Clase para pila de productos
 
@@ -92,7 +96,7 @@ class Producto(db.Model):
     # objectives = relationship('ProductObjectives',backref='Products')
 
     def __init__(self,descripcion):
-        self.description = descripcion
+        self.descripcion = descripcion
         
     def getALL(self):
         return engine.execute("select * from \"Products\";")
@@ -122,7 +126,7 @@ class Actor(db.Model):
     __tablename__ = 'Actores'
     idActor       = db.Column(db.Integer    , primary_key = True)
     nombre        = db.Column(db.String(50) , unique = False, nullable=False)
-    descripcion   = db.Column(db.String(500), unique = True)
+    descripcion   = db.Column(db.String(500), unique = False)
     idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
