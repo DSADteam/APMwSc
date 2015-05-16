@@ -133,7 +133,14 @@ class clsProducto():
 
         #Funcion para insertar un producto. Indice agregado automaticamente
         def insertar(self,descripcion):
-            if (not self.existeProducto(descript=descripcion)):
+            comentarioNulo = descripcion == None
+            if comentarioNulo:
+                return None
+
+            estaEnBd       = self.existeProducto(descript=descripcion)
+            longCharValido = len(descripcion) <= 500
+
+            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
                 newProd = Producto(descripcion)
                 self.session.add(newProd)
                 self.session.commit()

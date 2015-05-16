@@ -15,11 +15,18 @@ class MdlTest(unittest.TestCase):
     def setUp(self):
         self.prod=clsProducto(engine,sessionDB)
 
-
-    def testInsert(self):
+    """
+        Casos frontera
+    """
+    #Insert con limite interno en maximo de caracteres
+    def testInsertAlmostBig(self):
         string = 'a' * 500
         self.prod.insertar(string)
         self.assertTrue(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
-        
+    
+    def testInsertNoWayTooBig(self):
+        string = 'a' * 501
+        self.prod.insertar(string)
+        self.assertFalse(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
 
 unittest.main()
