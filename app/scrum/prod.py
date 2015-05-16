@@ -129,7 +129,7 @@ class clsProducto():
                 print("Error en creacion de objeto")
             else:
                 self.engine  = engine  #Necesario para realizar consultas
-                self.session = session #Necesario para insertar en bd
+                self.session = session #Necesario para insertar/borrar columnas
 
         #Funcion para insertar un producto. Indice agregado automaticamente
         def insertar(self,descripcion):
@@ -174,3 +174,9 @@ class clsProducto():
                     print("Empty query!")
             
             return res
+
+        #Funcion que elimina todas las filas
+        def borrarFilas(self):
+            self.session.query(Producto).delete()
+            self.session.commit()
+
