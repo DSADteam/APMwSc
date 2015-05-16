@@ -25,11 +25,6 @@ def ACrearProducto():
     res = results[0]
     
     #Action code goes here, res should be a list with a label and a message
-    # newProd = Producto(params['descripcion'])
-    # session.add(newProd)
-    # session.commit()
-
-    print(params)
     prd=clsProducto(session=sessionDB)
     prd.insertar(nombre=params['descripcion'])
     
