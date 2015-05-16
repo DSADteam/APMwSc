@@ -91,9 +91,9 @@ class Producto(db.Model):
 class Accion(db.Model):
     
     __tablename__ = 'Acciones'
-    idAccion      = db.Column(db.Integer, primary_key = True)
-    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
-    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    idAccion      = db.Column(Integer, primary_key = True)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('acciones', lazy = 'dynamic'))
     
     ''' Metodo init
@@ -109,10 +109,10 @@ class Accion(db.Model):
 class Actor(db.Model):
     
     __tablename__ = 'Actores'
-    idActor       = db.Column(db.Integer    , primary_key = True)
-    nombre        = db.Column(db.String(50) , unique = False)
-    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
-    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    idActor       = db.Column(Integer    , primary_key = True)
+    nombre        = db.Column(String(50) , unique = False, nullable=False)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
         Constructor del actor
@@ -130,9 +130,9 @@ class Actor(db.Model):
 
 class Objetivo(db.Model):
     __tablename__ = 'Objetivos'
-    idObjetivo    = db.Column(db.Integer, primary_key = True)
-    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
-    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    idObjetivo    = db.Column(Integer, primary_key = True)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
     
     ''' Metodo init

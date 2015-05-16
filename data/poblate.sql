@@ -23,17 +23,17 @@ INSERT INTO "Acciones" VALUES (4,'Documentar tablas',2);
 INSERT INTO "Acciones" VALUES (5,'Crear repositorio volador',3);
 INSERT INTO "Acciones" VALUES (6,'Documentar cosas',3);
 
-INSERT INTO "Actores" VALUES (1,'Developer','Desarrolador de proyecto',1);
-INSERT INTO "Actores" VALUES (2,'Scrum Master','Guia del grupo',1);
-INSERT INTO "Actores" VALUES (3,'Product Owner','Dueno del producto',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',1);
 
-INSERT INTO "Actores" VALUES (4,'Developer','Desarrolador de proyecto',2);
-INSERT INTO "Actores" VALUES (5,'Scrum Master','Guia del grupo',2);
-INSERT INTO "Actores" VALUES (6,'Product Owner','Dueno del producto',2);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',2);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',2);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',2);
 
-INSERT INTO "Actores" VALUES (7,'Developer','Desarrolador de proyecto',3);
-INSERT INTO "Actores" VALUES (8,'Scrum Master','Guia del grupo',3);
-INSERT INTO "Actores" VALUES (9,'Product Owner','Dueno del producto',3);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',3);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',3);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',3);
 
 INSERT INTO "Objetivos" VALUES (1,'En tanto que hagamos codigo lo continuemos',1);
 INSERT INTO "Objetivos" VALUES (2,'En tanto que todos nos divirtamos todo sera divertido',1);

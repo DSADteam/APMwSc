@@ -28,10 +28,13 @@ def ACrearActor():
     #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
     #session.add(oActor)
     #session.commit()
+    idPila = int(request.args.get('idPila', 1))
+    print('NIganiganiganiganigaaaaaaaaaaaaaaaaa1')
     print(params)
-    act=clsActor(session=session)
-    act.insertar(params['idActor'],params['descripcion'])
-    #res['label'] = res['label'] + '/' + str(idPila)
+    print(int(request.args.get('idPila', 1)))
+    act=clsActor(session=sessionDB,engine=engine)
+    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(request.args.get('idPila', 1)))
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -80,9 +83,9 @@ def VActor():
     #Action code goes here, res should be a JSON structure
     #from base import db, Actor
 
-    idActor = int(request.args['idActor'])
-    act = actor.query.filter_by(idActor=idActor).first()
-    res['actor'] =  {'idActor':act.idActor, 'descripcion':act.descripcion}
+    #idActor = int(request.args['idActor'])
+    #act = actor.query.filter_by(idActor=idActor).first()
+    #res['actor'] =  {'idActor':act.idActor, 'descripcion':act.descripcion}
 
     #Action code ends here
     return json.dumps(res)
@@ -96,8 +99,9 @@ def VCrearActor():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     #from base import db, Actor
-
-
+    print('NIganiganiganiganigaaaaaaaaaaaaaaaaa2')
+    params = request.get_json()
+    print(params)
     #Action code ends here
     return json.dumps(res)
 
@@ -106,11 +110,37 @@ class clsActor():
         def __init__(self,engine=None,session=None):
             self.engine  = engine
             self.session = session
+            
+        def insertar(self,nombre=None,descripcion=None,idProducto=None):
+            comentarioNulo = (nombre == None) or (descripcion == None) or\
+            (idProducto)==None
+            if comentarioNulo:
+                return False
 
-        def insertar(self,nombre,descripcion,idProducto):
-            blah = Actor(nombre,descripcion,idProducto)
-            self.session.add(blah)
-            self.session.commit()
+            estaEnBd       = self.existeActor(nombre=nombre)
+            #pr = clsProducto()
+            #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+            longCharValido = (len(nombre) <= 500) and (len(descripcion) <= 500)
+
+            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+                newAct = Actor(nombre,descripcion,idProducto)
+                self.session.add(newAct)
+                self.session.commit()
+                return True
+            else:
+                return False
+            
+        def existeActor(self,nombre=None):
+            if(nombre!=None):
+                result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
+            else:
+                return False
+            
+            contador = 0
+            for row in result:
+                contador += 1
+
+            return contador != 0
         
         def listarActores(self):
             res = []
@@ -118,7 +148,7 @@ class clsActor():
             if result!="":
                 for row in result:
 
-                    res.append({'idActor':row.idActor,'descripcion':row.descripcion})
+                    res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
                 else:
                     print("Empty query!")
                     
