@@ -9,8 +9,12 @@ import unittest
 
 
 class MdlTest(unittest.TestCase):
+    """
+        Inicializacion de pruebas 
+    """
     def setUp(self):
         self.prod=clsProducto(engine,sessionDB)
+
 
     def testInsert(self):
         string = 'a' * 500

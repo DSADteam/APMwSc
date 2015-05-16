@@ -122,16 +122,23 @@ def VProductos():
     return json.dumps(res)
 
 class clsProducto():
+        #Inicializacion 
         def __init__(self,engine=None,session=None):
-            self.engine  = engine
-            self.session = session
 
+            if(engine==None and session==None):
+                print("Error en creacion de objeto")
+            else:
+                self.engine  = engine  #Necesario para realizar consultas
+                self.session = session #Necesario para insertar en bd
+
+        #Funcion para insertar un producto. Indice agregado automaticamente
         def insertar(self,descripcion):
             if (not self.existeProducto(descript=descripcion)):
                 newProd = Producto(descripcion)
                 self.session.add(newProd)
                 self.session.commit()
 
+        #Funcion booleana, dada un id o descripcion, o ambos, se indica si el objeto esta en la tabla
         def existeProducto(self,id=None,descript=None):
             if(id != None and descript==None):
                 result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+";")
@@ -148,8 +155,8 @@ class clsProducto():
 
             return contador != 0
 
-            
-
+        #Funcion que lista los productos en una lista de diccionarios
+        #compatible con json
         def listarProductos(self):
             res = []
             result = self.engine.execute("select * from \"Productos\";")
@@ -160,8 +167,3 @@ class clsProducto():
                     print("Empty query!")
             
             return res
-
-
-#Use case code starts here
-
-#Use case code ends here
