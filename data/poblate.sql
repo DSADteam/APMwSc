@@ -1,10 +1,4 @@
--- INSERT INTO "Departaments" values (1,'Informacion'     );
--- INSERT INTO "Departaments" values (2,'Recursos Humanos');
--- INSERT INTO "Departaments" values (3,'Desarrollo'      );
--- 
--- INSERT INTO "Roles" values(1,'Developer'     );
--- INSERT INTO "Roles" values(2,'Scrum Master'  );
--- INSERT INTO "Roles" values(3,'Product Owner' );
+
 -- 
 -- INSERT INTO "Users" VALUES('Javier'      ,'javierlopm' ,'holahola1','javier@correo.com'  ,1,1);
 -- INSERT INTO "Users" VALUES('Nabil'       ,'nabilj'     ,'holahola2','nabil@correo.com'   ,2,1);
@@ -33,13 +27,13 @@ INSERT INTO "Actores" VALUES (1,'Developer','Desarrolador de proyecto',1);
 INSERT INTO "Actores" VALUES (2,'Scrum Master','Guia del grupo',1);
 INSERT INTO "Actores" VALUES (3,'Product Owner','Dueno del producto',1);
 
-INSERT INTO "Actores" VALUES (4,'Developer','Desarrolador de proyecto',1);
-INSERT INTO "Actores" VALUES (5,'Scrum Master','Guia del grupo',1);
-INSERT INTO "Actores" VALUES (6,'Product Owner','Dueno del producto',1);
+INSERT INTO "Actores" VALUES (4,'Developer','Desarrolador de proyecto',2);
+INSERT INTO "Actores" VALUES (5,'Scrum Master','Guia del grupo',2);
+INSERT INTO "Actores" VALUES (6,'Product Owner','Dueno del producto',2);
 
-INSERT INTO "Actores" VALUES (7,'Developer','Desarrolador de proyecto',1);
-INSERT INTO "Actores" VALUES (8,'Scrum Master','Guia del grupo',1);
-INSERT INTO "Actores" VALUES (9,'Product Owner','Dueno del producto',1);
+INSERT INTO "Actores" VALUES (7,'Developer','Desarrolador de proyecto',3);
+INSERT INTO "Actores" VALUES (8,'Scrum Master','Guia del grupo',3);
+INSERT INTO "Actores" VALUES (9,'Product Owner','Dueno del producto',3);
 
 INSERT INTO "Objetivos" VALUES (1,'En tanto que hagamos codigo lo continuemos',1);
 INSERT INTO "Objetivos" VALUES (2,'En tanto que todos nos divirtamos todo sera divertido',1);

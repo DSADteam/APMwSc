@@ -17,11 +17,6 @@ from sqlalchemy.sql.expression import text
 prod = Blueprint('prod', __name__)
 from base import *
 
-#engine = create_engine(URL(**data.settings.DATABASE))
-#DBSession h= sessionmaker(bind = engine)
-#s = DBSession()
-
-
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
     #POST/PUT parameters
@@ -30,12 +25,7 @@ def ACrearProducto():
     res = results[0]
     
     #Action code goes here, res should be a list with a label and a message
-    # newProd = Producto(params['descripcion'])
-    # session.add(newProd)
-    # session.commit()
-
-    print(params)
-    prd=clsProducto(session=sessionDB)
+    prd=clsProducto(session=sessionDB,engine=engine)
     prd.insertar(nombre=params['descripcion'])
     
     #Action code ends here
@@ -57,7 +47,7 @@ def AModifProducto():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     print(params) #Borrar
-    prd=clsProducto(session=sessionDB)
+    prd=clsProducto(session=sessionDB,engine=engine)
     prd.modificar(params['idPila'],params['descripcion'])
         
     #Action code ends here
@@ -89,21 +79,30 @@ def VProducto():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    prd=clsProducto(engine=engine)
+    prd=clsProducto(engine=engine,session=sessionDB)
     #res['data0'] = prd.listarProductos()
     
     idPila = int(request.args.get('idPila', 1))
     pilas = prd.listarProductos()
     #pilas = [{'idPila':1, 'nombre':'Pagos en línea', 'descripcion':'Pagos usando tarjeta de débito'}, {'idPila':2, 'nombre':'Recomendaciones de playas', 'descripcion':'Red social para playeros consumados'}, {'idPila':3, 'nombre':'Tu taxi seguro', 'descripcion':'Toma un taxi privado de forma segura'}, ]
-    print(pilas)
+    
     res['fPila'] = pilas[idPila-1]
-    res['data3'] = [{'idActor':1, 'descripcion':'Actor 1'}, {'idActor':2, 'descripcion':'Actor 2'}, {'idActor':3, 'descripcion':'Actor 3'},  ]
+    #res['data3'] = [{'idActor':1, 'descripcion':'Actor 1'}, {'idActor':2, 'descripcion':'Actor 2'}, {'idActor':3, 'descripcion':'Actor 3'},  ]
     res['data5'] = [{'idAccion':1, 'descripcion':'Accion 1'}, {'idAccion':2, 'descripcion':'Accion 2'}, {'idAccion':3, 'descripcion':'Accion 3'}, {'idAccion':4, 'descripcion':'Accion 4'}, ]
     res['data7'] = [{'idObjetivo':1, 'descripcion':'Objetivo 1'}, {'idObjetivo':2, 'descripcion':'Objetivo 2'}, {'idObjetivo':3, 'descripcion':'Objetivo 3'}, {'idObjetivo':4, 'descripcion':'Objetivo 4'}, {'idObjetivo':5, 'descripcion':'Objetivo 5'},  ]
     res['idPila'] = idPila    
 
-    #clsActor()
-    res['data3']
+    from app.scrum.actor import clsActor
+    from app.scrum.accion import clsAccion
+    from app.scrum.objetivo import clsObjetivo
+
+    oActor    = clsActor(engine,sessionDB)
+    oAccion   = clsAccion(engine,sessionDB)
+    oObjetivo = clsObjetivo(engine,sessionDB)
+
+    res['data3'] = oActor.listarActoresprod(idPila)
+    res['data5'] = oAccion.listarAccionesprod(idPila)
+    res['data7'] = oObjetivo.obtenerObjProd(idPila)
 
     #Action code ends here
     return json.dumps(res)
@@ -127,11 +126,10 @@ def VProductos():
 class clsProducto():
         #Inicializacion 
         def __init__(self,engine=None,session=None):
-
             if(engine==None and session==None):
                 print("Error en creacion de objeto")
             else:
-                self.engine  = engine  #Necesario para realizar consultas
+                self.engine  = engine  #Necesario para realizar consultas e insertar
                 self.session = session #Necesario para insertar/borrar columnas
 
         #Funcion para insertar un producto. Indice agregado automaticamente
@@ -169,6 +167,18 @@ class clsProducto():
                 contador += 1
 
             return contador != 0
+
+        #Funcion que entrega el id de un producto, dado su nombre
+        def idProd(self,nombre):
+            if self.existeProducto(nombre=nombre):
+                result = self.engine.execute("select * from \"Productos\" where nombre=\'"+nombre+"\';")
+                for row in result:
+                    resId = row[0]
+
+                return resId
+
+            else: 
+                return -1
 
         #Funcion que lista los productos en una lista de diccionarios
         #compatible con json

@@ -8,7 +8,6 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 from flask.ext.migrate import Migrate, MigrateCommand
-####
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint, UniqueConstraint, Sequence
@@ -20,8 +19,6 @@ manager.add_command("runserver", Server(
     use_reloader = True,
     host = '127.0.0.1')
 )
-
-#
 
 
 
@@ -49,20 +46,6 @@ def createdb():
     DBSession = sessionmaker(bind = engine)
     session = DBSession()
 
-from app.scrum.ident import ident
-app.register_blueprint(ident)
-from app.scrum.prod import prod
-app.register_blueprint(prod)
-from app.scrum.mast import mast
-app.register_blueprint(mast)
-from app.scrum.dev import dev
-app.register_blueprint(dev)
-from app.scrum.actor import actor
-app.register_blueprint(actor)
-from app.scrum.objetivo import objetivo
-app.register_blueprint(objetivo)
-from app.scrum.accion import accion
-app.register_blueprint(accion)
 
 #Application code starts here
 
@@ -97,7 +80,7 @@ class Producto(db.Model):
     # objectives = relationship('ProductObjectives',backref='Products')
 
     def __init__(self,nombre,descripcion=None):
-        self.nombre = nombre
+        self.nombre      = nombre
         self.descripcion = descripcion
         
     def getALL(self):
@@ -127,8 +110,8 @@ class Actor(db.Model):
     
     __tablename__ = 'Actores'
     idActor       = db.Column(db.Integer    , primary_key = True)
-    nombre        = db.Column(db.String(50) , unique = False, nullable=False)
-    descripcion   = db.Column(db.String(500), unique = False)
+    nombre        = db.Column(db.String(50) , unique = False)
+    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
     idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
@@ -139,6 +122,9 @@ class Actor(db.Model):
         self.nombre      = nombre
         self.descripcion = descripcion
         self.idProducto  = idProducto
+
+    def getALL(self):
+        return engine.execute("select * from \"Actores\";")
      
 # Clase Usuario
 
@@ -182,6 +168,20 @@ class dbuser(db.Model):
         self.iddpt = iddpt 
         self.idActor = idActor
 
+from app.scrum.ident import ident
+app.register_blueprint(ident)
+from app.scrum.prod import prod
+app.register_blueprint(prod)
+from app.scrum.mast import mast
+app.register_blueprint(mast)
+from app.scrum.dev import dev
+app.register_blueprint(dev)
+from app.scrum.actor import actor
+app.register_blueprint(actor)
+from app.scrum.objetivo import objetivo
+app.register_blueprint(objetivo)
+from app.scrum.accion import accion
+app.register_blueprint(accion)
 
 if __name__ == '__main__':
     app.config.update(

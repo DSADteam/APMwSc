@@ -1,7 +1,23 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, Blueprint, json
 
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+sys.path.append(dir)
+
+#Dependencias flask
+from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
+
+#Definicion de blueprint y bd
 objetivo = Blueprint('objetivo', __name__)
+from base import *
+
+
+
 
 
 @objetivo.route('/objetivo/ACrearObjetivo', methods=['POST'])
@@ -36,7 +52,7 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     
-    obj = clsObjetivo()
+    obj = clsObjetivo(session=session)
     obj.modificarObj(params['idObjetivo'], params['descripcion'])        
    
     #idPila = 1
@@ -76,9 +92,10 @@ def VObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
-   
-    obj = clsObjetivo()
-    obj.obtenerObj(params['idObjetivo'])
+    idObjetivo = int(request.args['idObjetivo'])
+    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
+    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
+    
     
     
     #Action code ends here
@@ -92,9 +109,8 @@ def VObjetivo():
 class clsObjetivo():
     
     def __init__(self,engine=None,session=None):
-        
-        self.engine  = engine
-        self.session = session
+            self.engine  = engine
+            self.session = session
     
     def insertarObj(self, idObjetivo, descripcion):
         
@@ -103,28 +119,32 @@ class clsObjetivo():
         session.commit()
         
     def modificarObj(self,idObjetivo,descripcion):
-        
-        session.query(base.Objetivo).filter(base.Objetivo.idobjetivo == idObjetivo).\
+        session.query(Objetivo).filter(Objetivo.idobjetivo == idObjetivo).\
              update({'descripcion' : (descripcion) })
         session.commit()
         
     def obtenerObjProd(self, idProducto):
-        
         res = []
-        result = self.engine.execute("select * from \"Objetivos\" where idProducto = \"+str(idProducto)\" ;")
+        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
         if result!="":
             for row in result:
-                res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
+            else:
+                print("Empty query!")
             
         return res
     
-    def obtenerObj(self, idObjetivo):
-        
-        idObjetivo = int(request.args['idObjetivo'])
-        obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
-        res['data7'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
-        
+    def obtenerObj(self, idProducto):
+        res = []
+        result = self.engine.execute("select * from \"Objetivos\";")
+        if result!="":
+            for row in result:
+                res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
+            else:
+                print("Empty query!")
+            
         return res
-
+    
 
 #Use case code ends here

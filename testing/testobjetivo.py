@@ -6,15 +6,13 @@ Created on 15/05/2015
 @author: Meggie Sanchez y Cristina Betancourt
 '''
 
-import os
 import sys
-dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
 sys.path.append(dir)
 
-from app.scrum.objetivo import *
-
-import base
-
+from app.scrum.objetivo import clsObjetivo
+from base import *
 import unittest
 
 class TestObjetivo(unittest.TestCase):
@@ -336,4 +334,6 @@ class TestObjetivo(unittest.TestCase):
         pDescripcion2 = 501
         r = objs.modificarObj(pIdObjetivo2, pDescripcion2)
         self.assertFalse(r)    
-        
+    
+if __name__ == "__main__":
+    unittest.main()    

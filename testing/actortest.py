@@ -1,31 +1,37 @@
-import unittest
-import os
 import sys
+import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
 sys.path.append(dir)
-from app.scrum.actor import clsActor
-from base import *
 
+from app.scrum.prod  import clsProducto
+from app.scrum.actor import clsActor
+from base import sessionDB,engine
+import unittest
 
 class actorTester(unittest.TestCase):
      
-#TEST INSERTAR
-#Casos regulares
+    def setUp(self):
+        self.act = clsActor(engine,sessionDB)
+        p        = clsProducto(engine,sessionDB)
+        p.insertar(nombre="Prueba para actor")
+        self.idP = p.idProd("Prueba para actor")
+
+    def tearDown(self):
+        #self.act.borrarFilas()
+        print("")
 
     def testinsertar1(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 1'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        aNombre = 'pepe'
+        aDescripcion = 'Actor 1'
+        test = self.act.insertar(nombre=aNombre,descripcion=aDescripcion,idProducto=self.idP)
         self.assertTrue(test)
-
+    
     def testinsertar2(self):
         act = clsActor()
         pIdActor = 2
         pnombre = 'juan'
         pdescripcion = 'Actor 2'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertTrue(test)
 
 #Casos fronteras
@@ -35,7 +41,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 1
         pnombre = 'AuS2CaV9lq8GbkJi174Af6hYDJ49ywbcx0Mf3rziTS9cJVfOja'
         pdescripcion = 'Actor 1'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertTrue(test)
 
     def testdescripcion500(self):
@@ -43,7 +49,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 4
         pnombre = 'brace yourself'
         pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo actor y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin!'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertTrue(test)
 
     def testCampoIdNulo(self):
@@ -51,7 +57,7 @@ class actorTester(unittest.TestCase):
         pIdActor = None
         pnombre = 'juancho'
         pdescripcion = 'Actor 2'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testNombreNulo(self):
@@ -59,7 +65,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 4
         pnombre = ''
         pdescripcion = 'Actor 2'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testDescripNulo(self):
@@ -67,7 +73,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 1
         pnombre = 'carlos'
         pdescripcion = ''
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testNombreNum(self):
@@ -75,7 +81,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 4
         pnombre = 232
         pdescripcion = 'Actor 4'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testDescripNum(self):
@@ -83,7 +89,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 2
         pnombre = 'fred'
         pdescripcion = 44444
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
 #Caso Esquina
@@ -93,15 +99,15 @@ class actorTester(unittest.TestCase):
         pIdActor = None
         pnombre = ''
         pdescripcion = ''
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
-    def testNombreyDescripNum(self)
+    def testNombreyDescripNum(self):
         act = clsActor()
         pIdActor = 3
         pnombre = 3333
         pdescripcion = 44444
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testidVacioyDescrip500(self):
@@ -109,7 +115,7 @@ class actorTester(unittest.TestCase):
         pIdActor = None
         pnombre = 'too long'
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
         
 #Casos Malicia
@@ -119,7 +125,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 'idviteh'
         pnombre = 'el viejo'
         pdescripcion = 'Actor 5'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testNombre51(self):
@@ -127,7 +133,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 2
         pnombre = 'AuS2CaV9lq8GbkJi174Af6hYDJ49ywbcx0Mf3rziTS9cJVfOjab'
         pdescripcion = 'Actor 2'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
     def testDescrip501(self):
@@ -135,7 +141,7 @@ class actorTester(unittest.TestCase):
         pIdActor = 1
         pnombre = 'Alberto'
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        test = acc.insertar(pIdActor,pnombre,pdescripcion)
+        test = act.insertar(pIdActor,pnombre,pdescripcion)
         self.assertFalse(test)
 
 #TEST MODIFICAR
@@ -376,5 +382,6 @@ class actorTester(unittest.TestCase):
         self.assertFalse(test)
 
 
-unittest.main()
-        
+if __name__ == "__main__":
+    unittest.main()
+
