@@ -96,7 +96,7 @@ class Producto(db.Model):
     # objectives = relationship('ProductObjectives',backref='Products')
 
     def __init__(self,descripcion):
-        self.description = descripcion
+        self.descripcion = descripcion
         
     def getALL(self):
         return engine.execute("select * from \"Products\";")

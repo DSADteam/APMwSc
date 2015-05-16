@@ -4,7 +4,6 @@
 import sys
 import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
-print(dir)
 sys.path.append(dir)
 
 #Dependencias flask
@@ -128,10 +127,29 @@ class clsProducto():
             self.session = session
 
         def insertar(self,descripcion):
-            newProd = Producto(descripcion)
-            session.add(newProd)
-            session.commit()
-        
+            if (not self.existeProducto(descript=descripcion)):
+                newProd = Producto(descripcion)
+                self.session.add(newProd)
+                self.session.commit()
+
+        def existeProducto(self,id=None,descript=None):
+            if(id != None and descript==None):
+                result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+";")
+            elif(id ==None and descript!=None):
+                result  = self.engine.execute("select * from \"Productos\" where descripcion=\'"+descript+"\';")
+            elif(id !=None and descript!=None):
+                result  = self.engine.execute("select * from \"Productos\" where \'idProducto\'="+str(id)+" and descripcion=\'"+descripcion+"\';")
+            else:
+                return False
+            
+            contador = 0
+            for row in result:
+                contador += 1
+
+            return contador != 0
+
+            
+
         def listarProductos(self):
             res = []
             result = self.engine.execute("select * from \"Productos\";")
