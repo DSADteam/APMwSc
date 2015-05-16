@@ -16,7 +16,6 @@ from sqlalchemy.sql.expression import text
 accion = Blueprint('accion', __name__)
 from base import *
 
-
 @accion.route('/accion/ACrearAccion', methods=['POST'])
 def ACrearAccion():
     #POST/PUT parameters

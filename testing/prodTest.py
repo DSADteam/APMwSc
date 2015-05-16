@@ -60,7 +60,7 @@ class MdlTest(unittest.TestCase):
         #Si falla puede ser solucionado mas adelante con expresiones regulares!
         string = "\" DROP TABLE \"PRODUCTOS\";";
         self.prod.insertar(string)
-        self.assertFalse(self.prod.existeProducto(descript=string),"Error, string peligroso encontrado en el sistema")
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, string peligroso encontrado en el sistema")
 
 
 unittest.main()

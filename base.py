@@ -8,7 +8,6 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 from flask.ext.migrate import Migrate, MigrateCommand
-####
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint, UniqueConstraint, Sequence
@@ -20,8 +19,6 @@ manager.add_command("runserver", Server(
     use_reloader = True,
     host = '127.0.0.1')
 )
-
-#
 
 
 
@@ -139,6 +136,9 @@ class Actor(db.Model):
         self.nombre      = nombre
         self.descripcion = descripcion
         self.idProducto  = idProducto
+
+    def getALL(self):
+        return engine.execute("select * from \"Actores\";")
      
 # Clase Usuario
 

@@ -117,7 +117,6 @@ def VProductos():
 class clsProducto():
         #Inicializacion 
         def __init__(self,engine=None,session=None):
-
             if(engine==None and session==None):
                 print("Error en creacion de objeto")
             else:
@@ -159,6 +158,18 @@ class clsProducto():
                 contador += 1
 
             return contador != 0
+
+        #Funcion que entrega el id de un producto, dado su nombre
+        def idProd(self,nombre):
+            if self.existeProducto(nombre=nombre):
+                result = self.engine.execute("select * from \"Productos\" where nombre=\'"+nombre+"\';")
+                for row in result:
+                    resId = row[0]
+
+                return resId
+
+            else: 
+                return -1
 
         #Funcion que lista los productos en una lista de diccionarios
         #compatible con json
