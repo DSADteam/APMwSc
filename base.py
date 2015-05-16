@@ -8,7 +8,6 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 from flask.ext.migrate import Migrate, MigrateCommand
-####
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, PrimaryKeyConstraint, UniqueConstraint, Sequence
@@ -47,20 +46,6 @@ def createdb():
     DBSession = sessionmaker(bind = engine)
     session = DBSession()
 
-from app.scrum.ident import ident
-app.register_blueprint(ident)
-from app.scrum.prod import prod
-app.register_blueprint(prod)
-from app.scrum.mast import mast
-app.register_blueprint(mast)
-from app.scrum.dev import dev
-app.register_blueprint(dev)
-from app.scrum.actor import actor
-app.register_blueprint(actor)
-from app.scrum.objetivo import objetivo
-app.register_blueprint(objetivo)
-from app.scrum.accion import accion
-app.register_blueprint(accion)
 
 #Application code starts here
 
@@ -86,14 +71,16 @@ sessionDB = DBSession()
 class Producto(db.Model):
     __tablename__ = 'Productos'
     idProducto  = db.Column(Integer, primary_key = True) #autoincremento
-    descripcion = db.Column(String(500),  unique = True)
+    nombre      = db.Column(String(500),  unique = True, nullable = False)
+    descripcion = db.Column(String(500),  unique = False)
 
     #Backrefs
     # roles      = relationship('ProductRoles'     ,backref='Products')
     # actions    = relationship('ProductActions'   ,backref='Products')
     # objectives = relationship('ProductObjectives',backref='Products')
 
-    def __init__(self,descripcion):
+    def __init__(self,nombre,descripcion=None):
+        self.nombre      = nombre
         self.descripcion = descripcion
         
     def getALL(self):
@@ -104,9 +91,9 @@ class Producto(db.Model):
 class Accion(db.Model):
     
     __tablename__ = 'Acciones'
-    idAccion      = db.Column(db.Integer, primary_key = True)
-    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
-    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    idAccion      = db.Column(Integer, primary_key = True)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('acciones', lazy = 'dynamic'))
     
     ''' Metodo init
@@ -122,10 +109,10 @@ class Accion(db.Model):
 class Actor(db.Model):
     
     __tablename__ = 'Actores'
-    idActor       = db.Column(db.Integer    , primary_key = True)
-    nombre        = db.Column(db.String(50) , unique = False, nullable=False)
-    descripcion   = db.Column(db.String(500), unique = False)
-    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    idActor       = db.Column(Integer    , primary_key = True)
+    nombre        = db.Column(String(50) , unique = False, nullable=False)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
     ''' Metodo init
         Constructor del actor
@@ -135,14 +122,17 @@ class Actor(db.Model):
         self.nombre      = nombre
         self.descripcion = descripcion
         self.idProducto  = idProducto
+
+    def getALL(self):
+        return engine.execute("select * from \"Actores\";")
      
 # Clase Usuario
 
 class Objetivo(db.Model):
     __tablename__ = 'Objetivos'
-    idObjetivo    = db.Column(db.Integer, primary_key = True)
-    descripcion   = db.Column(db.String(500), unique = False, nullable=False)
-    idProducto    = db.Column(db.Integer, db.ForeignKey('Productos.idProducto'))
+    idObjetivo    = db.Column(Integer, primary_key = True)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
     
     ''' Metodo init
@@ -154,9 +144,44 @@ class Objetivo(db.Model):
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
+# Class User, used at login for now.
 
+class dbuser(db.Model):
+    
+    __tablename__ = 'dbuser'
+    fullname = Column(String(50))
+    username = Column(String(16), primary_key = True)
+    password = Column(String(100)) #para que pueda aceptar hash
+    email = Column(String(30))
+    idActor = Column(Integer, ForeignKey('Actores.idActor'))
+    
+    ''' Metodo init
+        Constructor del usuario
+    ''' 
+    
+    def __init__(self, fullname, username, password, email, idActor):
+        
+        self.fullname = fullname
+        self.username = username
+        self.password = password
+        self.email = email
+        self.iddpt = iddpt 
+        self.idActor = idActor
 
-
+from app.scrum.ident import ident
+app.register_blueprint(ident)
+from app.scrum.prod import prod
+app.register_blueprint(prod)
+from app.scrum.mast import mast
+app.register_blueprint(mast)
+from app.scrum.dev import dev
+app.register_blueprint(dev)
+from app.scrum.actor import actor
+app.register_blueprint(actor)
+from app.scrum.objetivo import objetivo
+app.register_blueprint(objetivo)
+from app.scrum.accion import accion
+app.register_blueprint(accion)
 
 if __name__ == '__main__':
     app.config.update(
