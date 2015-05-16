@@ -18,7 +18,8 @@ class MdlTest(unittest.TestCase):
     #NOTA: correr estas pruebas unitarias con este teardown borraran todos los datos
     #      de la tabla Producto
     def tearDown(self):
-        self.prod.borrarFilas()
+        #self.prod.borrarFilas()
+        print("")
 
     """
         Casos frontera
@@ -42,7 +43,24 @@ class MdlTest(unittest.TestCase):
         self.assertTrue(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
 
     """
-        Casos borde
+        Casos esquina
     """
+    # Insert con 500 a acentuadas. La a y el acento es utf-8 o multichar?
+    def testTildeToTheSquare(self):
+        string = "á" * 500
+        self.prod.insertar(string)
+        self.assertTrue(self.prod.existeProducto(descript=string),"Error, no se encontro el producto")
+
+    """
+        Casos maliciosos
+    """
+
+    #Chequeo de proteccion contra inyecciones sql
+    def testDontMessMyDb(self):
+        #Si falla puede ser solucionado mas adelante con expresiones regulares!
+        string = "\" DROP TABLE \"PRODUCTOS\";";
+        self.prod.insertar(string)
+        self.assertFalse(self.prod.existeProducto(descript=string),"Error, string peligroso encontrado en el sistema")
+
 
 unittest.main()
