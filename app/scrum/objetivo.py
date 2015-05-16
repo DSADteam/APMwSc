@@ -11,12 +11,12 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    iObjetivo = objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
-    session.add(iObjetivo)
-    session.commit()
 
-    idPila = 1
-    res['label'] = res['label'] + '/' + str(idPila)
+    obj=clsObjetivo(session=session)
+    obj.insertarObj(params['idObjetivo'],params['descripcion'])
+    
+    #idPila = 1
+    #res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -36,13 +36,11 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     
-    iObjetivo = objetivo(params['descripcion'],params['idObjetivo'],params['idPila'])
-    session.query(objetivo).filter(objetivo.idObjetivo == idObjetivo).\
-        update({'descripcion' : (iObjetivo.descripcion) })
-    session.commit()
-        
-    idPila = 1
-    res['label'] = res['label'] + '/' + str(idPila)
+    obj = clsObjetivo()
+    obj.modificarObj(params['idObjetivo'], params['descripcion'])        
+   
+    #idPila = 1
+    #res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -61,7 +59,10 @@ def VCrearObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
-    res['idPila'] = [{'idPila':idPila}]
+    params = request.get_json()
+    print(params)
+    
+    #res['idPila'] = [{'idPila':idPila}]
 
     #Action code ends here
     return json.dumps(res)
@@ -75,10 +76,9 @@ def VObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
-    idObjetivo = int(request.args['idObjetivo'])
-    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
-    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
-    
+   
+    obj = clsObjetivo()
+    obj.obtenerObj(params['idObjetivo'])
     
     
     #Action code ends here
@@ -89,6 +89,42 @@ def VObjetivo():
 
 
 #Use case code starts here
+class clsObjetivo():
+    
+    def __init__(self,engine=None,session=None):
+        
+        self.engine  = engine
+        self.session = session
+    
+    def insertarObj(self, idObjetivo, descripcion):
+        
+        newObj = base.Objetivo(idObjetivo, descripcion) 
+        session.add(newObj)
+        session.commit()
+        
+    def modificarObj(self,idObjetivo,descripcion):
+        
+        session.query(base.Objetivo).filter(base.Objetivo.idobjetivo == idObjetivo).\
+             update({'descripcion' : (descripcion) })
+        session.commit()
+        
+    def obtenerObjProd(self, idProducto):
+        
+        res = []
+        result = self.engine.execute("select * from \"Objetivos\" where idProducto = \"+str(idProducto)\" ;")
+        if result!="":
+            for row in result:
+                res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
+            
+        return res
+    
+    def obtenerObj(self, idObjetivo):
+        
+        idObjetivo = int(request.args['idObjetivo'])
+        obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
+        res['data7'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
+        
+        return res
 
 
 #Use case code ends here
