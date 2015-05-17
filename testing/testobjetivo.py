@@ -11,9 +11,9 @@ import sys
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
 sys.path.append(dir)
 
-from app.scrum.objetivo import *
+from app.scrum.objetivo import clsObjetivo
 
-import base
+from base import *
 
 import unittest
 
