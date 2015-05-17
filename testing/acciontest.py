@@ -139,7 +139,7 @@ class accionTester(unittest.TestCase):
         acc = clsAccion()
         pIdProducto = 1
         pdescripcion = 'Accion 1'
-        acc.insertar(pIdAccion,pdescripcion,pIdProducto)
+        acc.insertar(pdescripcion,pIdProducto)
 
         pIdProducto2 = 1
         pdescripcion2 = 'A'
