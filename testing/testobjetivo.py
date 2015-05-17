@@ -13,6 +13,7 @@ sys.path.append(dir)
 
 from app.scrum.objetivo import clsObjetivo
 from base import *
+
 import unittest
 
 class TestObjetivo(unittest.TestCase):
