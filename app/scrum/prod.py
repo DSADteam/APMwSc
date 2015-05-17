@@ -17,6 +17,11 @@ from sqlalchemy.sql.expression import text
 prod = Blueprint('prod', __name__)
 from base import *
 
+#Modulos locales
+from app.scrum.actor import clsActor
+from app.scrum.accion import clsAccion
+from app.scrum.objetivo import clsObjetivo
+
 @prod.route('/prod/ACrearProducto', methods=['POST'])
 def ACrearProducto():
     #POST/PUT parameters
@@ -27,7 +32,7 @@ def ACrearProducto():
     #Action code goes here, res should be a list with a label and a message
     prd=clsProducto(session=sessionDB,engine=engine)
     prd.insertar(nombre=params['descripcion'])
-    
+    print(params)
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -87,14 +92,13 @@ def VProducto():
     #pilas = [{'idPila':1, 'nombre':'Pagos en línea', 'descripcion':'Pagos usando tarjeta de débito'}, {'idPila':2, 'nombre':'Recomendaciones de playas', 'descripcion':'Red social para playeros consumados'}, {'idPila':3, 'nombre':'Tu taxi seguro', 'descripcion':'Toma un taxi privado de forma segura'}, ]
     
     res['fPila'] = pilas[idPila-1]
+    '''
     #res['data3'] = [{'idActor':1, 'descripcion':'Actor 1'}, {'idActor':2, 'descripcion':'Actor 2'}, {'idActor':3, 'descripcion':'Actor 3'},  ]
     res['data5'] = [{'idAccion':1, 'descripcion':'Accion 1'}, {'idAccion':2, 'descripcion':'Accion 2'}, {'idAccion':3, 'descripcion':'Accion 3'}, {'idAccion':4, 'descripcion':'Accion 4'}, ]
     res['data7'] = [{'idObjetivo':1, 'descripcion':'Objetivo 1'}, {'idObjetivo':2, 'descripcion':'Objetivo 2'}, {'idObjetivo':3, 'descripcion':'Objetivo 3'}, {'idObjetivo':4, 'descripcion':'Objetivo 4'}, {'idObjetivo':5, 'descripcion':'Objetivo 5'},  ]
+    '''
+    
     res['idPila'] = idPila    
-
-    from app.scrum.actor import clsActor
-    from app.scrum.accion import clsAccion
-    from app.scrum.objetivo import clsObjetivo
 
     oActor    = clsActor(engine,sessionDB)
     oAccion   = clsAccion(engine,sessionDB)
@@ -209,7 +213,6 @@ class clsProducto():
                 self.session.query(Producto).filter(Producto.idProducto == id).\
                     update({'descripcion' : descripcion })
                 self.session.commit()
-                print(descripcion+"Oh yeahhhhhhhhhhhhhhhh")
                 return True
             else:
                 return False

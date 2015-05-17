@@ -28,10 +28,10 @@ def ACrearActor():
     #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
     #session.add(oActor)
     #session.commit()
-    print(params)
-    act=clsActor(session=session)
-    act.insertar(params['idActor'],params['descripcion'])
-    #res['label'] = res['label'] + '/' + str(idPila)
+    idPila = int(request.args.get('idPila', 1))
+    act=clsActor(session=sessionDB,engine=engine)
+    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(request.args.get('idPila', 1)))
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -50,17 +50,15 @@ def AModifActor():
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    #from base import db, Actor
+    idPila = int(request.args.get('idPila', 1))
+    print(params) #Borrar
+    print(idPila)
+    print('Shit, nigga.')
+    act=clsActor(session=sessionDB,engine=engine)
+    act.modificar(int(request.args.get('idPila', 1)),params['nombre'],params['descripcion'])
+    
     #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    session.query(Actor).filter(Actor.idActor == int(params['idActor'])).\
-        update({'descripcion' : (params['descripcion']) })
-    session.commit()
-
-    session.query(Actor).filter(Actor.idActor == int(params['idActor'])).\
-        update({'nombre' : (params['nombre']) })
-    session.commit()
-
-    #res['label'] = res['label'] + '/' + str(idPila)
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -79,11 +77,20 @@ def VActor():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     #from base import db, Actor
-
-    idActor = int(request.args['idActor'])
-    act = actor.query.filter_by(idActor=idActor).first()
-    res['actor'] =  {'idActor':act.idActor, 'descripcion':act.descripcion}
-
+    act=clsActor(engine=engine,session=sessionDB)
+    
+    idPila = int(request.args.get('idPila', 1))
+    print(idPila)
+    pilas = act.listarActores()
+    print('WTTTTTTTTTTTTF')
+    print(pilas)
+    res['fActor'] = pilas[idPila-1]
+    
+    
+    idActor = idPila
+    #act = sessionDB.query(Actor).filter_by(idActor=idActor).first()
+    #res['fPila'] =  {'idActor':act.idActor, 'nombre': act.nombre, 'descripcion':act.descripcion}
+    print(res)
     #Action code ends here
     return json.dumps(res)
 
@@ -96,8 +103,9 @@ def VCrearActor():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     #from base import db, Actor
-
-
+    print('NIganiganiganiganigaaaaaaaaaaaaaaaaa2')
+    params = request.get_json()
+    print(params)
     #Action code ends here
     return json.dumps(res)
 
@@ -106,21 +114,48 @@ class clsActor():
         def __init__(self,engine=None,session=None):
             self.engine  = engine
             self.session = session
+            
+        def insertar(self,nombre=None,descripcion=None,idProducto=None):
+            comentarioNulo = (nombre == None) or (descripcion == None) or\
+            (idProducto)==None
+            if comentarioNulo:
+                return False
 
-        def insertar(self,nombre,descripcion,idProducto):
-            blah = Actor(nombre,descripcion,idProducto)
-            self.session.add(blah)
-            self.session.commit()
+            estaEnBd       = self.existeActor(nombre=nombre)
+            #pr = clsProducto()
+            #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+            longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
+
+            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+                newAct = Actor(nombre,descripcion,idProducto)
+                self.session.add(newAct)
+                self.session.commit()
+                return True
+            else:
+                return False
+            
+        def existeActor(self,nombre=None):
+            if(nombre!=None):
+                result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
+            else:
+                return False
+            
+            contador = 0
+            for row in result:
+                contador += 1
+
+            return contador != 0
         
         def listarActores(self):
             res = []
             result = self.engine.execute("select * from \"Actores\";")
             if result!="":
                 for row in result:
-
-                    res.append({'idActor':row.idActor,'descripcion':row.descripcion})
+                    res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
                 else:
                     print("Empty query!")
+            
+            return res
                     
         def listarActoresprod(self,idProducto):
             res = []
@@ -137,6 +172,20 @@ class clsActor():
         def borrarFilas(self):
             self.session.query(Actor).delete()
             self.session.commit()
+
+        #Funcion que permite actualizar un nombre y descripcion
+        def modificar(self,id=None,nombre=None,descripcion=None):
+            if id and nombre and descripcion:
+                self.session.query(Actor).filter(Actor.idActor == id).\
+                    update({'nombre' : nombre })
+                self.session.commit()
+                
+                self.session.query(Actor).filter(Actor.idActor == id).\
+                    update({'descripcion' : descripcion })
+                self.session.commit()
+                return True
+            else:
+                return False
 
 #Use case code starts here
 
