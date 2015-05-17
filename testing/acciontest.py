@@ -15,15 +15,15 @@ class accionTester(unittest.TestCase):
         acc = clsAccion()
         pIdProducto = 1
         pdescripcion = 'Accion 1'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def testinsertar2(self):
         acc = clsAccion()
         pIdProducto = 2
         pdescripcion = 'A'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
 #casos frontera
 
@@ -31,29 +31,29 @@ class accionTester(unittest.TestCase):
         acc = clsAccion()
         pIdProducto = None
         pdescripcion = 'Accion 3'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def testDescripcionNulo(self):
         acc = clsAccion()
         pIdProducto = 1
         pdescripcion = ''
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def testdescripcion500(self):
         acc = clsAccion()
         pIdProducto = 4
         pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def testNumEnDescrip(self):
         acc = clsAccion()
         pIdProducto = 4
         pdescripcion = 234
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
 #Caso Esquina
 
@@ -61,29 +61,29 @@ class accionTester(unittest.TestCase):
         acc = clsAccion()
         pIdProducto = None
         pdescripcion = ''
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def idVacioyDescrip500(self):
         acc = clsAccion()
         pIdProducto = None
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def testIdNuloyDescripNum(self):
         acc = clsAccion()
         pIdProducto = None
         pdescripcion = 6589
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
     def testCharEnIdyDecripNum(self):
         acc = clsAccion()
         pIdProducto = 'bruxw'
         pdescripcion = 345346
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
 #Caso malicia
 
@@ -91,15 +91,15 @@ class accionTester(unittest.TestCase):
         acc = clsAccion()
         pIdProducto = 'idpepe'
         pdescripcion = 'Accion 2'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
     
     def testdescripcion501(self):
         acc = clsAccion()
         pIdProducto = 3
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        test = acc.insertar(pdescripcion,pIdProducto)
-        self.assertFalse(test)
+        acc.insertar(pdescripcion,pIdProducto)
+        self.assertTrue(existeAccion(descripcion=pdescripcion))
 
 #TEST MODIFICAR
 #casos regulares
@@ -112,8 +112,8 @@ class accionTester(unittest.TestCase):
 
         pIdProducto2 = 1
         pdescripcion2 = 'Accion N1'
-        test = acc.modificar(pdescripcion2,pIdProducto2)
-        self.assertTrue(test)
+        test = acc.modificar(pIdProducto2, pdescripcion2)
+        self.assertTrue(existeAccion(descripcion=pdescripcion2))
 
 #Casos fronteras
     
@@ -125,13 +125,15 @@ class accionTester(unittest.TestCase):
 
         pIdProducto2 = 2
         pdescripcion2 = 'el Mall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        test = acc.modificar(pdescripcion2,pIdProducto2)
-        self.assertTrue(test)
+        test = acc.modificar(pIdProducto2, pdescripcion2)
+        self.assertTrue(existeAccion(descripcion=pdescripcion2))
 
     def testModifNoValid(self):
         acc = clsAccion()
-        test = acc.modificar(123,"Accion 123")
-        self.assertFalse(test)
+        pIdProducto = 123
+        pdescripcion = 'Accion 123'
+        test = acc.modificar(pIdProducto,pdescripcion)
+        self.assertFalse(existeAccion(descripcion=pdescripcion))
 
     def testDescripAlMin(self):
         acc = clsAccion()
@@ -142,7 +144,7 @@ class accionTester(unittest.TestCase):
         pIdProducto2 = 1
         pdescripcion2 = 'A'
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertTrue(test)
+        self.assertTrue(existeAccion(descripcion=pdescripcion2))
 
 #Casos Esquina
 
@@ -154,8 +156,8 @@ class accionTester(unittest.TestCase):
 
         pIdProducto2 = None
         pdescripcion2 = ''
-        test = acc.modificar(pIdAccion2,pdescripcion2)
-        self.assertFalse(test)
+        test = acc.modificar(pIdProducto2,pdescripcion2)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
     def testModifIdNulyDescripNum(self):
         acc = clsAccion()
@@ -166,7 +168,7 @@ class accionTester(unittest.TestCase):
         pIdProducto2 = None
         pdescripcion2 = 345
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
     def testModifIdCharyDecripNum(self):
         acc = clsAccion()
@@ -177,7 +179,7 @@ class accionTester(unittest.TestCase):
         pIdProducto2 = 'idpepe'
         pdescripcion2 = 4567
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
     
     def testModifIdCharyDescripNul(self):
         acc = clsAccion()
@@ -188,7 +190,7 @@ class accionTester(unittest.TestCase):
         pIdProducto2 = 'idpepe'
         pdescripcion2 = ''
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
 
 #Casos Malicia
@@ -198,35 +200,35 @@ class accionTester(unittest.TestCase):
         pIdProducto2 = 'hola'
         pdescripcion2 = 'Accion p'
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
     def testModifDescrip501(self):
         acc = clsAccion()
         pIdProducto2 = 2
         pdescripcion2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
     def testModifDescripVacio(self):
         acc = clsAccion()
         pIdProducto2 = 1
         pdescripcion2 = ''
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
     def testModifDescripNum(self):
         acc = clsAccion()
         pIdProducto2 = 3
         pdescripcion2 = 123
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
     
     def testModifIdNulo(self):
         acc = clsAccion()
         pIdProducto2 = None
         pdescripcion2 = 'Accion nula'
         test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(test)
+        self.assertFalse(existeAccion(descripcion=pdescripcion2))
 
 
 unittest.main()
