@@ -124,7 +124,7 @@ class clsActor():
             estaEnBd       = self.existeActor(nombre=nombre)
             #pr = clsProducto()
             #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
-            longCharValido = (len(nombre) <= 500) and (len(descripcion) <= 500)
+            longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
 
             if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
                 newAct = Actor(nombre,descripcion,idProducto)
