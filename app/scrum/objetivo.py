@@ -98,7 +98,7 @@ class clsObjetivo():
         self.engine  = engine
         self.session = session
 
-    def insertar(self,descripcion=None,idProducto=None):
+    def insertar(self,idObjetivo,descripcion=None,idProducto=None):
         
         comentarioNulo = (descripcion == None) or\
         (idProducto)==None
