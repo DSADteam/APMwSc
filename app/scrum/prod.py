@@ -213,7 +213,6 @@ class clsProducto():
                 self.session.query(Producto).filter(Producto.idProducto == id).\
                     update({'descripcion' : descripcion })
                 self.session.commit()
-                print(descripcion+"Oh yeahhhhhhhhhhhhhhhh")
                 return True
             else:
                 return False
