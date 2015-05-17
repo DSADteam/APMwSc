@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 #Agregando proyect root
 
 import sys
@@ -18,9 +17,6 @@ from sqlalchemy.sql.expression import text
 #Definicion de blueprint y bd
 objetivo = Blueprint('objetivo', __name__)
 from base import *
-
-
-
 
 
 @objetivo.route('/objetivo/ACrearObjetivo', methods=['POST'])
@@ -51,7 +47,7 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-            
+    
     session.query(Objetivo).filter(Objetivo.idObjetivo == int(params['idObjetivo'])).\
         update({'descripcion' : (params['descripcion']) })
     session.commit()    
@@ -88,12 +84,9 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    
-    idObjetivo = int(request.args['idObjetivo'])
-    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
-    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
-    
-     #Action code ends here
+    obj=clsObjetivo(engine=engine)
+    res['data7'] = obj.listarObjetivos()
+    #Action code ends here
     return json.dumps(res)
 
 
@@ -103,9 +96,8 @@ class clsObjetivo():
     
     def __init__(self,engine=None,session=None):
         
-            self.engine  = engine
-            self.session = session
-    
+        self.engine  = engine
+        self.session = session
 
     def insertar(self,idObjetivo,descripcion=None,idProducto=None):
         
@@ -120,7 +112,7 @@ class clsObjetivo():
         longCharValido = (len(descripcion) <= 500)
 
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-            newObj = Objetivo(idObjetivo,descripcion)
+            newObj = Objetivo(idObjetivo,descripcion,idProducto)
             self.session.add(newObj)
             self.session.commit()
             return True
@@ -141,6 +133,7 @@ class clsObjetivo():
         return contador != 0
 
     def listarObjetivos(self):
+        
         res = []
         result = self.engine.execute("select * from \"Objetivos\";")
         if result!="":
@@ -148,7 +141,6 @@ class clsObjetivo():
                 res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
             else:
                 print("Empty query!")
-
                     
     def listarObjetivosprod(self,idProducto):
         
@@ -163,7 +155,6 @@ class clsObjetivo():
         
         return res
     
-
     def borrarFilas(self):
         
         self.session.query(Objetivo).delete()
