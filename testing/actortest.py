@@ -173,7 +173,7 @@ class actorTester(unittest.TestCase):
         acc.insertar(pnombre,pdescripcion,pIdProducto)
         
         
-        pnombre2= 'thebest'
+        pnombre2= ''
         pIdProducto2 = None
         pdescripcion2 = ''
         test = acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
@@ -199,7 +199,7 @@ class actorTester(unittest.TestCase):
         pdescripcion = 'Actor 1'
         acc.insertar(pnombre,pdescripcion,pIdProducto)
         
-        pnombre2= 'estenombre'
+        pnombre2= 5454
         pIdProducto2 = 'idpepe'
         pdescripcion2 = 4567
         test = acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
