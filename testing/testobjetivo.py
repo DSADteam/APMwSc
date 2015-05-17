@@ -5,6 +5,7 @@ Created on 15/05/2015
  
 @author: Meggie Sanchez y Cristina Betancourt
 '''
+
 import sys
 import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))

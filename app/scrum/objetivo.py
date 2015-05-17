@@ -90,7 +90,6 @@ def VObjetivo():
     return json.dumps(res)
 
 
-
 #Use case code starts here
 class clsObjetivo():
     
