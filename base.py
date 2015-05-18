@@ -74,10 +74,6 @@ class Producto(db.Model):
     nombre      = db.Column(String(500),  unique = True, nullable = False)
     descripcion = db.Column(String(500),  unique = False)
 
-    #Backrefs
-    # roles      = relationship('ProductRoles'     ,backref='Products')
-    # actions    = relationship('ProductActions'   ,backref='Products')
-    # objectives = relationship('ProductObjectives',backref='Products')
 
     def __init__(self,nombre,descripcion=None):
         self.nombre      = nombre
