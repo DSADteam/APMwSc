@@ -27,10 +27,10 @@ def ACrearObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    idPila = int(request.args.get('idPila', 1))
+    idPila = int(request.args.get('idProducto', 1))
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=int(request.args.get('idPila', 1)) )
-    res['label'] = res['label'] + '/' + str(idPila)
+    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=int(request.args.get('idProducto', 1)) )
+    res['label'] = res['label'] + '/' + str(idProducto)
 
     #Action code ends here
     if "actor" in res:
@@ -47,13 +47,10 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    
-    session.query(Objetivo).filter(Objetivo.idObjetivo == int(params['idObjetivo'])).\
-        update({'descripcion' : (params['descripcion']) })
-    session.commit()    
-   
-    #idPila = 1
-    #res['label'] = res['label'] + '/' + str(idPila)
+    idPila = int(request.args.get('idPila', 1))
+    act=clsActor(session=sessionDB,engine=engine)
+    act.modificar(int(request.args.get('idPila', 1)),params['idObjetivo'],params['descripcion'])
+    res['label'] = res['label'] + '/' + str(idProducto)
 
     #Action code ends here
     if "actor" in res:
@@ -71,7 +68,6 @@ def VCrearObjetivo():
     #Action code goes here, res should be a JSON structure
 
     params = request.get_json()
-    print(params)
     
     #res['idPila'] = [{'idPila':idPila}]
 
@@ -84,8 +80,12 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    obj=clsObjetivo(engine=engine)
-    res['data7'] = obj.listarObjetivos()
+    
+    obj=clsObjetivo(engine=engine,session=sessionDB)
+    idProducto = int(request.args.get('idProducto', 1))
+    objs = obj.listarObjetivos()
+    res['fObjetivo'] = objs[idProducto-1]
+    
     #Action code ends here
     return json.dumps(res)
 
@@ -160,7 +160,7 @@ class clsObjetivo():
         self.session.commit()
 
     #Funcion que permite actualizar la descripcion
-    def modificar(self,id=None,descripcion=None):
+    def modificar(self,idPila,id=None,descripcion=None):
         
         if id and descripcion:
             
@@ -170,5 +170,7 @@ class clsObjetivo():
             return True
         else:
             return False
+        
+       
     
 #Use case code ends here

@@ -135,7 +135,8 @@ class Objetivo(db.Model):
         Constructor del objetivo
     ''' 
     
-    def __init__(self,descripcion, idProducto):
+    def __init__(self,idObjetivo,descripcion, idProducto):
+        self.idObjetivo = idObjetivo
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
