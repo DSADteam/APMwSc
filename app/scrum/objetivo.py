@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#Agregando proyect root
+
 import sys
 import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
@@ -17,9 +19,6 @@ objetivo = Blueprint('objetivo', __name__)
 from base import *
 
 
-
-
-
 @objetivo.route('/objetivo/ACrearObjetivo', methods=['POST'])
 def ACrearObjetivo():
     #POST/PUT parameters
@@ -28,11 +27,10 @@ def ACrearObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    obj=clsObjetivo(session=session)
-    obj.insertarObj(params['idObjetivo'],params['descripcion'])
-    
-    #idPila = 1
-    #res['label'] = res['label'] + '/' + str(idPila)
+    idPila = int(request.args.get('idPila', 1))
+    obj=clsObjetivo(session=sessionDB, engine = engine)
+    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=int(request.args.get('idPila', 1)) )
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -42,8 +40,6 @@ def ACrearObjetivo():
             session['actor'] = res['actor']
     return json.dumps(res)
 
-
-
 @objetivo.route('/objetivo/AModifObjetivo', methods=['POST'])
 def AModifObjetivo():
     #POST/PUT parameters
@@ -52,8 +48,9 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     
-    obj = clsObjetivo(session=session)
-    obj.modificarObj(params['idObjetivo'], params['descripcion'])        
+    session.query(Objetivo).filter(Objetivo.idObjetivo == int(params['idObjetivo'])).\
+        update({'descripcion' : (params['descripcion']) })
+    session.commit()    
    
     #idPila = 1
     #res['label'] = res['label'] + '/' + str(idPila)
@@ -65,8 +62,6 @@ def AModifObjetivo():
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
-
-
 
 @objetivo.route('/objetivo/VCrearObjetivo')
 def VCrearObjetivo():
@@ -83,47 +78,71 @@ def VCrearObjetivo():
     #Action code ends here
     return json.dumps(res)
 
-
-
 @objetivo.route('/objetivo/VObjetivo')
 def VObjetivo():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    
-    idObjetivo = int(request.args['idObjetivo'])
-    obj = objetivo.query.filter_by(idObjetivo=idObjetivo).first()
-    res['objetivo'] =  {'idObjetivo':obj.idObjetivo, 'descripcion':obj.descripcion}
-    
-    
-    
+    obj=clsObjetivo(engine=engine)
+    res['data7'] = obj.listarObjetivos()
     #Action code ends here
     return json.dumps(res)
-
-
-
 
 
 #Use case code starts here
 class clsObjetivo():
     
     def __init__(self,engine=None,session=None):
-            self.engine  = engine
-            self.session = session
-    
-    def insertarObj(self, idObjetivo, descripcion):
         
-        newObj = base.Objetivo(idObjetivo, descripcion) 
-        session.add(newObj)
-        session.commit()
+        self.engine  = engine
+        self.session = session
+
+    def insertar(self,idObjetivo,descripcion=None,idProducto=None):
         
-    def modificarObj(self,idObjetivo,descripcion):
-        session.query(Objetivo).filter(Objetivo.idobjetivo == idObjetivo).\
-             update({'descripcion' : (descripcion) })
-        session.commit()
+        comentarioNulo = (descripcion == None) or\
+        (idProducto)==None
+        if comentarioNulo:
+            return False
+
+        estaEnBd       = self.existeObjetivo(descripcion=descripcion)
+        #pr = clsProducto()
+        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+        longCharValido = (len(descripcion) <= 500)
+
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+            newObj = Objetivo(idObjetivo,descripcion,idProducto)
+            self.session.add(newObj)
+            self.session.commit()
+            return True
+        else:
+            return False
+            
+    def existeObjetivo(self,descripcion=None):
         
-    def obtenerObjProd(self, idProducto):
+        if(descripcion!=None):
+            result  = self.engine.execute("select * from \"Objetivos\" where \'descripcion\'=\'"+descripcion+"\';")
+        else:
+            return False
+        
+        contador = 0
+        for row in result:
+            contador += 1
+
+        return contador != 0
+
+    def listarObjetivos(self):
+        
+        res = []
+        result = self.engine.execute("select * from \"Objetivos\";")
+        if result!="":
+            for row in result:
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
+            else:
+                print("Empty query!")
+                    
+    def listarObjetivosprod(self,idProducto):
+        
         res = []
         #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
         result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
@@ -132,19 +151,24 @@ class clsObjetivo():
                 res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
             else:
                 print("Empty query!")
-            
+        
         return res
     
-    def obtenerObj(self, idProducto):
-        res = []
-        result = self.engine.execute("select * from \"Objetivos\";")
-        if result!="":
-            for row in result:
-                res.append({'idObjetivo':row.idProducto,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
-            
-        return res
-    
+    def borrarFilas(self):
+        
+        self.session.query(Objetivo).delete()
+        self.session.commit()
 
+    #Funcion que permite actualizar la descripcion
+    def modificar(self,id=None,descripcion=None):
+        
+        if id and descripcion:
+            
+            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
+                update({'descripcion' : descripcion })
+            self.session.commit()
+            return True
+        else:
+            return False
+    
 #Use case code ends here
