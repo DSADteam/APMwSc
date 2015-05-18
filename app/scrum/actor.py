@@ -23,18 +23,18 @@ def ACrearActor():
     params = request.get_json()
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
     res = results[0]
-    #Action code goes here, res should be a list with a label and a message
-    #from base import db, Actor
-    #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    #session.add(oActor)
-    #session.commit()
-    print('GODDAMMINT')
-    print(request.path)
-    print(params)
-    idPila = int(request.args.get('idPila',1))
+    
+
+    print('NIganiganiganiganigaaaaaaaaaaaaaaaaa3')
+    print(session['idPila'])
+
+    idPila = str(session['idPila'])
+    session.pop("idPila",None)
+
+
     act=clsActor(session=sessionDB,engine=engine)
-    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(request.args.get('idPila', 1)))
-    res['label'] = res['label'] + '/' + str(idPila)
+    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=idPila)
+    res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
     if "actor" in res:
@@ -58,8 +58,9 @@ def AModifActor():
     act.modificar(params['idActor'],params['nombre'],params['descripcion'])
     #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
     #print('MIRAAAA ME VOY A:  '+res['label'] + '/' + str(idPila))
-    print('OBSERVAD!!!')
-    print(act.getProdId(params['idActor']))
+    #print('OBSERVAD!!! EL ID DE PRODUCTO QUE OBTUVE FUE :' + str(act.getProdId(params['idActor'])))
+
+    #print(act.getProdId(params['idActor']))
     res['label'] = res['label'] + '/' + str(act.getProdId(params['idActor']))
 
     #Action code ends here
@@ -88,7 +89,6 @@ def VActor():
     print(pilas)
     res['fActor'] = pilas[idPila-1]
     
-    
     idActor = idPila
     #act = sessionDB.query(Actor).filter_by(idActor=idActor).first()
     #res['fPila'] =  {'idActor':act.idActor, 'nombre': act.nombre, 'descripcion':act.descripcion}
@@ -106,8 +106,8 @@ def VCrearActor():
     #Action code goes here, res should be a JSON structure
     #from base import db, Actor
     print('NIganiganiganiganigaaaaaaaaaaaaaaaaa2')
-    params = request.get_json()
-    print(params)
+    session['idPila'] = request.args['idPila']
+
     #Action code ends here
     return json.dumps(res)
 
