@@ -160,7 +160,6 @@ class dbuser(db.Model):
         self.username = username
         self.password = password
         self.email = email
-        self.iddpt = iddpt 
         self.idActor = idActor
 
 from app.scrum.ident import ident

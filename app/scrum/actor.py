@@ -134,11 +134,14 @@ class clsActor():
             else:
                 return False
             
-        def existeActor(self,nombre=None):
+        def existeActor(self,nombre=None,idActor=None):
             if(nombre!=None):
                 result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
             else:
-                return False
+                if (idActor!=None):
+                    result  = self.engine.execute("select * from \"Actores\" where \'idActor\'=\'"+str(idActor)+"\';")
+                else:
+                    return False
             
             contador = 0
             for row in result:
