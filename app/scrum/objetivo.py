@@ -47,8 +47,8 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     idPila = int(request.args.get('idPila', 1))
-    act=clsActor(session=sessionDB,engine=engine)
-    act.modificar(int(request.args.get('idPila', 1)),params['idObjetivo'],params['descripcion'])
+    obj=clsObjetivo(session=sessionDB,engine=engine)
+    obj.modificar(int(request.args.get('idPila', 1)),params['descripcion'])
     res['label'] = res['label'] + '/' + str(idProducto)
 
     #Action code ends here
@@ -97,7 +97,7 @@ class clsObjetivo():
         self.engine  = engine
         self.session = session
 
-    def insertar(self,idObjetivo,descripcion=None,idProducto=None):
+    def insertar(self,descripcion=None,idProducto=None):
         
         comentarioNulo = (descripcion == None) or\
         (idProducto)==None
@@ -110,7 +110,7 @@ class clsObjetivo():
         longCharValido = (len(descripcion) <= 500)
 
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-            newObj = Objetivo(idObjetivo,descripcion,idProducto)
+            newObj = Objetivo(descripcion,idProducto)
             self.session.add(newObj)
             self.session.commit()
             return True
@@ -159,7 +159,7 @@ class clsObjetivo():
         self.session.commit()
 
     #Funcion que permite actualizar la descripcion
-    def modificar(self,idPila,id=None,descripcion=None):
+    def modificar(self,id=None,descripcion=None):
         
         if id and descripcion:
             

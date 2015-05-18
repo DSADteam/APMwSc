@@ -35,13 +35,6 @@ INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Des
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',3);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',3);
 
-INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que hagamos codigo lo continuemos',1);
-INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que todos nos divirtamos todo sera divertido',1);
-INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que jejeps todos huehuehue',1);
-INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que escribo esto nabil hace prod.py',2);
-INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que probamos la base de datos aprendemos',2);
-INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que jejeps todos huehuehue',2);
-
 INSERT INTO "dbuser" VALUES('Javier'      ,'javierlopm' ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','javier@correo.com'  ,3);
 INSERT INTO "dbuser" VALUES('Nabil'       ,'nabil'      ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','nabil@correo.com'   ,3);
 INSERT INTO "dbuser" VALUES('Cristina'    ,'cristinab'  ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','cristina@correo.com',3);
@@ -59,3 +52,11 @@ INSERT INTO "dbuser" VALUES('Roberto'     ,'robertor2'   ,'2e376b23934d2509220a3
 INSERT INTO "dbuser" VALUES('Meggie'      ,'meggies2'    ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','meggie@correo.com'  ,2);
 INSERT INTO "dbuser" VALUES('Ascander'    ,'ascander2'   ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','ascander@correo.com',2);
 INSERT INTO "dbuser" VALUES('Jean Carlos' ,'jeanc2'      ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','jeanc@correo.com'   ,2);
+
+INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que hagamos codigo lo continuemos',1);
+INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que todos nos divirtamos todo sera divertido',1);
+INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que jejeps todos huehuehue',1);
+INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que escribo esto nabil hace prod.py',2);
+INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que probamos la base de datos aprendemos',2);
+INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que jejeps todos huehuehue',2);
+
