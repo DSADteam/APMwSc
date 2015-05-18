@@ -76,7 +76,6 @@ def VCrearObjetivo():
     #Action code goes here, res should be a JSON structure
 
     params = request.get_json()
-    print(params)
     
     #res['idPila'] = [{'idPila':idPila}]
 

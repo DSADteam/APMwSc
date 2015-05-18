@@ -32,7 +32,6 @@ def ACrearProducto():
     #Action code goes here, res should be a list with a label and a message
     prd=clsProducto(session=sessionDB,engine=engine)
     prd.insertar(nombre=params['descripcion'])
-    print(params)
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -51,7 +50,6 @@ def AModifProducto():
     results = [{'label':'/VProductos', 'msg':['Producto actualizado']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    print(params) #Borrar
     prd=clsProducto(session=sessionDB,engine=engine)
     prd.modificar(params['idPila'],params['descripcion'])
         
@@ -72,7 +70,6 @@ def VCrearProducto():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     params = request.get_json()
-    print(params)
     #Action code ends here
     return json.dumps(res)
 

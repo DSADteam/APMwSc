@@ -51,9 +51,6 @@ def AModifActor():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     idPila = int(request.args.get('idPila', 1))
-    print(params) #Borrar
-    print(idPila)
-    print('Shit, nigga.')
     act=clsActor(session=sessionDB,engine=engine)
     act.modificar(int(request.args.get('idPila', 1)),params['nombre'],params['descripcion'])
     
@@ -80,17 +77,13 @@ def VActor():
     act=clsActor(engine=engine,session=sessionDB)
     
     idPila = int(request.args.get('idPila', 1))
-    print(idPila)
     pilas = act.listarActores()
-    print('WTTTTTTTTTTTTF')
-    print(pilas)
     res['fActor'] = pilas[idPila-1]
     
     
     idActor = idPila
     #act = sessionDB.query(Actor).filter_by(idActor=idActor).first()
     #res['fPila'] =  {'idActor':act.idActor, 'nombre': act.nombre, 'descripcion':act.descripcion}
-    print(res)
     #Action code ends here
     return json.dumps(res)
 
@@ -103,9 +96,7 @@ def VCrearActor():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     #from base import db, Actor
-    print('NIganiganiganiganigaaaaaaaaaaaaaaaaa2')
     params = request.get_json()
-    print(params)
     #Action code ends here
     return json.dumps(res)
 
