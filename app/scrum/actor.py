@@ -77,7 +77,6 @@ def VActor():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structur
 
-    #print(params['idActor'])
     idActor = request.args.get('idActor', 1)
     session['idActor']=idActor
     
@@ -163,7 +162,7 @@ class clsActor():
             result = self.session.query(Actor).filter(Actor.idProducto == idProducto)
             if result!="":
                 for row in result:
-                    res.append({'idActor':row.idActor,'descripcion':row.descripcion})
+                    res.append({'idActor':row.idActor,'nombre':row.nombre,'descripcion':row.descripcion})
                 else:
                     print("Empty query!")
             
