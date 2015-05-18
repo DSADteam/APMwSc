@@ -26,7 +26,6 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
     idPila = int(request.args.get('idProducto', 1))
     obj=clsObjetivo(session=sessionDB, engine = engine)
     obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=int(request.args.get('idProducto', 1)) )

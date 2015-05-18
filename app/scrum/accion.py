@@ -24,10 +24,18 @@ def ACrearAccion():
     results = [{'label':'/VProducto', 'msg':['Acción creada']}, {'label':'/VCrearAccion', 'msg':['Error al crear acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = int(request.args.get('idPila', 1))
+    #idPila = int(request.args.get('idPila', 1))
+    #print(params)
+
+    print("Los parametros que recibo son :")
+    for x in params:
+        print(x)
+
     acc=clsAccion(session=sessionDB,engine=engine)
     acc.insertar(descripcion=params['descripcion'],idProducto=int(request.args.get('idPila', 1)))
-    res['label'] = res['label'] + '/' + str(idPila)
+    
+    #res['label'] = res['label'] + '/' + str(idPila)
+    res['label'] = res['label'] + '/' + 1
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -72,10 +80,9 @@ def VAccion():
     acc=clsAccion(engine=engine,session=sessionDB)
     
     idPila = int(request.args.get('idPila', 1))
-    print(idPila)
+    
     pilas = acc.listarAcciones()
-    print('WTTTTTTTTTTTTF')
-    print(pilas)
+
     res['fAccion'] = pilas[idPila-1]
     
     
@@ -92,10 +99,14 @@ def VCrearAccion():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    print('lel')
     params = request.get_json()
-    print(params)
-    #Action code ends here
+    #print("Esta si es mi session " + str(int(request.args.get('idPila', 1))))
+    idPila = int(request.args.get('idPila', 1))
+
+    res = {'idPila': idPila}
+
+    print("El parametro que envio es" + str(idPila))
+
     return json.dumps(res)
 
 
