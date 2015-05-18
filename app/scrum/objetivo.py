@@ -26,10 +26,13 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = int(request.args.get('idProducto', 1))
+    print(session)
+    idPila = str(session['idPila'])
+    session.pop("idPila",None)
+
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=int(request.args.get('idProducto', 1)) )
-    res['label'] = res['label'] + '/' + str(idProducto)
+    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=idPila)
+    res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
     if "actor" in res:
@@ -65,10 +68,11 @@ def VCrearObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-    params = request.get_json()
+    print(session)
     
-    #res['idPila'] = [{'idPila':idPila}]
+    session['idPila'] = request.args['idPila']
+
+    print(session)
 
     #Action code ends here
     return json.dumps(res)
@@ -81,9 +85,11 @@ def VObjetivo():
     #Action code goes here, res should be a JSON structure
     
     obj=clsObjetivo(engine=engine,session=sessionDB)
-    idProducto = int(request.args.get('idProducto', 1))
+
+    idPila = int(request.args.get('idPila', 1))
     objs = obj.listarObjetivos()
     res['fObjetivo'] = objs[idProducto-1]
+    idObjetivo=idPila
     
     #Action code ends here
     return json.dumps(res)
