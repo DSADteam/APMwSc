@@ -74,10 +74,6 @@ class Producto(db.Model):
     nombre      = db.Column(String(500),  unique = True, nullable = False)
     descripcion = db.Column(String(500),  unique = False)
 
-    #Backrefs
-    # roles      = relationship('ProductRoles'     ,backref='Products')
-    # actions    = relationship('ProductActions'   ,backref='Products')
-    # objectives = relationship('ProductObjectives',backref='Products')
 
     def __init__(self,nombre,descripcion=None):
         self.nombre      = nombre
@@ -139,8 +135,7 @@ class Objetivo(db.Model):
         Constructor del objetivo
     ''' 
     
-    def __init__(self, idObjetivo, descripcion, idProducto):
-        self.idObjetivo  = idObjetivo
+    def __init__(self,descripcion, idProducto):
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
@@ -165,7 +160,6 @@ class dbuser(db.Model):
         self.username = username
         self.password = password
         self.email = email
-        self.iddpt = iddpt 
         self.idActor = idActor
 
 from app.scrum.ident import ident
