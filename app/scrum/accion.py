@@ -50,8 +50,6 @@ def AModifAccion():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     idPila = int(request.args.get('idPila', 1))
-    print(idPila)
-    print('bro.')
     acc=clsAccion(session=sessionDB,engine=engine)
     acc.modificar(int(request.args.get('idPila', 1)),params['descripcion'])
     
@@ -76,14 +74,13 @@ def VAccion():
     acc=clsAccion(engine=engine,session=sessionDB)
     
     idPila = int(request.args.get('idPila', 1))
+
     
     pilas = acc.listarAcciones()
-
     res['fAccion'] = pilas[idPila-1]
     
     
     idAccion = idPila
-    print(res)
     #Action code ends here
     return json.dumps(res)
 
@@ -95,6 +92,7 @@ def VCrearAccion():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
     session['idPila'] = request.args['idPila']
 
     return json.dumps(res)

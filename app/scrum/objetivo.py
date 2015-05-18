@@ -68,7 +68,10 @@ def VCrearObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    print(session)
+
+
+    params = request.get_json()
+
     
     session['idPila'] = request.args['idPila']
 

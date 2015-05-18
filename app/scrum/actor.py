@@ -49,12 +49,10 @@ def AModifActor():
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    #idPila = int(request.args.get("idPila",1))
 
     idActor = session['idActor']
     session.pop("idActor",None)
-    print(idActor)
-
+    
     act=clsActor(session=sessionDB,engine=engine)
     act.modificar(idActor,params['nombre'],params['descripcion'])
     
@@ -82,8 +80,8 @@ def VActor():
     
     act=clsActor(engine=engine,session=sessionDB)
     
-    idPila = request.args.get('idPila', 1)
 
+    idPila = request.args.get('idPila', 1)
     pilas = act.listarActores()
     res['fActor'] = pilas[idPila-1]
     
@@ -99,6 +97,7 @@ def VCrearActor():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
 
     session['idPila'] = request.args['idPila']
 
