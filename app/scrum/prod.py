@@ -106,7 +106,7 @@ def VProducto():
 
     res['data3'] = oActor.listarActoresprod(idPila)
     res['data5'] = oAccion.listarAccionesprod(idPila)
-    res['data7'] = oObjetivo.obtenerObjProd(idPila)
+    res['data7'] = oObjetivo.listarObjetivosprod(idPila)
 
     #Action code ends here
     return json.dumps(res)

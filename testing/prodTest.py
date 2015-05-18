@@ -46,9 +46,11 @@ class MdlTest(unittest.TestCase):
         Casos esquina
     """
     # Insert con 500 a acentuadas. La a y el acento es utf-8 o multichar?
+    # descripcion del mismo tam
     def testTildeToTheSquare(self):
         string = "á" * 500
-        self.prod.insertar(string)
+        descripcion = "á" * 500
+        self.prod.insertar(string,descripcion=descripcion)
         self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
 
     """

@@ -5,382 +5,269 @@ sys.path.append(dir)
 
 from app.scrum.prod  import clsProducto
 from app.scrum.actor import clsActor
-from base import sessionDB,engine
+from base import *
 import unittest
 
 class actorTester(unittest.TestCase):
-     
     def setUp(self):
-        self.act = clsActor(engine,sessionDB)
-        p        = clsProducto(engine,sessionDB)
-        p.insertar(nombre="Prueba para actor")
-        self.idP = p.idProd("Prueba para actor")
-
+        self.acc=clsActor(engine,sessionDB)
+        
     def tearDown(self):
-        #self.act.borrarFilas()
-        print("")
+        self.actor.borrarFilas()
 
     def testinsertar1(self):
-        aNombre = 'pepe'
-        aDescripcion = 'Actor 1'
-        test = self.act.insertar(nombre=aNombre,descripcion=aDescripcion,idProducto=self.idP)
-        self.assertTrue(test)
-    
-    def testinsertar2(self):
-        act = clsActor()
-        pIdActor = 2
-        pnombre = 'juan'
-        pdescripcion = 'Actor 2'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertTrue(test)
-
-#Casos fronteras
-
-    def testnombre50(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'AuS2CaV9lq8GbkJi174Af6hYDJ49ywbcx0Mf3rziTS9cJVfOja'
+        
+        pnombre = 'pedro'
+        pIdProducto = 1
         pdescripcion = 'Actor 1'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertTrue(test)
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testdescripcion500(self):
-        act = clsActor()
-        pIdActor = 4
-        pnombre = 'brace yourself'
-        pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo actor y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin!'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertTrue(test)
+    def testinsertar2(self):
+      
+        pnombre = 'pedrito'
+        pIdProducto = 2
+        pdescripcion = 'A'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
+
+#casos frontera
 
     def testCampoIdNulo(self):
-        act = clsActor()
-        pIdActor = None
-        pnombre = 'juancho'
-        pdescripcion = 'Actor 2'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+        
+        pnombre = 'jose'
+        pIdProducto = None
+        pdescripcion = 'Actor 3'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testNombreNulo(self):
-        act = clsActor()
-        pIdActor = 4
-        pnombre = ''
-        pdescripcion = 'Actor 2'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
-
-    def testDescripNulo(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'carlos'
+    def testDescripcionNulo(self):
+        
+        pnombre = 'josue'
+        pIdProducto = 1
         pdescripcion = ''
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testNombreNum(self):
-        act = clsActor()
-        pIdActor = 4
-        pnombre = 232
-        pdescripcion = 'Actor 4'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+    def testdescripcion500(self):
+   
+        pnombre = 'eli'
+        pIdProducto = 4
+        pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testDescripNum(self):
-        act = clsActor()
-        pIdActor = 2
-        pnombre = 'fred'
-        pdescripcion = 44444
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+    def testNumEnDescrip(self):
+       
+        pnombre = 'chiabe'
+        pIdProducto = 4
+        pdescripcion = 234
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
 #Caso Esquina
 
-    def testtodosVacios(self):
-        act = clsActor()
-        pIdActor = None
-        pnombre = ''
+    def todosVacios(self):
+       
+        pnombre = 'chiabes'
+        pIdProducto = None
         pdescripcion = ''
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testNombreyDescripNum(self):
-        act = clsActor()
-        pIdActor = 3
-        pnombre = 3333
-        pdescripcion = 44444
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
-
-    def testidVacioyDescrip500(self):
-        act = clsActor()
-        pIdActor = None
-        pnombre = 'too long'
+    def idVacioyDescrip500(self):
+    
+        pnombre = 'teama'
+        pIdProducto = None
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
-        
-#Casos Malicia
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testCharEnId(self):
-        act = clsActor()
-        pIdActor = 'idviteh'
-        pnombre = 'el viejo'
-        pdescripcion = 'Actor 5'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+    def testIdNuloyDescripNum(self):
+      
+        pnombre = 'teruel'
+        pIdProducto = None
+        pdescripcion = 6589
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
-    def testNombre51(self):
-        act = clsActor()
-        pIdActor = 2
-        pnombre = 'AuS2CaV9lq8GbkJi174Af6hYDJ49ywbcx0Mf3rziTS9cJVfOjab'
+    def testCharEnIdyDecripNum(self):
+  
+        pnombre = ''
+        pIdProducto = 'bruxw'
+        pdescripcion = 345346
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(nombre=pnombre))
+
+#Caso malicia
+
+    def testcharEnId(self):
+ 
+        pnombre = 'jirafa'
+        pIdProducto = 'idpepe'
         pdescripcion = 'Actor 2'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
-
-    def testDescrip501(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'Alberto'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
+    
+    def testdescripcion501(self):
+   
+        pnombre = 'perro'
+        pIdProducto = 3
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        test = act.insertar(pIdActor,pnombre,pdescripcion)
-        self.assertFalse(test)
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        self.assertTrue(self.acc.existeActor(pnombre))
 
 #TEST MODIFICAR
-#caso regular
+#casos regulares
 
     def testModificar1(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
+     
+        pnombre = 'nabil'
+        pIdProducto = 1
         pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 'pablo'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        
+        pnombre2= 'coki'
+        pIdProducto2 = 1
         pdescripcion2 = 'Actor N1'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertTrue(test)
+        test = self.acc.modificar(IdProducto=pIdProducto2,nombre=pnombre2, descripcion=pdescripcion2)
+        self.assertTrue(self.acc.existeActor(pnombre2))
 
 #Casos fronteras
+    
+    def testDescrip500(self):
+       
+        pnombre = 'cristina'
+        pIdProducto = 2
+        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
 
-    def testModifnombre50(self):        
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 'AuS2CaV9lq8GbkJi174Af6hYDJ49ywbcx0Mf3rziTS9cJVfOja'
-        pdescripcion2 = 'Actor N1'
-        test = act.modificar(pIdActor,pnombre2,pdescripcion2)
-        self.assertTrue(test)
-
-
-    def testModifDescrip500(self):        
-        act = clsActor()
-        pIdActor = 3
-        pnombre = 'harold'
-        pdescripcion = 'Actor 3'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 3
-        pnombre2 = 'harold'
-        pdescripcion2 = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo actor y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin!'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertTrue(test)
+        pnombre2= 'oil'
+        pdescripcion2 = 'el Mall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        test = self.acc.modificar(pIdProducto,pnombre2, pdescripcion2)
+        self.assertTrue(self.acc.existeActor(pnombre2))
 
     def testModifNoValid(self):
-        act = clsActor()
-        test = act.modificar(123,'carlos','Accion 123')
-        self.assertFalse(test)
+       
+        pIdProducto = 123
+        pdescripcion = 'Actor 123'
+        pnombre2= 'tini'
+        test = self.acc.modificar(pIdProducto,pnombre2,pdescripcion)
+        self.assertFalse(self.acc.existeActor(pnombre2))
 
-    def testNombreMin(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
+    def testDescripAlMin(self):
+
+        pnombre = 'roberto'
+        pIdProducto = 1
         pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 'p'
-        pdescripcion2 = 'Actor N1'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertTrue(test)
-
-    def testDescripMin(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 'pepe'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        
+        pnombre2= 'nuevo'
+        pIdProducto2 = 1
         pdescripcion2 = 'A'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertTrue(test)
+        test = self.acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertTrue(self.acc.existeActor(nombre=pnombre2))
 
-#Casos Esquinas
+#Casos Esquina
 
-    def testModifTodosNull(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
+    def testModifTodoNul(self):
+    
+        pnombre = 'meggie'
+        pIdProducto = 1
         pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = None
-        pnombre2 = ''
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        
+        
+        pnombre2= ''
         pdescripcion2 = ''
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
-    
+        test = self.acc.modificar(pIdProducto,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+
     def testModifIdNulyDescripNum(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
+      
+        pnombre = 'latigresa'
+        pIdProducto = 1
         pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        
+        pnombre2= 'chiabz'
+        pIdProducto2 = None
+        
+        test = self.acc.modificar(pIdProducto,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
-        pIdActor2 = None
-        pnombre2 = 'laura'
-        pdescripcion2 = 985
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
-    
-    def testModifIdNulyNombreNum(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
-        pdescripcion = 'Acctor 3'
-        act.insertar(pIdActor,pnombre,pdescripcion)
+    def testModifIdCharyDecripNum(self):
 
-        pIdActor2 = None
-        pnombre2 = 69
-        pdescripcion2 = 'Actor 3'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
-
-    def testModifNombreyDescripNum(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
+        pnombre = 'manuela'
+        pIdProducto = 1
         pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 69
-        pdescripcion2 = 985
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        
+        pnombre2= 'estenombre'
+      
+        pdescripcion2 = 4567
+        test = self.acc.modificar(pIdProducto,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
     
-    def testModifIdCharyDescripNum(self):
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
+    def testModifIdCharyDescripNul(self):
+      
+        pnombre = 'unnombre'
+        pIdProducto = 1
+        pdescripcion = 'Actor1'
+        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+        
+        pnombre2= 'yyyyyy'
+      
+        pdescripcion2 = ''
+        test = self.acc.modificar(pIdProducto,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
-        pIdActor2 = 'idx'
-        pnombre2 = 'laura'
-        pdescripcion2 = 985
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
-    
-    def testModifIdCharyNombreNum(self):
-        act = clsActor()
-        pIdActor = 2
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 2'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 'idx'
-        pnombre2 = 42
-        pdescripcion2 = 'Actor 2'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
 
 #Casos Malicia
 
     def testModifCharEnId(self):
-        act = clsActor()
-        pIdActor = 2
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 2'
-        act.insertar(pIdActor,pnombre,pdescripcion)
+    
+        pIdProducto2 = 'hola'
+        pdescripcion2 = 'Actor p'
+        pnombre2= 'estem'
+        test = self.acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
-        pIdActor2 = 'idx'
-        pnombre2 = 'pepe'
-        pdescripcion2 = 'Actor 2'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
-
-    def testModifDescrip501(self):        
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'harold'
-        pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 'hordor'
-        pdescripcion2 = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo actor y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el ¡fin!'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
-
-    def testModifnombre51(self):        
-        act = clsActor()
-        pIdActor = 1
-        pnombre = 'pepe'
-        pdescripcion = 'Actor 1'
-        act.insertar(pIdActor,pnombre,pdescripcion)
-
-        pIdActor2 = 1
-        pnombre2 = 'AuS2CaV9lq8GbkJi174Af6hYDJ49ywbcx0Mf3rziTS9cJVfOjab'
-        pdescripcion2 = 'Actor N1'
-        test = act.modificar(pIdActor2,pnombre2,pdescripcion2)
-        self.assertFalse(test)
+    def testModifDescrip501(self):
+      
+        pIdProducto2 = 2
+        pnombre2= 'este'
+        pdescripcion2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
+        test = self.acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
     def testModifDescripVacio(self):
-        act = clsActor()
-        pIdActor2 = 1
-        pnombre = 'julio'
+    
+        pIdProducto2 = 1
+        pnombre2= 'nombredos'
         pdescripcion2 = ''
-        test = act.modificar(pIdActor2,pdescripcion2)
-        self.assertFalse(test)
-
-    def testModifNombreVacio(self):
-        act = clsActor()
-        pIdActor2 = 1
-        pnombre = ''
-        pdescripcion2 = 'Actor 1'
-        test = act.modificar(pIdActor2,pdescripcion2)
-        self.assertFalse(test)
-
-    def testModifNombreNum(self):
-        act = clsActor()
-        pIdActor2 = 1
-        pnombre = 986
-        pdescripcion2 = 'Actor 1'
-        test = act.modificar(pIdActor2,pdescripcion2)
-        self.assertFalse(test)
+        test = self.acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
     def testModifDescripNum(self):
-        act = clsActor()
-        pIdActor2 = 1
-        pnombre = 'fabio'
-        pdescripcion2 = 865
-        test = act.modificar(pIdActor2,pdescripcion2)
-        self.assertFalse(test)
-
+ 
+        pIdProducto2 = 3
+        pnombre2= 'nombretres'
+        pdescripcion2 = 123
+        test = self.acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+    
     def testModifIdNulo(self):
-        act = clsActor()
-        pIdActor2 = None
-        pnombre = 'rod'
-        pdescripcion2 = 'Actor 3'
-        test = act.modificar(pIdActor2,pdescripcion2)
-        self.assertFalse(test)
+ 
+        pIdProducto2 = None
+        pnombre2= 'nombrecuatro'
+        pdescripcion2 = 'Actor nulo'
+        test = self.acc.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+
+
 
 
 if __name__ == "__main__":
     unittest.main()
+

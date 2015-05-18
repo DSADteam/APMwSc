@@ -28,7 +28,10 @@ def ACrearActor():
     #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
     #session.add(oActor)
     #session.commit()
-    idPila = int(request.args.get('idPila', 1))
+    print('GODDAMMINT')
+    print(request.path)
+    print(params)
+    idPila = int(request.args.get('idPila',1))
     act=clsActor(session=sessionDB,engine=engine)
     act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(request.args.get('idPila', 1)))
     res['label'] = res['label'] + '/' + str(idPila)
@@ -50,15 +53,14 @@ def AModifActor():
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = int(request.args.get('idPila', 1))
-    print(params) #Borrar
-    print(idPila)
-    print('Shit, nigga.')
+    #idPila = int(request.args.get("idPila",1))
     act=clsActor(session=sessionDB,engine=engine)
-    act.modificar(int(request.args.get('idPila', 1)),params['nombre'],params['descripcion'])
-    
+    act.modificar(params['idActor'],params['nombre'],params['descripcion'])
     #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    res['label'] = res['label'] + '/' + str(idPila)
+    #print('MIRAAAA ME VOY A:  '+res['label'] + '/' + str(idPila))
+    print('OBSERVAD!!!')
+    print(act.getProdId(params['idActor']))
+    res['label'] = res['label'] + '/' + str(act.getProdId(params['idActor']))
 
     #Action code ends here
     if "actor" in res:
@@ -124,7 +126,7 @@ class clsActor():
             estaEnBd       = self.existeActor(nombre=nombre)
             #pr = clsProducto()
             #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
-            longCharValido = (len(nombre) <= 500) and (len(descripcion) <= 500)
+            longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
 
             if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
                 newAct = Actor(nombre,descripcion,idProducto)
@@ -175,6 +177,12 @@ class clsActor():
         def borrarFilas(self):
             self.session.query(Actor).delete()
             self.session.commit()
+        
+        def getProdId(self,idActor):
+            result = self.session.query(Actor).filter(Actor.idActor == idActor)
+            for row in result:
+                x=row.idProducto
+            return x
 
         #Funcion que permite actualizar un nombre y descripcion
         def modificar(self,id=None,nombre=None,descripcion=None):
