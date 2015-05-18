@@ -53,6 +53,7 @@ def AModifActor():
 
     idActor = session['idActor']
     session.pop("idActor",None)
+    print(idActor)
 
     act=clsActor(session=sessionDB,engine=engine)
     act.modificar(idActor,params['nombre'],params['descripcion'])
@@ -83,7 +84,6 @@ def VActor():
     act=clsActor(engine=engine,session=sessionDB)
     
     idPila = request.args.get('idPila', 1)
-    print(idPila)
 
     pilas = act.listarActores()
     res['fActor'] = pilas[idPila-1]
