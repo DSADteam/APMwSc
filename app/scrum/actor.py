@@ -50,14 +50,14 @@ def AModifActor():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     #idPila = int(request.args.get("idPila",1))
-    act=clsActor(session=sessionDB,engine=engine)
-    act.modificar(params['idActor'],params['nombre'],params['descripcion'])
-    #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    #print('MIRAAAA ME VOY A:  '+res['label'] + '/' + str(idPila))
-    #print('OBSERVAD!!! EL ID DE PRODUCTO QUE OBTUVE FUE :' + str(act.getProdId(params['idActor'])))
 
-    #print(act.getProdId(params['idActor']))
-    res['label'] = res['label'] + '/' + str(act.getProdId(params['idActor']))
+    idActor = session['idActor']
+    session.pop("idActor",None)
+
+    act=clsActor(session=sessionDB,engine=engine)
+    act.modificar(idActor,params['nombre'],params['descripcion'])
+    
+    res['label'] = res['label'] + '/' + str(idActor)
 
     #Action code ends here
     if "actor" in res:
@@ -74,14 +74,20 @@ def VActor():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
-    #Action code goes here, res should be a JSON structure
+    #Action code goes here, res should be a JSON structur
+
+    #print(params['idActor'])
+    idActor = request.args.get('idActor', 1)
+    session['idActor']=idActor
     
     act=clsActor(engine=engine,session=sessionDB)
     
-    idPila = int(request.args.get('idPila', 1))
+    idPila = request.args.get('idPila', 1)
+    print(idPila)
+
     pilas = act.listarActores()
     res['fActor'] = pilas[idPila-1]
-    idActor = idPila
+    
 
     #Action code ends here
     return json.dumps(res)
