@@ -29,12 +29,12 @@ def ACrearActor():
     #session.add(oActor)
     #session.commit()
     print('GODDAMMINT')
-    print(request.path)
+    print(request.base_url)
     print(params)
-    idPila = int(request.args.get('idPila',1))
+    idPila = 1
     act=clsActor(session=sessionDB,engine=engine)
-    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(request.args.get('idPila', 1)))
-    res['label'] = res['label'] + '/' + str(idPila)
+    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=1)
+    res['label'] = res['label'] + '/' + str(1)
 
     #Action code ends here
     if "actor" in res:
@@ -85,9 +85,8 @@ def VActor():
     print(idPila)
     pilas = act.listarActores()
     print('WTTTTTTTTTTTTF')
-    print(pilas)
     res['fActor'] = pilas[idPila-1]
-    
+    print(res['fActor'])
     
     idActor = idPila
     #act = sessionDB.query(Actor).filter_by(idActor=idActor).first()

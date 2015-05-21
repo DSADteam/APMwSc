@@ -47,10 +47,12 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = int(request.args.get('idPila', 1))
+    #idPila = int(request.args.get('idPila', 1))
+    print('dDAAAAAAAAAAA')
+    print(params)
     obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(int(request.args.get('idPila', 1)),params['descripcion'])
-    res['label'] = res['label'] + '/' + str(idProducto)
+    obj.modificar(params['idObjetivo'],params['descripcion'])
+    res['label'] = res['label'] + '/' + str(obj.getProdId(params['idObjetivo']))
 
     #Action code ends here
     if "actor" in res:
@@ -81,11 +83,23 @@ def VObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
+    
+    obj=clsObjetivo(engine=engine,session=sessionDB)
+    
+    idPila = int(request.args.get('idPila', 1))
+    print(idPila)
+    pilas = obj.listarObjetivos()
+    res['fObjetivos'] = pilas[idPila-1]
+    
+    
+    idActor = idPila
+    
+    
     obj=clsObjetivo(engine=engine,session=sessionDB)
     idProducto = int(request.args.get('idProducto', 1))
     objs = obj.listarObjetivos()
     res['fObjetivo'] = objs[idProducto-1]
-    
+    primt(res['fObjetivo'] )
     #Action code ends here
     return json.dumps(res)
 
@@ -158,6 +172,12 @@ class clsObjetivo():
         
         self.session.query(Objetivo).delete()
         self.session.commit()
+
+    def getProdId(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        for row in result:
+            x=row.idObjetivo
+        return x
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):

@@ -45,14 +45,15 @@ def AModifAccion():
     results = [{'label':'/VProducto', 'msg':['Acción actualizada']}, {'label':'/VAccion', 'msg':['Error al modificar acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = int(request.args.get('idPila', 1))
-    print(idPila)
-    print('bro.')
+    #idPila = int(request.args.get('idPila', 1))
+    #rint(idPila)
+    print('br.....................o.')
+    print(params)
     acc=clsAccion(session=sessionDB,engine=engine)
-    acc.modificar(int(request.args.get('idPila', 1)),params['descripcion'])
+    acc.modificar(params['idAccion'],params['descripcion'])
     
-    res['label'] = res['label'] + '/' + str(idPila)
-
+    res['label'] = res['label'] + '/' + str(acc.getProdId(params['idAccion']))
+    
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -77,8 +78,8 @@ def VAccion():
     print('WTTTTTTTTTTTTF')
     print(pilas)
     res['fAccion'] = pilas[idPila-1]
-    
-    
+    print('HEEEEEEEEEEEEEELP')
+    print(res['fAccion'])
     idAccion = idPila
     print(res)
     #Action code ends here
@@ -124,6 +125,12 @@ class clsAccion():
             else:
                 return False
             
+        def getProdId(self,idAccion):
+            result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
+            for row in result:
+                x=row.idProducto
+            return x
+        
         def existeAccion(self,descripcion=None):
             if(descripcion!=None):
                 result  = self.engine.execute("select * from \"Acciones\" where \'descripcion\'=\'"+descripcion+"\';")
@@ -136,7 +143,6 @@ class clsAccion():
 
             return contador != 0
 
-        
         def listarAcciones(self):
             res = []
             result = self.engine.execute("select * from \"Acciones\";")
@@ -145,6 +151,8 @@ class clsAccion():
                     res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
                 else:
                     print("Empty query!")
+                    
+            return res
                     
         def listarAccionesprod(self,idProducto):
             res = []
