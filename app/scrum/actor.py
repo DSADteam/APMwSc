@@ -104,93 +104,101 @@ def VCrearActor():
     #Action code ends here
     return json.dumps(res)
 
+#Use case code starts here
 
 class clsActor():
-        def __init__(self,engine=None,session=None):
-            self.engine  = engine
-            self.session = session
-            
-        def insertar(self,nombre=None,descripcion=None,idProducto=None):
-            comentarioNulo = (nombre == None) or (descripcion == None) or\
-            (idProducto)==None
-            if comentarioNulo:
-                return False
-
-            estaEnBd       = self.existeActor(nombre=nombre)
-            #pr = clsProducto()
-            #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
-            longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
-
-            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-                newAct = Actor(nombre,descripcion,idProducto)
-                self.session.add(newAct)
-                self.session.commit()
-                return True
-            else:
-                return False
-            
-        def existeActor(self,nombre=None,idActor=None):
-            if(nombre!=None):
-                result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
-            else:
-                if (idActor!=None):
-                    result  = self.engine.execute("select * from \"Actores\" where \'idActor\'=\'"+str(idActor)+"\';")
-                else:
-                    return False
-            
-            contador = 0
-            for row in result:
-                contador += 1
-
-            return contador != 0
+    
+    def __init__(self,engine=None,session=None):
         
-        def listarActores(self):
-            res = []
-            result = self.engine.execute("select * from \"Actores\";")
-            if result!="":
-                for row in result:
-                    res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
-                else:
-                    print("Empty query!")
-            
-            return res
-                    
-        def listarActoresprod(self,idProducto):
-            res = []
-            #result = self.engine.execute("select * from \"Actores\" where \'idProducto\'="+str(idProducto)+" ;")
-            result = self.session.query(Actor).filter(Actor.idProducto == idProducto)
-            if result!="":
-                for row in result:
-                    res.append({'idActor':row.idActor,'nombre':row.nombre,'descripcion':row.descripcion})
-                else:
-                    print("Empty query!")
-            
-            return res
+        self.engine  = engine
+        self.session = session
+        
+    def insertar(self,nombre=None,descripcion=None,idProducto=None):
+        
+        comentarioNulo = (nombre == None) or (descripcion == None) or\
+        (idProducto)==None
+        if comentarioNulo:
+            return False
 
-        def borrarFilas(self):
-            self.session.query(Actor).delete()
+        estaEnBd       = self.existeActor(nombre=nombre)
+        #pr = clsProducto()
+        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+        longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
+
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+            newAct = Actor(nombre,descripcion,idProducto)
+            self.session.add(newAct)
             self.session.commit()
+            return True
+        else:
+            return False
         
-        def getProdId(self,idActor):
-            result = self.session.query(Actor).filter(Actor.idActor == idActor)
-            for row in result:
-                x=row.idProducto
-            return x
-
-        #Funcion que permite actualizar un nombre y descripcion
-        def modificar(self,id=None,nombre=None,descripcion=None):
-            if id and nombre and descripcion:
-                self.session.query(Actor).filter(Actor.idActor == id).\
-                    update({'nombre' : nombre })
-                self.session.commit()
-                
-                self.session.query(Actor).filter(Actor.idActor == id).\
-                    update({'descripcion' : descripcion })
-                self.session.commit()
-                return True
+    def existeActor(self,nombre=None,idActor=None):
+        
+        if(nombre!=None):
+            result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
+        else:
+            if (idActor!=None):
+                result  = self.engine.execute("select * from \"Actores\" where \'idActor\'=\'"+str(idActor)+"\';")
             else:
                 return False
+        
+        contador = 0
+        for row in result:
+            contador += 1
 
-#Use case code starts here
+        return contador != 0
+    
+    def listarActores(self):
+        
+        res = []
+        result = self.engine.execute("select * from \"Actores\";")
+        if result!="":
+            for row in result:
+                res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
+            else:
+                print("Empty query!")
+        
+        return res
+                
+    def listarActoresprod(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Actores\" where \'idProducto\'="+str(idProducto)+" ;")
+        result = self.session.query(Actor).filter(Actor.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                res.append({'idActor':row.idActor,'nombre':row.nombre,'descripcion':row.descripcion})
+            else:
+                print("Empty query!")
+        
+        return res
+
+    def borrarFilas(self):
+        
+        self.session.query(Actor).delete()
+        self.session.commit()
+    
+    def getProdId(self,idActor):
+        
+        result = self.session.query(Actor).filter(Actor.idActor == idActor)
+        for row in result:
+            x=row.idProducto
+        return x
+
+    #Funcion que permite actualizar un nombre y descripcion
+    def modificar(self,id=None,nombre=None,descripcion=None):
+        
+        if id and nombre and descripcion:
+            self.session.query(Actor).filter(Actor.idActor == id).\
+                update({'nombre' : nombre })
+            self.session.commit()
+            
+            self.session.query(Actor).filter(Actor.idActor == id).\
+                update({'descripcion' : descripcion })
+            self.session.commit()
+            return True
+        else:
+            return False
 
 #Use case code ends here

@@ -98,81 +98,87 @@ def VCrearAccion():
     return json.dumps(res)
 
 
+#Use case code starts here
 
 class clsAccion():
-        def __init__(self,engine=None,session=None):
-            self.engine  = engine
-            self.session = session
-            
-        def insertar(self,descripcion=None,idProducto=None):
-            comentarioNulo = (descripcion == None) or\
-            (idProducto)==None
-            if comentarioNulo:
-                return False
-
-            estaEnBd       = self.existeAccion(descripcion=descripcion)
-            #pr = clsProducto()
-            #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
-            longCharValido = (len(descripcion) <= 500)
-
-            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-                newAcc = Accion(descripcion,idProducto)
-                self.session.add(newAcc)
-                self.session.commit()
-                return True
-            else:
-                return False
-            
-        def existeAccion(self,descripcion=None):
-            if(descripcion!=None):
-                result  = self.engine.execute("select * from \"Acciones\" where \'descripcion\'=\'"+descripcion+"\';")
-            else:
-                return False
-            
-            contador = 0
-            for row in result:
-                contador += 1
-
-            return contador != 0
-
+    
+    def __init__(self,engine=None,session=None):
         
-        def listarAcciones(self):
-            res = []
-            result = self.engine.execute("select * from \"Acciones\";")
-            if result!="":
-                for row in result:
-                    res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
-                else:
-                    print("Empty query!")
-                    
-        def listarAccionesprod(self,idProducto):
-            res = []
-            #result = self.engine.execute("select * from \"Acciones\" where idProducto= "+str(idProducto)+" ;")
-            result = self.session.query(Accion).filter(Accion.idProducto == idProducto)
-            if result!="":
-                for row in result:
-                    res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
-                else:
-                    print("Empty query!")
-            
-            return res
+        self.engine  = engine
+        self.session = session
         
-        def borrarFilas(self):
-            self.session.query(Accion).delete()
+    def insertar(self,descripcion=None,idProducto=None):
+        
+        comentarioNulo = (descripcion == None) or\
+        (idProducto)==None
+        if comentarioNulo:
+            return False
+
+        estaEnBd       = self.existeAccion(descripcion=descripcion)
+        #pr = clsProducto()
+        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+        longCharValido = (len(descripcion) <= 500)
+
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+            newAcc = Accion(descripcion,idProducto)
+            self.session.add(newAcc)
             self.session.commit()
+            return True
+        else:
+            return False
+        
+    def existeAccion(self,descripcion=None):
+        
+        if(descripcion!=None):
+            result  = self.engine.execute("select * from \"Acciones\" where \'descripcion\'=\'"+descripcion+"\';")
+        else:
+            return False
+        
+        contador = 0
+        for row in result:
+            contador += 1
 
-        #Funcion que permite actualizar la descripcion
-        def modificar(self,id=None,descripcion=None):
-            if id and descripcion:
-                
-                self.session.query(Accion).filter(Accion.idAccion == id).\
-                    update({'descripcion' : descripcion })
-                self.session.commit()
-                return True
+        return contador != 0
+
+    def listarAcciones(self):
+        
+        res = []
+        result = self.engine.execute("select * from \"Acciones\";")
+        if result!="":
+            for row in result:
+                res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
             else:
-                return False
+                print("Empty query!")
+                
+    def listarAccionesprod(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Acciones\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Accion).filter(Accion.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
+            else:
+                print("Empty query!")
+        
+        return res
+    
+    def borrarFilas(self):
+        
+        self.session.query(Accion).delete()
+        self.session.commit()
 
-#Use case code starts here
+    #Funcion que permite actualizar la descripcion
+    def modificar(self,id=None,descripcion=None):
+        
+        if id and descripcion:
+            
+            self.session.query(Accion).filter(Accion.idAccion == id).\
+                update({'descripcion' : descripcion })
+            self.session.commit()
+            return True
+        else:
+            return False
 
 
 #Use case code ends here
