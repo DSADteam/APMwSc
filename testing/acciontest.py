@@ -99,14 +99,14 @@ class accionTester(unittest.TestCase):
         pIdProducto = 'idpepe'
         pdescripcion = 'Accion 2'
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
     
     def testdescripcion501(self):
         acc = clsAccion()
         pIdProducto = 3
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
 #TEST MODIFICAR
 #casos regulares

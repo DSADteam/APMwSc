@@ -130,6 +130,15 @@ class clsProducto():
 
         #Funcion para insertar un producto. Indice agregado automaticamente
         def insertar(self,nombre,descripcion=None):
+            try:
+                nombre = int(nombre)
+            except ValueError:
+                return False
+            try:
+                descripcion = int(descripcion)
+            except ValueError:
+                return False
+                
             comentarioNulo = (nombre == None)
             if comentarioNulo:
                 return False

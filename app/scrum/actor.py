@@ -115,6 +115,19 @@ class clsActor():
         
     def insertar(self,nombre=None,descripcion=None,idProducto=None):
         
+        try:
+            nombre = int(nombre)
+        except ValueError:
+            return False
+        try:
+            descripcion = int(descripcion)
+        except ValueError:
+            return False
+        
+        if isinstance(IdProducto, str):
+            return False
+        
+       
         comentarioNulo = (nombre == None) or (descripcion == None) or\
         (idProducto)==None
         if comentarioNulo:
@@ -134,6 +147,13 @@ class clsActor():
             return False
         
     def existeActor(self,nombre=None,idActor=None):
+        
+        try:
+            nombre = int(nombre)
+        except ValueError:
+            return False
+        if isinstance(IdActor, str):
+            return False
         
         if(nombre!=None):
             result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
@@ -188,6 +208,19 @@ class clsActor():
 
     #Funcion que permite actualizar un nombre y descripcion
     def modificar(self,id=None,nombre=None,descripcion=None):
+        
+        if(id==None):
+            return False
+         
+        try:
+            nombre = int(nombre)
+        except ValueError:
+            return False
+        try:
+            descripcion = int(descripcion)
+        except ValueError:
+            return False
+        
         
         if id and nombre and descripcion:
             self.session.query(Actor).filter(Actor.idActor == id).\
