@@ -174,8 +174,8 @@ class objetivoTester(unittest.TestCase):
     
     # Modificar un objetivo que no existe
     def testModificar2(self):
-        
-        self.objetivo.modificar(45356456, 'holapa')
+        pDescripcion='holapa'
+        self.objetivo.modificar(45356456, pDescripcion)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))  
     
     # Casos Fronteras

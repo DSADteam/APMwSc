@@ -72,7 +72,7 @@ class actorTester(unittest.TestCase):
     
         pnombre = 'teama'
         pIdProducto = None
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        pdescripcion = 'O'*500
         self.acc.insertar(pnombre,pdescripcion,pIdProducto)
         self.assertTrue(self.acc.existeActor(pnombre))
 

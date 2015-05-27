@@ -106,7 +106,14 @@ class clsObjetivo():
         self.engine  = engine
         self.session = session
 
-    def insertar(self,descripcion=None,idProducto=None):
+    def insertar(self,idProducto=None,descripcion=None):
+        
+        try:
+            descripcion = int(descripcion)
+        except ValueError:
+            return False
+        if isinstance(IdProducto, str):
+            return False
         
         comentarioNulo = (descripcion == None) or\
         (idProducto)==None
@@ -127,6 +134,11 @@ class clsObjetivo():
             return False
             
     def existeObjetivo(self,descripcion=None):
+        
+        try:
+            descripcion = int(descripcion)
+        except ValueError:
+            return False
         
         if(descripcion!=None):
             result  = self.engine.execute("select * from \"Objetivos\" where \'descripcion\'=\'"+descripcion+"\';")
@@ -169,6 +181,9 @@ class clsObjetivo():
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
+        
+        if(id==None):
+            return False
         
         if id and descripcion:
             
