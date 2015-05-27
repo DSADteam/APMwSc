@@ -84,12 +84,14 @@ def VProducto():
     prd=clsProducto(engine=engine,session=sessionDB)
     
     idPila = int(request.args.get('idPila', 1))
+
     pilas = prd.listarProductos()
-    
-    res['fPila'] = pilas[idPila-1]
+
 
     
-    res['idPila'] = idPila    
+    #res['fPila'] = pilas[idPila-1]
+    session['idPila'] = idPila    
+    print(session)
 
     oActor    = clsActor(engine,sessionDB)
     oAccion   = clsAccion(engine,sessionDB)
@@ -111,7 +113,9 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    
+    session.pop("idPila", None)
+    print(session)
+
     prd=clsProducto(engine=engine)
     res['data0'] = prd.listarProductos()
     

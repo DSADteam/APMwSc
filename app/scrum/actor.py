@@ -26,7 +26,6 @@ def ACrearActor():
 
 
     idPila = str(session['idPila'])
-    session.pop("idPila",None)
 
     act=clsActor(session=sessionDB,engine=engine)
     act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=idPila)
@@ -56,7 +55,7 @@ def AModifActor():
     act=clsActor(session=sessionDB,engine=engine)
     act.modificar(idActor,params['nombre'],params['descripcion'])
     
-    res['label'] = res['label'] + '/' + str(idActor)
+    res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
     if "actor" in res:
@@ -81,10 +80,15 @@ def VActor():
     act=clsActor(engine=engine,session=sessionDB)
     
 
-    idPila = request.args.get('idPila', 1)
-    pilas = act.listarActores()
-    res['fActor'] = pilas[idPila-1]
-    
+    #idPila = session['idPila']
+    #pilas = act.listarActores()
+    #print(pilas)
+    #res['fActor'] = pilas[idPila-1]
+    #print(res)
+
+    res['fActor'] = act.mostrarActor(idActor)
+
+    print(res)
 
     #Action code ends here
     return json.dumps(res)
@@ -99,7 +103,7 @@ def VCrearActor():
     #Action code goes here, res should be a JSON structure
 
 
-    session['idPila'] = request.args['idPila']
+    #session['idPila'] = request.args['idPila']
 
     #Action code ends here
     return json.dumps(res)
@@ -148,6 +152,18 @@ class clsActor():
             contador += 1
 
         return contador != 0
+
+    def mostrarActor(self,idActor):
+        result = self.session.query(Actor).filter(Actor.idActor == idActor)
+        print("Este es el resultado ")
+        print(result)
+        if result!="":
+            for row in result:
+                res = {'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion}
+            else:
+                print("Empty query!")
+        return res
+
     
     def listarActores(self):
         

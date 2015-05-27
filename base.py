@@ -28,6 +28,7 @@ def make_session_permanent():
 
 @app.route('/')
 def root():
+    session.pop("idPila", None)
     return app.send_static_file('index.html')
 
 @manager.command

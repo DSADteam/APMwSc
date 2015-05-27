@@ -31,7 +31,7 @@ def ACrearObjetivo():
     session.pop("idPila",None)
 
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=idPila)
+    obj.insertar(descripcion = params['descripcion'], idProducto=idPila)
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -49,10 +49,11 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = int(request.args.get('idPila', 1))
+    idPila = session['idPila']
+    print(session)
     obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(int(request.args.get('idPila', 1)),params['descripcion'])
-    res['label'] = res['label'] + '/' + str(idProducto)
+    obj.modificar(idPila,params['descripcion'])
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -73,7 +74,7 @@ def VCrearObjetivo():
     params = request.get_json()
 
     
-    session['idPila'] = request.args['idPila']
+    #session['idPila'] = request.args['idPila']
 
     print(session)
 
@@ -89,7 +90,9 @@ def VObjetivo():
     
     obj=clsObjetivo(engine=engine,session=sessionDB)
 
-    idPila = int(request.args.get('idPila', 1))
+    idPila = session['idPila']
+    print(session)
+    
     objs = obj.listarObjetivos()
     res['fObjetivo'] = objs[idProducto-1]
     idObjetivo=idPila
