@@ -175,7 +175,7 @@ class Historia(db.Model):
     
     __tablename__ = 'Historias'
     idHistoria    = db.Column(Integer, primary_key = True)
-    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    codigo   = db.Column(String(500), unique = False, nullable=False)
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('historias', lazy = 'dynamic'))
 
@@ -183,9 +183,9 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
     
-    def __init__(self,descripcion, idProducto):
+    def __init__(self,codigo, idProducto):
         
-        self.descripcion = descripcion
+        self.codigo = codigo
         self.idProducto  = idProducto
     
 

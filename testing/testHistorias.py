@@ -23,16 +23,16 @@ class TestHistoria(unittest.TestCase):
     def testinsertar1(self):
         
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
     def testinsertar2(self):
       
         pIdProducto = 2
-        pdescripcion = 'Historia 2'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(pdescripcion==descripcion))
+        pcodigo = 'Historia 2'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(pcodigo==codigo))
         
 # Casos fronteras
 
@@ -40,33 +40,33 @@ class TestHistoria(unittest.TestCase):
         
         his = clsHistoria()
         pIdProducto = None
-        pdescripcion = 'Historyyyy'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'Historyyyy'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
-    def testDescripcionNulo(self):
+    def testcodigoNulo(self):
         
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = ''
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = ''
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
-    def testdescripcion500(self):
+    def testcodigo500(self):
         
         his = clsHistoria()
         pIdProducto = 4
-        pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la codigo del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
     def testNumEnDescrip(self):
         
         his = clsHistoria()
         pIdProducto = 5
-        pdescripcion = 234
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 234
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
 # Casos Esquinas
 
@@ -74,33 +74,33 @@ class TestHistoria(unittest.TestCase):
         
         his = clsHistoria()
         pIdProducto = None
-        pdescripcion = ''
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = ''
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
     def idVacioyDescrip500(self):
         
         his = clsHistoria()
         pIdProducto = None
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
     def testIdNuloyDescripNum(self):
         
         his = clsHistoria()
         pIdProducto = None
-        pdescripcion = 6589
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 6589
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
     def testCharEnIdyDecripNum(self):
         
         his = clsHistoria()
         pIdProducto = 'bruxw'
-        pdescripcion = 345346
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 345346
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
         
 # Casos malicias
 
@@ -108,17 +108,17 @@ class TestHistoria(unittest.TestCase):
         
         his = clsHistoria()
         pIdProducto = 'idpepe'
-        pdescripcion = 'Historia 2'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'Historia 2'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
     
-    def testdescripcion501(self):
+    def testcodigo501(self):
         
         his = clsHistoria()
         pIdProducto = 3
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        self.his.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
+        self.his.insertar(pcodigo,pIdProducto)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
         
 # TEST MODIFICAR
 
@@ -128,13 +128,13 @@ class TestHistoria(unittest.TestCase):
         
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = 1
-        pdescripcion2 = 'Historia N1'
-        test = his.modificar(pIdProducto2, pdescripcion2)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 'Historia N1'
+        test = his.modificar(pIdProducto2, pcodigo2)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo2))
 
 # Casos fronteras
     
@@ -142,33 +142,33 @@ class TestHistoria(unittest.TestCase):
     
         his = clsHistoria()
         pIdProducto = 2
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = 2
-        pdescripcion2 = 'el Mall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        test = his.modificar(pIdProducto2, pdescripcion2)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 'el Mall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        test = his.modificar(pIdProducto2, pcodigo2)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo2))
 
     def testModifNoValid(self):
         
         his = clsHistoria()
         pIdProducto = 123
-        pdescripcion = 'Historia 123'
-        test = his.modificar(pIdProducto,pdescripcion)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion))
+        pcodigo = 'Historia 123'
+        test = his.modificar(pIdProducto,pcodigo)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo))
 
     def testDescripAlMin(self):
         
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = 1
-        pdescripcion2 = 'A'
-        test = his.modificar(pIdProducto2,pdescripcion2)
-        self.assertTrue(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 'A'
+        test = his.modificar(pIdProducto2,pcodigo2)
+        self.assertTrue(self.his.existeHistoria(codigo=pcodigo2))
 
 # Casos Esquinas
 
@@ -176,49 +176,49 @@ class TestHistoria(unittest.TestCase):
         
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = None
-        pdescripcion2 = ''
-        test = his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = ''
+        test = his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
 
     def testModifIdNulyDescripNum(self):
         
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = None
-        pdescripcion2 = 345
-        test = his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 345
+        test = his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
 
     def testModifIdCharyDecripNum(self):
         
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = 'idpepe'
-        pdescripcion2 = 4567
-        test = his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 4567
+        test = his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
     
     def testModifIdCharyDescripNul(self):
        
         his = clsHistoria()
         pIdProducto = 1
-        pdescripcion = 'Historia 1'
-        self.his.insertar(pdescripcion,pIdProducto)
+        pcodigo = 'Historia 1'
+        self.his.insertar(pcodigo,pIdProducto)
 
         pIdProducto2 = 'idpepe'
-        pdescripcion2 = ''
-        test = his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = ''
+        test = his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
 
 # Casos Malicias
 
@@ -226,41 +226,41 @@ class TestHistoria(unittest.TestCase):
         
         his = clsHistoria()
         pIdProducto2 = 'hola'
-        pdescripcion2 = 'Historia p'
-        test = self.his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 'Historia p'
+        test = self.his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
 
     def testModifDescrip501(self):
         
         his = clsHistoria()
         pIdProducto2 = 2
-        pdescripcion2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        test = his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
+        test = his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
 
     def testModifDescripVacio(self):
         
         his = clsHistoria()
         pIdProducto2 = 1
-        pdescripcion2 = ''
-        test = self.his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = ''
+        test = self.his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
 
     def testModifDescripNum(self):
         
         his = clsHistoria()
         pIdProducto2 = 3
-        pdescripcion2 = 123
-        test = self.his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 123
+        test = self.his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
     
     def testModifIdNulo(self):
         
         his = clsHistoria()
         pIdProducto2 = None
-        pdescripcion2 = 'Historia nula'
-        test = self.his.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.his.existeHistoria(descripcion=pdescripcion2))
+        pcodigo2 = 'Historia nula'
+        test = self.his.modificar(pIdProducto2,pcodigo2)
+        self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
     
 if __name__ == "__main__":
     unittest.main()
