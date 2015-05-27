@@ -50,10 +50,15 @@ def AModifAccion():
     results = [{'label':'/VProducto', 'msg':['Acción actualizada']}, {'label':'/VAccion', 'msg':['Error al modificar acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    print("ESto es lo que teeeeengoooo")
+    print(params)
+
+    idAccion = params['idAccion']
     idPila = session['idPila']
-    print(session)
+
     acc=clsAccion(session=sessionDB,engine=engine)
-    acc.modificar(idPila,params['descripcion'])
+    paso = acc.modificar(idAccion,params['descripcion'])
+    print(paso)
     
     res['label'] = res['label'] + '/' + str(idPila)
 
@@ -76,14 +81,14 @@ def VAccion():
     acc=clsAccion(engine=engine,session=sessionDB)
     
     idPila = session['idPila']
-    print(session)
-
+    idAccion = request.args.get('idAccion', 1)
     
-    pilas = acc.listarAcciones()
-    res['fAccion'] = pilas[idPila-1]
+    #pilas = acc.mostrarAccion(idAccion)
+    res['fAccion'] = acc.mostrarAccion(int(idAccion))
+    #res['fAccion'] = pilas[idPila-1]
     
     
-    idAccion = idPila
+    #idAccion = idPila
     #Action code ends here
     return json.dumps(res)
 
@@ -141,6 +146,15 @@ class clsAccion():
 
         return contador != 0
 
+    def mostrarAccion(self,idAccion):
+        result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
+        if result!="":
+            for row in result:
+                res = {'idAccion':row.idAccion,'descripcion':row.descripcion}
+            else:
+                print("Empty query!")
+        return res
+
     def listarAcciones(self):
         
         res = []
@@ -171,11 +185,11 @@ class clsAccion():
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
-        
+        print("Modificare el id" + str(id))
         if id and descripcion:
-            
-            self.session.query(Accion).filter(Accion.idAccion == id).\
+            a= self.session.query(Accion).filter(Accion.idAccion == id).\
                 update({'descripcion' : descripcion })
+            print(a)
             self.session.commit()
             return True
         else:
