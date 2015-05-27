@@ -49,11 +49,12 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    idPila = session['idPila']
-    print(session)
+    
+    idObjetivo = params['idObjetivo']
+
     obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(idPila,params['descripcion'])
-    res['label'] = res['label'] + '/' + str(idPila)
+    obj.modificar(idObjetivo,params['descripcion'])
+    res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
     if "actor" in res:
@@ -87,15 +88,12 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    
     obj=clsObjetivo(engine=engine,session=sessionDB)
 
-    idPila = session['idPila']
-    print(session)
-    
-    objs = obj.listarObjetivos()
-    res['fObjetivo'] = objs[idProducto-1]
-    idObjetivo=idPila
+    idObjetivo        = request.args.get('idObjetivo', 1)
+    res['idObjetivo'] = idObjetivo
+    res['fObjetivo']  = obj.mostrarObjetivo(int(idObjetivo))
+    #idObjetivo=idPila
     
     #Action code ends here
     return json.dumps(res)
@@ -141,6 +139,15 @@ class clsObjetivo():
             contador += 1
 
         return contador != 0
+
+    def mostrarObjetivo(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        if result!="":
+            for row in result:
+                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion}
+            else:
+                print("Empty query!")
+        return res
 
     def listarObjetivos(self):
         

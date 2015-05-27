@@ -83,13 +83,13 @@ def VProducto():
     #Action code goes here, res should be a JSON structure
     prd=clsProducto(engine=engine,session=sessionDB)
     
-    idPila = int(request.args.get('idPila', 1))
+    idPila = request.args.get('idPila', 1)
 
     pilas = prd.listarProductos()
 
 
     
-    #res['fPila'] = pilas[idPila-1]
+    res['idPila'] = idPila
     session['idPila'] = idPila    
     print(session)
 
@@ -118,8 +118,6 @@ def VProductos():
 
     prd=clsProducto(engine=engine)
     res['data0'] = prd.listarProductos()
-    
-    #res['data0'].append({'idPila':"WTF",'nombre':"otroWTF"})
     #Action code ends here'''
     return json.dumps(res)
 

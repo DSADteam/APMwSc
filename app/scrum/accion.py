@@ -23,15 +23,13 @@ def ACrearAccion():
     params = request.get_json()
     results = [{'label':'/VProducto', 'msg':['Acción creada']}, {'label':'/VCrearAccion', 'msg':['Error al crear acción']}, ]
     res = results[0]
-    
 
     idPila = session['idPila']
-    print(session)
-
 
     acc=clsAccion(session=sessionDB,engine=engine)
     acc.insertar(descripcion=params['descripcion'],idProducto=idPila)
-    res['label'] = res['label'] + '/' + idPila
+    res['label'] = res['label'] + '/' + str(idPila)
+    res['idPila'] = idPila
 
     #Action code ends here
     if "actor" in res:
@@ -50,8 +48,6 @@ def AModifAccion():
     results = [{'label':'/VProducto', 'msg':['Acción actualizada']}, {'label':'/VAccion', 'msg':['Error al modificar acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    print("ESto es lo que teeeeengoooo")
-    print(params)
 
     idAccion = params['idAccion']
     idPila = session['idPila']
@@ -80,7 +76,7 @@ def VAccion():
     #Action code goes here, res should be a JSON structure
     acc=clsAccion(engine=engine,session=sessionDB)
     
-    idPila = session['idPila']
+    
     idAccion = request.args.get('idAccion', 1)
     
     #pilas = acc.mostrarAccion(idAccion)

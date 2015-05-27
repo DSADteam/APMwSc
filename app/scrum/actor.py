@@ -49,8 +49,7 @@ def AModifActor():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    idActor = session['idActor']
-    session.pop("idActor",None)
+    idActor = params['idActor']
     
     act=clsActor(session=sessionDB,engine=engine)
     act.modificar(idActor,params['nombre'],params['descripcion'])
@@ -73,22 +72,11 @@ def VActor():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structur
-
-    idActor = request.args.get('idActor', 1)
-    session['idActor']=idActor
-    
     act=clsActor(engine=engine,session=sessionDB)
-    
 
-    #idPila = session['idPila']
-    #pilas = act.listarActores()
-    #print(pilas)
-    #res['fActor'] = pilas[idPila-1]
-    #print(res)
-
-    res['fActor'] = act.mostrarActor(idActor)
-
-    print(res)
+    idActor        = request.args.get('idActor', 1)
+    res['idActor'] = idActor
+    res['fActor']  = act.mostrarActor(idActor)
 
     #Action code ends here
     return json.dumps(res)
