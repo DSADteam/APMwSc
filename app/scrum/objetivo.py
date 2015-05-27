@@ -76,7 +76,7 @@ def VCrearObjetivo():
 
     
     #session['idPila'] = request.args['idPila']
-
+    res['idPila'] = session['idPila']
     print(session)
 
     #Action code ends here

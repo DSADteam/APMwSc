@@ -91,7 +91,7 @@ def VCrearActor():
     #Action code goes here, res should be a JSON structure
 
 
-    #session['idPila'] = request.args['idPila']
+    res['idPila'] = session['idPila']
 
     #Action code ends here
     return json.dumps(res)

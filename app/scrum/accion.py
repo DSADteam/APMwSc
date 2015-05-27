@@ -98,6 +98,8 @@ def VCrearAccion():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+    res['idPila'] = session['idPila']
+
     return json.dumps(res)
 
 
