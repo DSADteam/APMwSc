@@ -29,7 +29,7 @@ def ACrearHistoria():
     session.pop("idPila",None)
     
     his = clsHistoria(session=sessionDB,engine=engine)
-    his.insertar(descripcion=params['descripcion'],idProducto=idPila)
+    his.insertar(codigo=params['codigo'],idProducto=idPila)
     
     #Datos de prueba
     res['label'] = res['label'] + '/' + idPila
@@ -54,7 +54,7 @@ def AModifHistoria():
 
     idPila = int(request.args.get('idPila', 1))
     his = clsHistoria(session=sessionDB,engine=engine)
-    his.modificar(int(request.args.get('idPila', 1)),params['descripcion'])
+    his.modificar(int(request.args.get('idPila', 1)),params['codigo'])
 
     #Datos de prueba    
     res['label'] = res['label'] + '/' + str(idPila)
@@ -175,30 +175,30 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
         
-    def insertar(self,descripcion=None,idProducto=None):
+    def insertar(self,codigo=None,idProducto=None):
         
-        comentarioNulo = (descripcion == None) or\
+        comentarioNulo = (codigo == None) or\
         (idProducto)==None
         if comentarioNulo:
             return False
 
-        estaEnBd       = self.existeHistoria(descripcion=descripcion)
+        estaEnBd       = self.existeHistoria(codigo=codigo)
         #pr = clsProducto()
         #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
-        longCharValido = (len(descripcion) <= 500)
+        longCharValido = (len(codigo) <= 500)
 
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-            newHis = Historia(descripcion,idProducto)
+            newHis = Historia(codigo,idProducto)
             self.session.add(newHis)
             self.session.commit()
             return True
         else:
             return False
         
-    def existeHistoria(self,descripcion=None):
+    def existeHistoria(self,codigo=None):
         
-        if(descripcion!=None):
-            result  = self.engine.execute("select * from \"Historias\" where \'descripcion\'=\'"+descripcion+"\';")
+        if(codigo!=None):
+            result  = self.engine.execute("select * from \"Historias\" where \'codigo\'=\'"+codigo+"\';")
         else:
             return False
         
@@ -214,7 +214,7 @@ class clsHistoria():
         result = self.engine.execute("select * from \"Historias\";")
         if result!="":
             for row in result:
-                res.append({'idHistoria':row.idHistoria,'descripcion':row.descripcion})
+                res.append({'idHistoria':row.idHistoria,'codigo':row.codigo})
             else:
                 print("Empty query!")
                 
@@ -225,7 +225,7 @@ class clsHistoria():
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
         if result!="":
             for row in result:
-                res.append({'idHistoria':row.idHistoria,'descripcion':row.descripcion})
+                res.append({'idHistoria':row.idHistoria,'codigo':row.codigo})
             else:
                 print("Empty query!")
         
@@ -236,13 +236,13 @@ class clsHistoria():
         self.session.query(Historia).delete()
         self.session.commit()
 
-    #Funcion que permite actualizar la descripcion
-    def modificar(self,id=None,descripcion=None):
+    #Funcion que permite actualizar la codigo
+    def modificar(self,id=None,codigo=None):
         
-        if id and descripcion:
+        if id and codigo:
             
             self.session.query(Historia).filter(Historia.idHistoria == id).\
-                update({'descripcion' : descripcion })
+                update({'codigo' : codigo })
             self.session.commit()
             return True
         else:
