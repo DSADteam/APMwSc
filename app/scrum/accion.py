@@ -28,6 +28,7 @@ def ACrearAccion():
 
     acc=clsAccion(session=sessionDB,engine=engine)
     acc.insertar(descripcion=params['descripcion'],idProducto=idPila)
+    
     res['label'] = res['label'] + '/' + str(idPila)
     res['idPila'] = idPila
 
