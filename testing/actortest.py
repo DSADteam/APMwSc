@@ -6,22 +6,22 @@ sys.path.append(dir)
 from app.scrum.prod  import clsProducto
 from app.scrum.actor import clsActor
 from base import *
-import unittest
+import unittest 
 
 class actorTester(unittest.TestCase):
     def setUp(self):
         self.acc=clsActor(engine,sessionDB)
         
     def tearDown(self):
-        self.actor.borrarFilas()
+        #self.actor.borrarFilas()
 
-    def testinsertar1(self):
+        def testinsertar1(self):
         
-        pnombre = 'pedro'
-        pIdProducto = 1
-        pdescripcion = 'Actor 1'
-        self.acc.insertar(pnombre,pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeActor(pnombre))
+          pnombre = 'pedro'
+          IdProducto = 1
+          descripcion = 'Actor 1'
+          self.acc.insertar(pnombre,pdescripcion,pIdProducto)
+          self.assertTrue(self.acc.existeActor(pnombre))
 
     def testinsertar2(self):
       

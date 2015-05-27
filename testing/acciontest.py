@@ -14,22 +14,22 @@ class accionTester(unittest.TestCase):
 #TEST INSERTAR
 #Casos regulares
     def tearDown(self):
-        self.accion.borrarFilas()
+        #self.accion.borrarFilas()
 
-    def testinsertar1(self):
-        acc = clsAccion()
-        pIdProducto = 1
-        pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        def testinsertar1(self):
+            acc = clsAccion()
+            pIdProducto = 1
+            pdescripcion = 'Accion 1'
+            self.acc.insertar(pdescripcion,pIdProducto)
+            self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
 
-    def testinsertar2(self):
-        acc = clsAccion()
-        pIdProducto = 2
-        pdescripcion = 'A'
-        self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
-
+        def testinsertar2(self):
+            acc = clsAccion()
+            pIdProducto = 2
+            pdescripcion = 'A'
+            self.acc.insertar(pdescripcion,pIdProducto)
+            self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        
 #casos frontera
 
     def testCampoIdNulo(self):
