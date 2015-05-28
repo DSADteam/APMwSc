@@ -22,6 +22,8 @@ class accionTester(unittest.TestCase):
             pdescripcion = 'Accion 1'
             self.acc.insertar(pdescripcion,pIdProducto)
             self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        
+        
 
         def testinsertar2(self):
             acc = clsAccion()

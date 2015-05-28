@@ -163,7 +163,7 @@ class clsActor():
         contador = 0
         for row in result:
             contador = contador +1
-
+ 
         return contador != 0
     
     def listarActores(self):
