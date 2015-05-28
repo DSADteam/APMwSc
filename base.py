@@ -185,12 +185,13 @@ class Historia(db.Model):
     producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
     historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
+
     ''' Metodo init
         Constructor de las historias de usuarios
     ''' 
     
-    def __init__(self,descripcion, idProducto,idAccion,idHistoriaPadre=None):
-        self.descripcion = descripcion
+    def __init__(self,codigo, idProducto,idAccion,idHistoriaPadre=None):
+        self.codigo = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         if idHistoriaPadre:
@@ -203,7 +204,6 @@ class ObjetivosHistoria(db.Model):
 
     idHistoria = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     idObjetivo = db.Column(Integer, db.ForeignKey('Objetivos.idObjetivo'), unique = False, primary_key=True)   
-    #primaryKey = db.PrimaryKeyConstraint()
 
     objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
     historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))

@@ -12,6 +12,14 @@ def ACrearHistoria():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
+
+    idPila = str(session['idPila'])
+    session.pop("idPila",None)
+    
+    his = clsHistoria(session=sessionDB,engine=engine)
+    his.insertar(codigo=params['codigo'],idProducto=idPila)
+    
+
     #Datos de prueba
     res['label'] = res['label'] + '/1'
 
@@ -33,8 +41,12 @@ def AModifHistoria():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    #Datos de prueba
-    res['label'] = res['label'] + '/1'
+    idPila = int(request.args.get('idPila', 1))
+    his = clsHistoria(session=sessionDB,engine=engine)
+    his.modificar(int(request.args.get('idPila', 1)),params['codigo'])
+
+    #Datos de prueba    
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -141,5 +153,83 @@ def VHistorias():
 
 #Use case code starts here
 
+class clsHistoria():
+    
+    def __init__(self,engine=None,session=None):
+        self.engine  = engine
+        self.session = session
+        
+    def insertar(self,codigo=None,idProducto=None):
+        
+        comentarioNulo = (codigo == None) or\
+        (idProducto)==None
+        if comentarioNulo:
+            return False
+
+        estaEnBd       = self.existeHistoria(codigo=codigo)
+        #pr = clsProducto()
+        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+        longCharValido = (len(codigo) <= 500)
+
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+            newHis = Historia(codigo,idProducto)
+            self.session.add(newHis)
+            self.session.commit()
+            return True
+        else:
+            return False
+        
+    def existeHistoria(self,codigo=None):
+        
+        if(codigo!=None):
+            result  = self.engine.execute("select * from \"Historias\" where \'codigo\'=\'"+codigo+"\';")
+        else:
+            return False
+        
+        contador = 0
+        for row in result:
+            contador += 1
+
+        return contador != 0
+
+    def listarHistorias(self):
+        
+        res = []
+        result = self.engine.execute("select * from \"Historias\";")
+        if result!="":
+            for row in result:
+                res.append({'idHistoria':row.idHistoria,'codigo':row.codigo})
+            else:
+                print("Empty query!")
+                
+    def listarHistoriasprod(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Historias\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                res.append({'idHistoria':row.idHistoria,'codigo':row.codigo})
+            else:
+                print("Empty query!")
+        
+        return res
+    
+    def borrarFilas(self):
+        
+        self.session.query(Historia).delete()
+        self.session.commit()
+
+    #Funcion que permite actualizar la codigo
+    def modificar(self,id=None,codigo=None):
+        
+        if id and codigo:
+            
+            self.session.query(Historia).filter(Historia.idHistoria == id).\
+                update({'codigo' : codigo })
+            self.session.commit()
+            return True
+        else:
+            return False
 
 #Use case code ends here
