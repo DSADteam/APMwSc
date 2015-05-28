@@ -150,7 +150,7 @@ class clsActor():
             result = self.session.query(Actor).filter(Actor.nombre == nombre)
         elif(nombre==None and descripcion!=None):
             result = self.session.query(Actor).filter(Actor.descripcion == descripcion)
-        elif(nombre==None and descripcion!=None):
+        elif(nombre!=None and descripcion!=None):
             result = self.session.query(Actor).filter(Actor.nombre == nombre).filter(Actor.descripcion == descripcion)
         else:
             return False
