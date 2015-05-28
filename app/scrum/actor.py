@@ -23,20 +23,6 @@ def ACrearActor():
     params = request.get_json()
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
     res = results[0]
-<<<<<<< HEAD
-    #Action code goes here, res should be a list with a label and a message
-    #from base import db, Actor
-    #oActor = actor(params['nombre'],params['descripcion'],params['idActor'], params['idPila'])
-    #session.add(oActor)
-    #session.commit()
-    print('GODDAMMINT')
-    print(request.base_url)
-    print(params)
-    idPila = 1
-    act=clsActor(session=sessionDB,engine=engine)
-    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=1)
-    res['label'] = res['label'] + '/' + str(1)
-=======
 
 
     idPila = str(session['idPila'])
@@ -44,7 +30,6 @@ def ACrearActor():
     act=clsActor(session=sessionDB,engine=engine)
     act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=idPila)
     res['label'] = res['label'] + '/' + idPila
->>>>>>> Javier
 
     #Action code ends here
     if "actor" in res:
@@ -88,26 +73,12 @@ def VActor():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structur
     act=clsActor(engine=engine,session=sessionDB)
-<<<<<<< HEAD
-    
-    idPila = int(request.args.get('idPila', 1))
-    print(idPila)
-    pilas = act.listarActores()
-    print('WTTTTTTTTTTTTF')
-    res['fActor'] = pilas[idPila-1]
-    print(res['fActor'])
-    
-    idActor = idPila
-    #act = sessionDB.query(Actor).filter_by(idActor=idActor).first()
-    #res['fPila'] =  {'idActor':act.idActor, 'nombre': act.nombre, 'descripcion':act.descripcion}
-    print(res)
-=======
+
 
     idActor        = request.args.get('idActor', 1)
     res['idActor'] = idActor
     res['fActor']  = act.mostrarActor(idActor)
 
->>>>>>> Javier
     #Action code ends here
     return json.dumps(res)
 

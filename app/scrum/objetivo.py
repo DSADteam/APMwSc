@@ -49,21 +49,12 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-<<<<<<< HEAD
-    #idPila = int(request.args.get('idPila', 1))
-    print('dDAAAAAAAAAAA')
-    print(params)
-    obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(params['idObjetivo'],params['descripcion'])
-    res['label'] = res['label'] + '/' + str(obj.getProdId(params['idObjetivo']))
-=======
-    
+
     idObjetivo = params['idObjetivo']
 
     obj=clsObjetivo(session=sessionDB,engine=engine)
     obj.modificar(idObjetivo,params['descripcion'])
     res['label'] = res['label'] + '/' + str(session['idPila'])
->>>>>>> Javier
 
     #Action code ends here
     if "actor" in res:
@@ -97,26 +88,7 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-<<<<<<< HEAD
-    
-    
-    obj=clsObjetivo(engine=engine,session=sessionDB)
-    
-    idPila = int(request.args.get('idPila', 1))
-    print(idPila)
-    pilas = obj.listarObjetivos()
-    res['fObjetivos'] = pilas[idPila-1]
-    
-    
-    idActor = idPila
-    
-    
-    obj=clsObjetivo(engine=engine,session=sessionDB)
-    idProducto = int(request.args.get('idProducto', 1))
-    objs = obj.listarObjetivos()
-    res['fObjetivo'] = objs[idProducto-1]
-    primt(res['fObjetivo'] )
-=======
+
     obj=clsObjetivo(engine=engine,session=sessionDB)
 
     idObjetivo        = request.args.get('idObjetivo', 1)
@@ -124,7 +96,6 @@ def VObjetivo():
     res['fObjetivo']  = obj.mostrarObjetivo(int(idObjetivo))
     #idObjetivo=idPila
     
->>>>>>> Javier
     #Action code ends here
     return json.dumps(res)
 
