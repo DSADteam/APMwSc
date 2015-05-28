@@ -29,7 +29,7 @@ class MdlTest(unittest.TestCase):
         string = 'a' * 500
         self.prod.insertar(nombre=string)
         self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
-    
+
     #Insert con limite externo de maximo de caracteres
     def testInsertNoWayTooBig(self):
         string = 'a' * 501
@@ -62,7 +62,7 @@ class MdlTest(unittest.TestCase):
         #Si falla puede ser solucionado mas adelante con expresiones regulares!
         string = "\" DROP TABLE \"PRODUCTOS\";";
         self.prod.insertar(string)
-        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, string peligroso encontrado en el sistema")
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, string peligroso encontrado en el sistema")
 
 
 unittest.main()

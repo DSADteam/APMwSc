@@ -114,8 +114,13 @@ class clsAccion():
         
     def insertar(self,descripcion=None,idProducto=None):
         
+        if type(descripcion) is int:
+            return False
+        if isinstance(idProducto, str):
+            return False
+        
         comentarioNulo = (descripcion == None) or\
-        (idProducto)==None
+        (idProducto==None) or (descripcion == '')
         if comentarioNulo:
             return False
 
@@ -133,17 +138,17 @@ class clsAccion():
             return False
         
     def existeAccion(self,descripcion=None):
+        if type(descripcion) is int:
+            return False
+        if (descripcion==''):
+            return False
         
         if(descripcion!=None):
-            result  = self.engine.execute("select * from \"Acciones\" where \'descripcion\'=\'"+descripcion+"\';")
+            result = self.session.query(Accion).filter(Accion.descripcion == descripcion)
         else:
             return False
         
-        contador = 0
-        for row in result:
-            contador += 1
-
-        return contador != 0
+        return result.count() > 0
 
     def mostrarAccion(self,idAccion):
         result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
@@ -194,7 +199,23 @@ class clsAccion():
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
+
         print("Modificare el id" + str(id))
+
+        if type(descripcion) is int:
+            return False
+        if isinstance(id, str):
+            return False
+        
+        if(id==None):
+            return False
+    
+        try:
+            descripcion = int(descripcion)
+        except ValueError:
+            return False
+        
+
         if id and descripcion:
             a= self.session.query(Accion).filter(Accion.idAccion == id).\
                 update({'descripcion' : descripcion })
