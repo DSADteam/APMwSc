@@ -180,18 +180,19 @@ class Historia(db.Model):
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion')   , unique = True,  nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
     
-    #Backrefs
-    accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
+    # Backrefs
+    
+    accion          = db.relationship('Acciones', backref = db.backref('accion', lazy = 'dynamic'))
     producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
-    historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
+    historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
     ''' Metodo init
         Constructor de las historias de usuarios
     ''' 
     
-    def __init__(self,codigo, idProducto,idAccion,idHistoriaPadre=None):
-        self.codigo = codigo
+    def __init__(self,codigo,idProducto,idAccion,idHistoriaPadre=None):
+
+        self.codigo      = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         if idHistoriaPadre:
@@ -200,30 +201,32 @@ class Historia(db.Model):
 # Clase para objetivos de una historia
 
 class ObjetivosHistoria(db.Model):
-    __tablename__   = 'ObjetivosHistorias'
 
-    idHistoria = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
-    idObjetivo = db.Column(Integer, db.ForeignKey('Objetivos.idObjetivo'), unique = False, primary_key=True)   
+    __tablename__ = 'ObjetivosHistorias'
+    idHistoria    = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
+    idObjetivo    = db.Column(Integer, db.ForeignKey('Objetivos.idObjetivo'), unique = False, primary_key=True)   
 
-    objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
-    historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
+    objetivo      = db.relationship('Objetivo', backref = db.backref('objetivo', lazy = 'dynamic'))
+    historia      = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
     ''' Metodo init
         Constructor de Objetivos asociados a Historias
     ''' 
     
     def __init__(self,idHistoria,idObjetivo):
+
         self.idHistoria = idHistoria
         self.idObjetivo = idObjetivo
 
-#Clase para actores de una historia
+# Clase para actores de una historia
 
 class ActoresHistoria(db.Model):
+
     __tablename__   = 'ActoresHistorias'
     idHistoria      = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     idActor         = db.Column(Integer, db.ForeignKey('Actores.idActor'),     unique = False,  primary_key=True)
     
-    actor           = db.relationship('Actor',   backref = db.backref('actor'   , lazy = 'dynamic'))
+    actor           = db.relationship('Actor', backref = db.backref('actor'   , lazy = 'dynamic'))
     historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
     ''' Metodo init
@@ -231,6 +234,7 @@ class ActoresHistoria(db.Model):
     ''' 
     
     def __init__(self,idHistoria,idActor):
+        
         self.idHistoria = idHistoria
         self.idActor    = idActor
 

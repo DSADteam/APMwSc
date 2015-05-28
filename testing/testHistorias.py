@@ -6,6 +6,7 @@ sys.path.append(dir)
 from app.scrum.prod      import clsProducto
 from app.scrum.historias import clsHistoria
 from app.scrum.accion    import clsAccion
+from app.scrum.objetivo  import clsObjetivo
 from base import *
 import unittest
 
@@ -19,10 +20,7 @@ class TestHistoria(unittest.TestCase):
         prod     = clsProducto(engine,sessionDB)
         prod.insertar("ProductoPruebaHistoria","Descripcion prueba")
         self.prodId = prod.idProd("ProductoPruebaHistoria")
-
-
-
-        
+       
     def tearDown(self):
         #self.historia.borrarFilas()
         pass
@@ -42,6 +40,7 @@ class TestHistoria(unittest.TestCase):
 # Casos fronteras
 
     def testInsertar500(self):
+
         accion          = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 500",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 500")
@@ -51,6 +50,7 @@ class TestHistoria(unittest.TestCase):
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo))    
 
     def testInsertar501(self):
+
         accion          = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 501",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 501")
@@ -60,6 +60,7 @@ class TestHistoria(unittest.TestCase):
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo))
 
     def testCodigoVacio(self):
+    	
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion codigo vacio",self.prodId)
         idAccion = accion.obtenerId("Accion codigo vacio")
