@@ -111,123 +111,96 @@ class accionTester(unittest.TestCase):
 
 #TEST MODIFICAR
 #casos regulares
-    '''
+    
     def testModificar1(self):
         
-        pIdProducto = 1
         pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
+        self.acc.insertar(pdescripcion,self.prodId)
 
-        pIdProducto2 = 1
         pdescripcion2 = 'Accion N1'
-        test = acc.modificar(pIdProducto2, pdescripcion2)
+        test = self.acc.modificar(self.prodId, pdescripcion2)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion2))
-
+    
 #Casos fronteras
     
     def testDescrip500(self):
     
-        pIdProducto = 2
         pdescripcion = 'l'
-        self.acc.insertar(pdescripcion,pIdProducto)
+        self.acc.insertar(pdescripcion,self.prodId)
 
-        pIdProducto2 = 2
         pdescripcion2 = 'P'*500
-        test = acc.modificar(pIdProducto2, pdescripcion2)
+        test = self.acc.modificar(self.prodId, pdescripcion2)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion2))
-
-    def testModifNoValid(self):
-        
-        pIdProducto = 123
-        pdescripcion = 'Accion 123'
-        test = acc.modificar(pIdProducto,pdescripcion)
-        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
-
+    
+    
     def testDescripAlMin(self):
         
-        pIdProducto = 1
         pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
+        self.acc.insertar(pdescripcion,self.prodId)
 
-        pIdProducto2 = 1
         pdescripcion2 = 'A'
-        test = acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(self.prodId,pdescripcion2)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion2))
 
 #Casos Esquina
-
+    
     def testModifTodoNul(self):
-        
-        pIdProducto = 1
-        pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
 
         pIdProducto2 = None
         pdescripcion2 = ''
-        test = acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
 
+    
     def testModifIdNulyDescripNum(self):
-        
-        pIdProducto = 1
-        pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
 
         pIdProducto2 = None
         pdescripcion2 = 345
-        test = acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
-
+    
     def testModifIdCharyDecripNum(self):
-        
-        pIdProducto = 1
-        pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
 
         pIdProducto2 = 'idpepe'
         pdescripcion2 = 4567
-        test = acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
     
     def testModifIdCharyDescripNul(self):
-       
-        pIdProducto = 1
-        pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
-
+    
         pIdProducto2 = 'idpepe'
         pdescripcion2 = ''
-        test = acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
 
 #Casos Malicia
 
+    
     def testModifCharEnId(self):
         
         pIdProducto2 = 'hola'
         pdescripcion2 = 'Accion p'
         test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
-
+    
+    
     def testModifDescrip501(self):
-        
-        pIdProducto2 = 2
-        pdescripcion2 = 'U'*501
-        test = acc.modificar(pIdProducto2,pdescripcion2)
-        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
 
+        pdescripcion2 = 'U'*501
+        test = self.acc.modificar(self.prodId,pdescripcion2)
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
+    
+    
     def testModifDescripVacio(self):
        
-        pIdProducto2 = 1
         pdescripcion2 = ''
-        test = self.acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(self.prodId,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
-
+    
     def testModifDescripNum(self):
         
-        pIdProducto2 = 3
         pdescripcion2 = 123
-        test = self.acc.modificar(pIdProducto2,pdescripcion2)
+        test = self.acc.modificar(self.prodId,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
     
     def testModifIdNulo(self):
@@ -236,7 +209,7 @@ class accionTester(unittest.TestCase):
         pdescripcion2 = 'Accion nula'
         test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
-    '''
+    
 
 unittest.main()
     

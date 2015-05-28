@@ -49,7 +49,7 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    
+
     idObjetivo = params['idObjetivo']
 
     obj=clsObjetivo(session=sessionDB,engine=engine)
@@ -88,6 +88,7 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
     obj=clsObjetivo(engine=engine,session=sessionDB)
 
     idObjetivo        = request.args.get('idObjetivo', 1)
@@ -184,6 +185,12 @@ class clsObjetivo():
         
         self.session.query(Objetivo).delete()
         self.session.commit()
+
+    def getProdId(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        for row in result:
+            x=row.idObjetivo
+        return x
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):

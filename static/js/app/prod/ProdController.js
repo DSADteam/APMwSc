@@ -113,8 +113,8 @@ scrumModule.controller('VProductoController',
       $scope.VCrearAccion10 = function(idPila) {
         $location.path('/VCrearAccion/'+idPila);
       };
-      $scope.VCrearObjetivo11 = function() {
-        $location.path('/VCrearObjetivo');
+      $scope.VCrearObjetivo11 = function(idPila) {
+        $location.path('/VCrearObjetivo/'+idPila);
       };
       $scope.VHistorias12 = function(idPila) {
         $location.path('/VHistorias/'+idPila);

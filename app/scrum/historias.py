@@ -1,8 +1,23 @@
 # -*- coding: utf-8 -*-
+
+#Agregando proyect root
+
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+sys.path.append(dir)
+
+#Dependencias flask
 from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
 
 historias = Blueprint('historias', __name__)
 
+from base import *
+from app.scrum.actor import clsActor
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -139,11 +154,11 @@ def VHistorias():
     #Action code goes here, res should be a JSON structure
 
     #Datos de prueba
-    res['idPila'] = 1
-    res['data0'] = [
-      {'idHistoria':1, 'enunciado':'En tanto que picho podría tomar agua para saciar mi sed'}]
-    
-
+    his=clsHistoria(engine=engine,session=sessionDB)
+    res['idPila'] = session['idPila']
+    res['data0'] = his.listarHistoriasprod(int(session['idPila']))
+    print('DAAAAAAAAAAAAAAAAAAAAAAAA')
+    print(res['data0'])
     #Action code ends here
     return json.dumps(res)
 
@@ -160,38 +175,55 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
         
-    def insertar(self,codigo=None,idProducto=None):
+    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None):
         
         comentarioNulo = (codigo == None) or\
-        (idProducto)==None
-        if comentarioNulo:
+        (idProducto!=None) or (idAccion==None)
+        if comentarioNulo or codigo=='' or tipo==None:
             return False
 
-        estaEnBd       = self.existeHistoria(codigo=codigo)
+        estaEnBd       = self.existeHistoria(codigo=codigo,idProducto=idProducto)
         #pr = clsProducto()
         #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
         longCharValido = (len(codigo) <= 500)
-
-        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-            newHis = Historia(codigo,idProducto)
+        tieneLoops = self.tieneLoops(idProducto,idPapa,codigo)
+        
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo) and\
+            not tieneLoops:
+            newHis = Historia(codigo,idProducto,idAccion,tipo)
             self.session.add(newHis)
             self.session.commit()
             return True
         else:
             return False
         
-    def existeHistoria(self,codigo=None):
+    def tieneLoops(self,idProducto=None,idPapa=None,codigo=None):
         
-        if(codigo!=None):
-            result  = self.engine.execute("select * from \"Historias\" where \'codigo\'=\'"+codigo+"\';")
-        else:
+        if idProducto==None or codigo==None or idPapa==None:
+            return False
+
+        res  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.idHistoria == idPapa)
+        
+        while res.idHistoriaPadre!=None:
+            if res.codigo!=codigo:
+                return True
+            else:
+                res  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.idHistoria == idPapa)
+                idPapa=res.idHistoria
+        return False
+        
+    def existeHistoria(self,codigo=None, idHistoria=None,idProducto=None):
+        comentarioNulo = ((codigo == None) and\
+        (idHistoria==None)) or idProducto==None
+        if comentarioNulo:
             return False
         
-        contador = 0
-        for row in result:
-            contador += 1
+        if(idHistoria!=None):
+            result  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.idHistoria == idHistoria)
+        else:
+            result  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.codigo == codigo)
 
-        return contador != 0
+        return result.count() != 0
 
     def listarHistorias(self):
         
@@ -199,7 +231,7 @@ class clsHistoria():
         result = self.engine.execute("select * from \"Historias\";")
         if result!="":
             for row in result:
-                res.append({'idHistoria':row.idHistoria,'codigo':row.codigo})
+                res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
             else:
                 print("Empty query!")
                 
@@ -210,7 +242,7 @@ class clsHistoria():
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
         if result!="":
             for row in result:
-                res.append({'idHistoria':row.idHistoria,'codigo':row.codigo})
+                res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
             else:
                 print("Empty query!")
         

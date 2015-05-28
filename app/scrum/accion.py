@@ -56,8 +56,6 @@ def AModifAccion():
     acc=clsAccion(session=sessionDB,engine=engine)
     paso = acc.modificar(idAccion,params['descripcion'])
     print(paso)
-    
-    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -77,7 +75,6 @@ def VAccion():
     #Action code goes here, res should be a JSON structure
     acc=clsAccion(engine=engine,session=sessionDB)
     
-    
     idAccion = request.args.get('idAccion', 1)
     
     #pilas = acc.mostrarAccion(idAccion)
@@ -86,6 +83,7 @@ def VAccion():
     
     
     #idAccion = idPila
+
     #Action code ends here
     return json.dumps(res)
 
@@ -199,9 +197,8 @@ class clsAccion():
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
-
-        print("Modificare el id" + str(id))
-
+        
+        
         if type(descripcion) is int:
             return False
         if isinstance(id, str):
@@ -209,17 +206,13 @@ class clsAccion():
         
         if(id==None):
             return False
-    
-        try:
-            descripcion = int(descripcion)
-        except ValueError:
+        if (len(descripcion)>500):
             return False
-        
+    
 
         if id and descripcion:
             a= self.session.query(Accion).filter(Accion.idAccion == id).\
                 update({'descripcion' : descripcion })
-            print(a)
             self.session.commit()
             return True
         else:
