@@ -198,7 +198,6 @@ class clsAccion():
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
 
-        print("Modificare el id" + str(id))
 
         if type(descripcion) is int:
             return False
@@ -208,16 +207,10 @@ class clsAccion():
         if(id==None):
             return False
     
-        try:
-            descripcion = int(descripcion)
-        except ValueError:
-            return False
-        
 
         if id and descripcion:
             a= self.session.query(Accion).filter(Accion.idAccion == id).\
                 update({'descripcion' : descripcion })
-            print(a)
             self.session.commit()
             return True
         else:

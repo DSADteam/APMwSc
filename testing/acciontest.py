@@ -111,18 +111,16 @@ class accionTester(unittest.TestCase):
 
 #TEST MODIFICAR
 #casos regulares
-    '''
+    
     def testModificar1(self):
         
-        pIdProducto = 1
         pdescripcion = 'Accion 1'
-        self.acc.insertar(pdescripcion,pIdProducto)
+        self.acc.insertar(pdescripcion,self.prodId)
 
-        pIdProducto2 = 1
         pdescripcion2 = 'Accion N1'
-        test = acc.modificar(pIdProducto2, pdescripcion2)
+        test = self.acc.modificar(self.prodId, pdescripcion2)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion2))
-
+    
 #Casos fronteras
     
     def testDescrip500(self):
@@ -135,7 +133,7 @@ class accionTester(unittest.TestCase):
         pdescripcion2 = 'P'*500
         test = acc.modificar(pIdProducto2, pdescripcion2)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion2))
-
+    '''
     def testModifNoValid(self):
         
         pIdProducto = 123
