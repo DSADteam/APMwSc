@@ -175,7 +175,7 @@ class Historia(db.Model):
     
     __tablename__   = 'Historias'
     idHistoria      = db.Column(Integer, primary_key = True)
-    descripcion     = db.Column(String(500), unique = False, nullable=False)
+    codigo          = db.Column(String(500), unique = False, nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion')   , unique = True,  nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
