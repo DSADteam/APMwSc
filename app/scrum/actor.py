@@ -121,9 +121,6 @@ class clsActor():
             return (False)
         if type(idProducto) is str:
             return (False)
-        
-        
-        
        
         comentarioNulo = (nombre == None) or (descripcion == None) or\
         (idProducto)==None
@@ -152,19 +149,17 @@ class clsActor():
             return (False)
         
         if(nombre!=None):
-            result  = self.engine.execute("select * from \"Actores\" where \'nombre\'='"+nombre+"';")
+            #result  = self.engine.execute("select * from \"Actores\" where \'nombre\'='"+nombre+"';")
+            result = self.session.query(Actor).filter(Actor.nombre == nombre)
         else:
             if (idActor!=None):
-                result  = self.engine.execute("select * from \"Actores\" where \'idActor\'='"+str(idActor)+"';")
+                #result  = self.engine.execute("select * from \"Actores\" where \'idActor\'='"+str(idActor)+"';")
+                pass
             else:
-         
                 return False
-        
-        contador = 0
-        for row in result:
-            contador = contador +1
 
-        return contador != 0
+
+        return result.count() > 0
     
     def listarActores(self):
         

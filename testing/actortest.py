@@ -14,37 +14,24 @@ class actorTester(unittest.TestCase):
         prod=clsProducto(engine,sessionDB)
         prod.insertar("nombreprod","unadescripcion")
         self.prodId = prod.idProd("nombreprod")
-        print(self.prodId)        
-    #def tearDown(self):
-        #self.acc.borrarFilas()
 
-    '''
-    def testinsertar1(self):
-      
-        pnombre = "pedrito"
-        pIdProducto = 2
-        pdescripcion = "holfittt"
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertTrue(self.acc.existeActor(pnombre))
+
     
 #casos frontera
 
-    def testCampoIdNulo(self):
-        
-        pnombre = 'jose'
-        pIdProducto = None
-        pdescripcion = 'Actor 3'
+    def testinsertar1(self):
+        pnombre = "pedrito"
+        pdescripcion = "holfittt"
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
-
+        self.assertTrue(self.acc.existeActor(pnombre))
+    '''
     def testDescripcionNulo(self):
-        
         pnombre = 'josue'
         pIdProducto = 1
         pdescripcion = ''
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
-    '''    
+        
 
         
     def testdescripcion500(self):
@@ -55,7 +42,7 @@ class actorTester(unittest.TestCase):
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
         
-    '''
+    
     def testNumEnDescrip(self):
        
         pnombre = 'chiabe'
