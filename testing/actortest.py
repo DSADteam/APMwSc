@@ -20,39 +20,28 @@ class actorTester(unittest.TestCase):
 #casos frontera
 
     def testinsertar1(self):
-        pnombre = "pedrito"
+        pnombre = "pedro" * 10
         pdescripcion = "holfittt"
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertTrue(self.acc.existeActor(pnombre))
-    '''
-    def testDescripcionNulo(self):
-        pnombre = 'josue'
-        pIdProducto = 1
-        pdescripcion = ''
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
-        
-
-        
-    def testdescripcion500(self):
-   
-        pnombre = 'eli'
+    
+    def testdescripcion501(self):
+        pnombre = 'justAno123' * 500
+        pnombre += 's'
         pIdProducto = 4
         pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
-        
-    
-    def testNumEnDescrip(self):
-       
-        pnombre = 'chiabe'
-        pIdProducto = 4
-        pdescripcion = 234
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+
+    def testWrongProdId(self):
+        pnombre = 'justAnotherTest'
+        pdescripcion = 'descripcionNormal'
+        self.acc.insertar(pnombre,pdescripcion,-1)
         self.assertFalse(self.acc.existeActor(pnombre))
-        
     
-#Caso Esquina
+
+    '''
+    #Casos Esquina
 
     def todosVacios(self):
        
@@ -100,6 +89,14 @@ class actorTester(unittest.TestCase):
         pnombre = 'perro'
         pIdProducto = 3
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
+        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.acc.existeActor(pnombre))
+
+    def testNumEnDescrip(self):
+       
+        pnombre = 'chiabe'
+        pIdProducto = 4
+        pdescripcion = 234
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
 

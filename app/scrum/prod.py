@@ -166,7 +166,6 @@ class clsProducto():
             contador = 0
             for row in result:
                 contador += 1
-            print(contador)
 
             return contador != 0
 

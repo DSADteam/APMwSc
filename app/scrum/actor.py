@@ -128,11 +128,13 @@ class clsActor():
             return False
 
         estaEnBd       = self.existeActor(nombre=nombre)
-        #pr = clsProducto()
-        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+        
+        producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+        existeProducto = producto.count() > 0
+
         longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
 
-        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo) and existeProducto:
             newAct = Actor(nombre,descripcion,idProducto)
             self.session.add(newAct)
             self.session.commit()
@@ -157,7 +159,7 @@ class clsActor():
                 pass
             else:
                 return False
-                
+
         return result.count() > 0
 
     
