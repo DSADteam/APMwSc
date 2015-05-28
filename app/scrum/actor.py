@@ -113,44 +113,50 @@ class clsActor():
             return (False)
         if type(idProducto) is str:
             return (False)
+
+
        
         comentarioNulo = (nombre == None) or (descripcion == None) or\
-        (idProducto)==None
+        (idProducto==None) or (nombre == '') or (descripcion == '') 
         if comentarioNulo:
             return False
 
-        estaEnBd       = self.existeActor(nombre=nombre)
+        #estaEnBd       = self.existeActor(nombre=nombre)
         
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
         existeProducto = producto.count() > 0
 
         longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
 
-        if (not estaEnBd) and (longCharValido) and (not comentarioNulo) and existeProducto:
+        if (longCharValido) and (not comentarioNulo) and existeProducto:
             newAct = Actor(nombre,descripcion,idProducto)
             self.session.add(newAct)
             self.session.commit()
-   
             return True
         else:
             return False
         
-    def existeActor(self,nombre=None,idActor=None):
+    def existeActor(self,nombre=None,descripcion=None):
+        # No veo esto necesario, no en existe... solo en insertar
+        nombreStr   = (type(nombre) is str)      or nombre==None
+        descriptStr = (type(descripcion) is str) or descripcion==None
         
-        if type(nombre) is int:
-            return (False)
-        if type(idActor) is str:
-            return (False)
-        
-        if(nombre!=None):
-            #result  = self.engine.execute("select * from \"Actores\" where \'nombre\'='"+nombre+"';")
-            result = self.session.query(Actor).filter(Actor.nombre == nombre)
+        if(nombreStr and descriptStr):
+            pass
         else:
-            if (idActor!=None):
-                #result  = self.engine.execute("select * from \"Actores\" where \'idActor\'='"+str(idActor)+"';")
-                pass
-            else:
-                return False
+            return False
+
+        if(nombre!=None and descripcion==None):
+            result = self.session.query(Actor).filter(Actor.nombre == nombre)
+        elif(nombre==None and descripcion!=None):
+            result = self.session.query(Actor).filter(Actor.descripcion == descripcion)
+        elif(nombre==None and descripcion!=None):
+            result = self.session.query(Actor).filter(Actor.nombre == nombre).filter(Actor.descripcion == descripcion)
+        else:
+            return False
+        
+        #print(result.count())
+
         return result.count() > 0
 
 
@@ -164,8 +170,6 @@ class clsActor():
             else:
                 print("Empty query!")
         return res
-
-
 
     
     def listarActores(self):

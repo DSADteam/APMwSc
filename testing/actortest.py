@@ -19,11 +19,11 @@ class actorTester(unittest.TestCase):
     
 #casos frontera
 
-    def testinsertar1(self):
+    def testinsertar500(self):
         pnombre = "pedro" * 10
         pdescripcion = "holfittt"
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertTrue(self.acc.existeActor(pnombre))
+        self.assertTrue(self.acc.existeActor(nombre=pnombre,descripcion=pdescripcion))
     
     def testdescripcion501(self):
         pnombre = 'justAno123' * 500
@@ -40,17 +40,16 @@ class actorTester(unittest.TestCase):
         self.assertFalse(self.acc.existeActor(pnombre))
     
 
-    '''
     #Casos Esquina
 
-    def todosVacios(self):
-       
-        pnombre = 'chiabes'
+    def testTodosVacios(self):
+        pnombre = ''
         pIdProducto = None
         pdescripcion = ''
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        a = self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
-
+    
+    '''
     def idVacioyDescrip500(self):
     
         pnombre = 'teama'
@@ -60,7 +59,7 @@ class actorTester(unittest.TestCase):
 
     def testIdNuloyDescripNum(self):
       
-        pnombre = 'teruel'
+        pnombre = 'jeanCarlos'
         pIdProducto = None
         pdescripcion = 6589
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
