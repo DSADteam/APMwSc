@@ -197,14 +197,16 @@ class clsAccion():
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
-
-
+        
+        
         if type(descripcion) is int:
             return False
         if isinstance(id, str):
             return False
         
         if(id==None):
+            return False
+        if (len(descripcion)>500):
             return False
     
 
