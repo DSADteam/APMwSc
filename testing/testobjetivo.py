@@ -8,6 +8,7 @@ Created on 15/05/2015
 
 import sys
 import os
+
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
 sys.path.append(dir)
 
@@ -16,7 +17,7 @@ from app.scrum.objetivo import clsObjetivo
 from base import *
 import unittest
 
-class TestObjetivo(unittest.TestCase):
+class objetivoTester(unittest.TestCase):
     
     # Inicializacion de casos de prueba
     def setUp(self):
@@ -27,7 +28,7 @@ class TestObjetivo(unittest.TestCase):
     # Casos interiores
     
     # Insertar un objetivo que no existe
-    def TestInsertar1(self):
+    def testInsertar1(self):
         
         pIdObjetivo = 1
         pDescripcion = 'Terminar tarea'
@@ -35,7 +36,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
 
      # Insertar un objetivo que existe
-    def TestInsertar2(self):
+    def testInsertar2(self):
         
         pIdObjetivo = 1
         pDescripcion = 'Terminar tarea'
@@ -43,9 +44,9 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
          
     # Casos fronteras
-    
+''' 
     # Insertar un objetivo con el minimo numero de caracteres en descripcion
-    def TestInsertar3(self):
+    def testInsertar3(self):
         
         pIdObjetivo = 2
         pDescripcion = 'T'
@@ -53,7 +54,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
 
     # Insertar un objetivo con el maximo numero de caracteres en descripcion
-    def TestInsertar4(self):
+    def testInsertar4(self):
         
         pIdObjetivo = 3
         pDescripcion = 'd'*500
@@ -61,7 +62,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
         
     # Insertar un objetivp con el minimo numero en idObjetivo
-    def TestInsertar5(self):
+    def testInsertar5(self):
         
         pIdObjetivo = 4
         pDescripcion = 'e'*500
@@ -69,7 +70,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
      
     # Insertar un objetivo con el maximo numero en idObjetivo
-    def TestInsertar6(self):
+    def testInsertar6(self):
         
         pIdObjetivo = (2**31)-1
         pDescripcion = 'h'*500
@@ -79,7 +80,7 @@ class TestObjetivo(unittest.TestCase):
     # Casos esquinas
     
     # Insertar un objetivo con el minimo numero en idObjetivo y el minimo de caracteres en descripcion
-    def TestInsertar7(self):
+    def testInsertar7(self):
         
         pIdObjetivo = 5
         pDescripcion = 'r'
@@ -87,7 +88,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
         
     # Insertar un objetivo con el minimo numero en idObjetivo y el maximo de caracteres en descripcion
-    def TestInsertar8(self):
+    def testInsertar8(self):
         
         pIdObjetivo = 6
         pDescripcion = 'g'*500
@@ -95,7 +96,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
 
     # Insertar un objetivo con el maximo numero en idObjetivo y el mínimo de caracteres en descripcion
-    def TestInsertar9(self):
+    def testInsertar9(self):
         
         pIdObjetivo = (2**31)-1
         pDescripcion = 'a'
@@ -103,7 +104,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
 
     # Insertar un objetivo con el maximo numero en idObjetivo y el maximo de caracteres en descripcion
-    def TestInsertar10(self):
+    def testInsertar10(self):
         
         pIdObjetivo = (2**31)-1
         pDescripcion = 'b'*500
@@ -113,7 +114,7 @@ class TestObjetivo(unittest.TestCase):
     # Casos maliciosos
     
     # Insertar un objetivo con cadena vacia en descripcion
-    def TestInsertar11(self):
+    def testInsertar11(self):
 
         pIdObjetivo = 7
         pDescripcion = ''
@@ -121,7 +122,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
 
     # Insertar un objetivo que excede los 500 caracteres en descripcion
-    def TestInsertar12(self):
+    def testInsertar12(self):
         
         pIdObjetivo = 8
         pDescripcion = 'l'*501
@@ -129,7 +130,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
         
     # Insertar un objetivo con enteros en descripcion
-    def TestInsertar13(self):
+    def testInsertar13(self):
         
         pIdObjetivo = 356456
         pDescripcion = 3245345
@@ -137,7 +138,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
        
     # Insertar un objetivo con string en idObjetivo
-    def TestInsertar14(self):
+    def testInsertar14(self):
         
         pIdObjetivo = 'fghfgh'
         pDescripcion = 32
@@ -145,7 +146,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
         
     # Insertar un objetivo con nada como idrole
-    def TestInsertar15(self):
+    def testInsertar15(self):
         
         pIdObjetivo = None
         pDescripcion = 'dfghjj'
@@ -160,7 +161,7 @@ class TestObjetivo(unittest.TestCase):
 
     # Modificar un objetivo que ya existe
     
-    def TestModificar1(self):
+    def testModificar1(self):
 
         pIdObjetivo = 9
         pDescripcion = 'holaaa'
@@ -172,15 +173,15 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion))         
     
     # Modificar un objetivo que no existe
-    def TestModificar2(self):
-        
-        self.objetivo.modificar(45356456, 'holapa')
+    def testModificar2(self):
+        pDescripcion='holapa'
+        self.objetivo.modificar(45356456, pDescripcion)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))  
     
     # Casos Fronteras
     
     # Modificar un objetivo que tiene el minimo numero en idObjetivo
-    def TestModificar3(self):
+    def testModificar3(self):
   
         pIdObjetivo = 1 
         pDescripcion = 'holaaajejeps'
@@ -192,7 +193,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion))  
     
     # Modificar un objetivo que tiene el maximo numero en idObjetivo
-    def TestModificar4(self):
+    def testModificar4(self):
 
         pIdObjetivo = (2**31)-1
         pDescripcion = 'holaaajejeps12'
@@ -204,7 +205,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
         
     # Modificar un objetivo que tiene el maximo de caracteres en descripcion
-    def TestModificar5(self):
+    def testModificar5(self):
         
         pIdObjetivo = 76
         pDescripcion = 'ñ'*500
@@ -216,7 +217,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
     
     # Modificar un objetivo que tiene el minimo de caracteres en descripcion
-    def TestModificar6(self):
+    def testModificar6(self):
         
         pIdObjetivo = 00
         pDescripcion = 'dgbdfb'
@@ -230,7 +231,7 @@ class TestObjetivo(unittest.TestCase):
     # Casos Esquinas
     
     # Modificar un objetivo que tiene el minimo numero en idObjetivo y el maximo de caracteres en descripcion
-    def TestModificar7(self): 
+    def testModificar7(self): 
         
         pIdObjetivo = 0
         pDescripcion = 'z'*500
@@ -242,7 +243,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
         
     # Modificar un objetivo que tiene el minimo numero en idObjetivo y el minimo de caracteres en descripcion
-    def TestModificar8(self):
+    def testModificar8(self):
         
         pIdObjetivo = 8
         pDescripcion = 'rdf'
@@ -254,7 +255,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
     
     # Modificar un objetivo que tiene el maximo numero en idObjetivo y el minimo de caracteres en descripcion
-    def TestModificar9(self):
+    def testModificar9(self):
         
         pIdObjetivo = (2**31)-1
         pDescripcion = 'cgfhjhj'
@@ -266,7 +267,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
 
     # Modificar un objetivo que tiene el maximo numero en idObjetivo y el maximo de caracteres en descripcion
-    def TestModificar10(self):
+    def testModificar10(self):
         
         pIdObjetivo = (2**31)-1
         pDescripcion = 'j'
@@ -280,7 +281,7 @@ class TestObjetivo(unittest.TestCase):
     # Casos maliciosos
 
     # Modificar un objetivo que tiene como idObjetivo un string
-    def TestModificar11(self):     
+    def testModificar11(self):     
         
         pIdObjetivo2 = '234'
         pDescripcion2 = 'g'*500
@@ -288,7 +289,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))      
     
     # Modificar un objetivo que tiene como descripcion una cadena vacia
-    def TestModificar13(self):  
+    def testModificar13(self):  
         
         pIdObjetivo2 = 1
         pDescripcion2 = ''
@@ -296,7 +297,7 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))    
           
     # Modificar un objetivo que excede los 500 caracteres en descripcion
-    def TestModificar14(self):      
+    def testModificar14(self):      
         
         pIdObjetivo2 = 1
         pDescripcion2 = 'o'*501
@@ -304,10 +305,12 @@ class TestObjetivo(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))     
 
     # Modificar un objetivo que tiene enteros en descripcion
-    def TestModificar15(self):        
+    def testModificar15(self):        
         
         pIdObjetivo2 = 1
         pDescripcion2 = 501
         self.objetivo.modificar(pIdObjetivo2, pDescripcion2)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))    
-        
+'''
+if __name__ == "__main__": 
+    unittest.main()   

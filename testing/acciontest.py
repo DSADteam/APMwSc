@@ -11,25 +11,27 @@ import unittest
 class accionTester(unittest.TestCase):
     def setUp(self):
         self.acc=clsAccion(engine,sessionDB)
+        
 #TEST INSERTAR
 #Casos regulares
     def tearDown(self):
-        self.accion.borrarFilas()
+        #self.accion.borrarFilas()
+        pass
 
     def testinsertar1(self):
         acc = clsAccion()
-        pIdProducto = 1
         pdescripcion = 'Accion 1'
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
 
+        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+    """
     def testinsertar2(self):
         acc = clsAccion()
         pIdProducto = 2
         pdescripcion = 'A'
         self.acc.insertar(pdescripcion,pIdProducto)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
-
+        
 #casos frontera
 
     def testCampoIdNulo(self):
@@ -37,28 +39,28 @@ class accionTester(unittest.TestCase):
         pIdProducto = None
         pdescripcion = 'Accion 3'
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
     def testDescripcionNulo(self):
         acc = clsAccion()
         pIdProducto = 1
         pdescripcion = ''
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
     def testdescripcion500(self):
         acc = clsAccion()
         pIdProducto = 4
-        pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
+        pdescripcion = 'A'*500
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertTrue(self.acc.existeAccion(pdescripcion))
 
     def testNumEnDescrip(self):
         acc = clsAccion()
         pIdProducto = 4
         pdescripcion = 234
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
 #Caso Esquina
 
@@ -68,29 +70,29 @@ class accionTester(unittest.TestCase):
         pIdProducto = None
         pdescripcion = ''
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
     def idVacioyDescrip500(self):
         
         acc = clsAccion()
         pIdProducto = None
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        pdescripcion = 'B'*500
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
     def testIdNuloyDescripNum(self):
         acc = clsAccion()
         pIdProducto = None
         pdescripcion = 6589
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
     def testCharEnIdyDecripNum(self):
         acc = clsAccion()
         pIdProducto = 'bruxw'
         pdescripcion = 345346
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
 #Caso malicia
 
@@ -99,14 +101,14 @@ class accionTester(unittest.TestCase):
         pIdProducto = 'idpepe'
         pdescripcion = 'Accion 2'
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
     
     def testdescripcion501(self):
         acc = clsAccion()
         pIdProducto = 3
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
+        pdescripcion = 'X'*501
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
 
 #TEST MODIFICAR
 #casos regulares
@@ -128,11 +130,11 @@ class accionTester(unittest.TestCase):
     
         acc = clsAccion()
         pIdProducto = 2
-        pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        pdescripcion = 'l'
         self.acc.insertar(pdescripcion,pIdProducto)
 
         pIdProducto2 = 2
-        pdescripcion2 = 'el Mall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        pdescripcion2 = 'P'*500
         test = acc.modificar(pIdProducto2, pdescripcion2)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion2))
 
@@ -214,7 +216,7 @@ class accionTester(unittest.TestCase):
     def testModifDescrip501(self):
         acc = clsAccion()
         pIdProducto2 = 2
-        pdescripcion2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
+        pdescripcion2 = 'U'*501
         test = acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
 
@@ -238,6 +240,7 @@ class accionTester(unittest.TestCase):
         pdescripcion2 = 'Accion nula'
         test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
+    """
 
 unittest.main()
     

@@ -171,6 +171,7 @@ class dbuser(db.Model):
      
 # Clase historias de usuarios
    
+
 class Historia(db.Model):
     
     __tablename__   = 'Historias'
@@ -185,10 +186,10 @@ class Historia(db.Model):
     producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
     historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
-
-    ''' Metodo init
+    """
+     Metodo init
         Constructor de las historias de usuarios
-    ''' 
+    """
     
     def __init__(self,codigo, idProducto,idAccion,idHistoriaPadre=None):
         self.codigo = codigo
@@ -230,6 +231,7 @@ class ActoresHistoria(db.Model):
         Constructor de Actores asociados a Historias
     ''' 
     
+
     def __init__(self,idHistoria,idActor):
         self.idHistoria = idHistoria
         self.idActor    = idActor

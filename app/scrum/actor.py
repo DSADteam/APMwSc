@@ -106,40 +106,53 @@ class clsActor():
         self.session = session
         
     def insertar(self,nombre=None,descripcion=None,idProducto=None):
-        
+   
+        if type(nombre) is int:
+            return (False)
+        if type(descripcion) is int:
+            return (False)
+        if type(idProducto) is str:
+            return (False)
+       
         comentarioNulo = (nombre == None) or (descripcion == None) or\
         (idProducto)==None
         if comentarioNulo:
             return False
 
         estaEnBd       = self.existeActor(nombre=nombre)
-        #pr = clsProducto()
-        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
+        
+        producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+        existeProducto = producto.count() > 0
+
         longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
 
-        if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
+        if (not estaEnBd) and (longCharValido) and (not comentarioNulo) and existeProducto:
             newAct = Actor(nombre,descripcion,idProducto)
             self.session.add(newAct)
             self.session.commit()
+   
             return True
         else:
             return False
         
     def existeActor(self,nombre=None,idActor=None):
         
+        if type(nombre) is int:
+            return (False)
+        if type(idActor) is str:
+            return (False)
+        
         if(nombre!=None):
-            result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
+            #result  = self.engine.execute("select * from \"Actores\" where \'nombre\'='"+nombre+"';")
+            result = self.session.query(Actor).filter(Actor.nombre == nombre)
         else:
             if (idActor!=None):
-                result  = self.engine.execute("select * from \"Actores\" where \'idActor\'=\'"+str(idActor)+"\';")
+                #result  = self.engine.execute("select * from \"Actores\" where \'idActor\'='"+str(idActor)+"';")
+                pass
             else:
                 return False
-        
-        contador = 0
-        for row in result:
-            contador += 1
+        return result.count() > 0
 
-        return contador != 0
 
     def mostrarActor(self,idActor):
         result = self.session.query(Actor).filter(Actor.idActor == idActor)
@@ -151,6 +164,8 @@ class clsActor():
             else:
                 print("Empty query!")
         return res
+
+
 
     
     def listarActores(self):
@@ -192,6 +207,16 @@ class clsActor():
 
     #Funcion que permite actualizar un nombre y descripcion
     def modificar(self,id=None,nombre=None,descripcion=None):
+        
+        if(id==None):
+            return False
+        if type(id) is str:
+            return False
+        if type(nombre) is int:
+            return False
+        if type(descripcion) is int:
+            return False
+        
         
         if id and nombre and descripcion:
             self.session.query(Actor).filter(Actor.idActor == id).\
