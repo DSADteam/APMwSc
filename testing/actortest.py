@@ -9,23 +9,23 @@ from base import *
 import unittest 
 
 class actorTester(unittest.TestCase):
+    
     def setUp(self):
+        
         self.act=clsActor(engine,sessionDB)
         prod=clsProducto(engine,sessionDB)
         prod.insertar("nombreprod","unadescripcion")
         self.prodId = prod.idProd("nombreprod")
 
-
-    
 #casos frontera
 
-    def testinsertar500(self):
+    def testInsertar500(self):
         pnombre = "pedro" * 10
         pdescripcion = "holfittt"
         self.act.insertar(pnombre,pdescripcion,self.prodId)
         self.assertTrue(self.act.existeActor(nombre=pnombre,descripcion=pdescripcion))
     
-    def testdescripcion501(self):
+    def testDescripcion501(self):
         pnombre = 'justAno123' * 500
         pnombre += 's'
         pIdProducto = 4
@@ -66,7 +66,7 @@ class actorTester(unittest.TestCase):
         self.assertFalse(self.act.existeActor(nombre=pnombre))
 
 
-    def testdescripcion501(self):
+    def testDescripcion501(self):
    
         pnombre = 'perro'
         pIdProducto = 3
@@ -109,15 +109,7 @@ class actorTester(unittest.TestCase):
         test = self.act.modificar(self.prodId,pnombre2, pdescripcion2)
         self.assertTrue(self.act.existeActor(pnombre2))
 
-    '''       
-    def testModifNoValid(self):
-       
-        pIdProducto = 123
-        pdescripcion = 'Actor 123'
-        pnombre2= 'tini'
-        test = self.act.modificar(pIdProducto,pnombre2,pdescripcion)
-        self.assertFalse(self.act.existeActor(pnombre2))
-    '''
+    
     def testDescripAlMin(self):
 
         pnombre = 'roberto'

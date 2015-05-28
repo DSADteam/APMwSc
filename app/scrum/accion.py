@@ -120,7 +120,7 @@ class clsAccion():
             return False
         
         comentarioNulo = (descripcion == None) or\
-        (idProducto)==None
+        (idProducto==None) or (descripcion == '')
         if comentarioNulo:
             return False
 
@@ -140,18 +140,15 @@ class clsAccion():
     def existeAccion(self,descripcion=None):
         if type(descripcion) is int:
             return False
-        
+        if (descripcion==''):
+            return False
         
         if(descripcion!=None):
-            result  = self.engine.execute("select * from \"Acciones\" where \'descripcion\'=\'"+descripcion+"\';")
+            result = self.session.query(Accion).filter(Accion.descripcion == descripcion)
         else:
             return False
         
-        contador = 0
-        for row in result:
-            contador += 1
-        print(contador)
-        return contador != 0
+        return result.count() > 0
 
     def mostrarAccion(self,idAccion):
         result = self.session.query(Accion).filter(Accion.idAccion == idAccion)

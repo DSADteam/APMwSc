@@ -154,8 +154,6 @@ class clsActor():
             result = self.session.query(Actor).filter(Actor.nombre == nombre).filter(Actor.descripcion == descripcion)
         else:
             return False
-        
-        #print(result.count())
 
         return result.count() > 0
 
