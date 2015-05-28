@@ -26,11 +26,13 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    print(session)
+    idPila = str(session['idPila'])
+    session.pop("idPila",None)
 
-    idPila = int(request.args.get('idProducto', 1))
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(idObjetivo = params['idObjetivo'], descripcion = params['descripcion'], idProducto=int(request.args.get('idProducto', 1)) )
-    res['label'] = res['label'] + '/' + str(idProducto)
+    obj.insertar(descripcion = params['descripcion'], idProducto=idPila)
+    res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
     if "actor" in res:
@@ -47,12 +49,21 @@ def AModifObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo actualizado']}, {'label':'/VObjetivo', 'msg':['Error al modificar objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+<<<<<<< HEAD
     #idPila = int(request.args.get('idPila', 1))
     print('dDAAAAAAAAAAA')
     print(params)
     obj=clsObjetivo(session=sessionDB,engine=engine)
     obj.modificar(params['idObjetivo'],params['descripcion'])
     res['label'] = res['label'] + '/' + str(obj.getProdId(params['idObjetivo']))
+=======
+    
+    idObjetivo = params['idObjetivo']
+
+    obj=clsObjetivo(session=sessionDB,engine=engine)
+    obj.modificar(idObjetivo,params['descripcion'])
+    res['label'] = res['label'] + '/' + str(session['idPila'])
+>>>>>>> Javier
 
     #Action code ends here
     if "actor" in res:
@@ -69,9 +80,13 @@ def VCrearObjetivo():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+
     params = request.get_json()
+
     
-    #res['idPila'] = [{'idPila':idPila}]
+    #session['idPila'] = request.args['idPila']
+    res['idPila'] = session['idPila']
+    print(session)
 
     #Action code ends here
     return json.dumps(res)
@@ -82,6 +97,7 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+<<<<<<< HEAD
     
     
     obj=clsObjetivo(engine=engine,session=sessionDB)
@@ -100,6 +116,15 @@ def VObjetivo():
     objs = obj.listarObjetivos()
     res['fObjetivo'] = objs[idProducto-1]
     primt(res['fObjetivo'] )
+=======
+    obj=clsObjetivo(engine=engine,session=sessionDB)
+
+    idObjetivo        = request.args.get('idObjetivo', 1)
+    res['idObjetivo'] = idObjetivo
+    res['fObjetivo']  = obj.mostrarObjetivo(int(idObjetivo))
+    #idObjetivo=idPila
+    
+>>>>>>> Javier
     #Action code ends here
     return json.dumps(res)
 
@@ -144,6 +169,15 @@ class clsObjetivo():
             contador += 1
 
         return contador != 0
+
+    def mostrarObjetivo(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        if result!="":
+            for row in result:
+                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion}
+            else:
+                print("Empty query!")
+        return res
 
     def listarObjetivos(self):
         

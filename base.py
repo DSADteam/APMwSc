@@ -20,8 +20,6 @@ manager.add_command("runserver", Server(
     host = '127.0.0.1')
 )
 
-
-
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -30,6 +28,7 @@ def make_session_permanent():
 
 @app.route('/')
 def root():
+    session.pop("idPila", None)
     return app.send_static_file('index.html')
 
 @manager.command
@@ -69,17 +68,19 @@ sessionDB = DBSession()
 #Clase para pila de productos
 
 class Producto(db.Model):
+    
     __tablename__ = 'Productos'
-    idProducto  = db.Column(Integer, primary_key = True) #autoincremento
-    nombre      = db.Column(String(500),  unique = True, nullable = False)
-    descripcion = db.Column(String(500),  unique = False)
-
+    idProducto    = db.Column(Integer, primary_key = True) #autoincremento
+    nombre        = db.Column(String(500),  unique = True, nullable = False)
+    descripcion   = db.Column(String(500),  unique = False)
 
     def __init__(self,nombre,descripcion=None):
+        
         self.nombre      = nombre
         self.descripcion = descripcion
         
     def getALL(self):
+        
         return engine.execute("select * from \"Products\";")
 
 # Clase Accion
@@ -97,6 +98,7 @@ class Accion(db.Model):
     ''' 
     
     def __init__(self, descripcion, idProducto):
+        
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
@@ -110,21 +112,25 @@ class Actor(db.Model):
     descripcion   = db.Column(String(500), unique = False, nullable=False)
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('actores', lazy = 'dynamic'))
+    
     ''' Metodo init
         Constructor del actor
     ''' 
     
     def __init__(self, nombre, descripcion, idProducto):
+        
         self.nombre      = nombre
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
     def getALL(self):
+        
         return engine.execute("select * from \"Actores\";")
      
-# Clase Usuario
+# Clase Objetivo
 
 class Objetivo(db.Model):
+    
     __tablename__ = 'Objetivos'
     idObjetivo    = db.Column(Integer, primary_key = True)
     descripcion   = db.Column(String(500), unique = False, nullable=False)
@@ -135,8 +141,8 @@ class Objetivo(db.Model):
         Constructor del objetivo
     ''' 
     
-    def __init__(self,idObjetivo,descripcion, idProducto):
-        self.idObjetivo = idObjetivo
+    def __init__(self,descripcion, idProducto):
+        
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
@@ -145,11 +151,11 @@ class Objetivo(db.Model):
 class dbuser(db.Model):
     
     __tablename__ = 'dbuser'
-    fullname = Column(String(50))
-    username = Column(String(16), primary_key = True)
-    password = Column(String(100)) #para que pueda aceptar hash
-    email = Column(String(30))
-    idActor = Column(Integer, ForeignKey('Actores.idActor'))
+    fullname      = Column(String(50))
+    username      = Column(String(16), primary_key = True)
+    password      = Column(String(100)) #para que pueda aceptar hash
+    email         = Column(String(30))
+    idActor       = Column(Integer, ForeignKey('Actores.idActor'))
     
     ''' Metodo init
         Constructor del usuario
@@ -160,8 +166,73 @@ class dbuser(db.Model):
         self.fullname = fullname
         self.username = username
         self.password = password
-        self.email = email
-        self.idActor = idActor
+        self.email    = email
+        self.idActor  = idActor
+     
+# Clase historias de usuarios
+   
+class Historia(db.Model):
+    
+    __tablename__   = 'Historias'
+    idHistoria      = db.Column(Integer, primary_key = True)
+    codigo          = db.Column(String(500), unique = False, nullable=False)
+    idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
+    idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion')   , unique = True,  nullable=True)
+    idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
+    
+    #Backrefs
+    accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
+    producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
+    historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
+
+
+    ''' Metodo init
+        Constructor de las historias de usuarios
+    ''' 
+    
+    def __init__(self,codigo, idProducto,idAccion,idHistoriaPadre=None):
+        self.codigo = codigo
+        self.idProducto  = idProducto
+        self.idAccion    = idAccion
+        if idHistoriaPadre:
+            self.idHistoriaPadre = idHistoriaPadre
+
+# Clase para objetivos de una historia
+
+class ObjetivosHistoria(db.Model):
+    __tablename__   = 'ObjetivosHistorias'
+
+    idHistoria = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
+    idObjetivo = db.Column(Integer, db.ForeignKey('Objetivos.idObjetivo'), unique = False, primary_key=True)   
+
+    objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
+    historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
+
+    ''' Metodo init
+        Constructor de Objetivos asociados a Historias
+    ''' 
+    
+    def __init__(self,idHistoria,idObjetivo):
+        self.idHistoria = idHistoria
+        self.idObjetivo = idObjetivo
+
+#Clase para actores de una historia
+
+class ActoresHistoria(db.Model):
+    __tablename__   = 'ActoresHistorias'
+    idHistoria      = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
+    idActor         = db.Column(Integer, db.ForeignKey('Actores.idActor'),     unique = False,  primary_key=True)
+    
+    actor           = db.relationship('Actor',   backref = db.backref('actor'   , lazy = 'dynamic'))
+    historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
+
+    ''' Metodo init
+        Constructor de Actores asociados a Historias
+    ''' 
+    
+    def __init__(self,idHistoria,idActor):
+        self.idHistoria = idHistoria
+        self.idActor    = idActor
 
 from app.scrum.ident import ident
 app.register_blueprint(ident)
@@ -177,6 +248,8 @@ from app.scrum.objetivo import objetivo
 app.register_blueprint(objetivo)
 from app.scrum.accion import accion
 app.register_blueprint(accion)
+from app.scrum.historias import historias
+app.register_blueprint(historias)
 
 if __name__ == '__main__':
     app.config.update(

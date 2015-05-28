@@ -1,22 +1,9 @@
-scrumModule.service('accionService', ['$q', '$http', function($q, $http) {
+scrumModule.service('historiasService', ['$q', '$http', function($q, $http) {
 
-    this.AModifAccion = function(fAccion) {
-        return  $http({
-          url: "accion/AModifAccion",
-          data: fAccion,
-          method: 'POST',
-        });
-    //    var labels = ["/VProducto", "/VAccion", ];
-    //    var res = labels[0];
-    //    var deferred = $q.defer();
-    //    deferred.resolve(res);
-    //    return deferred.promise;
-    };
-
-    this.VAccion = function(args) {
+    this.VHistorias = function(args) {
         if(typeof args == 'undefined') args={};
         return $http({
-          url: 'accion/VAccion',
+          url: 'historias/VHistorias',
           method: 'GET',
           params: args
         });
@@ -26,23 +13,49 @@ scrumModule.service('accionService', ['$q', '$http', function($q, $http) {
     //    return deferred.promise;
     };
 
-    this.ACrearAccion = function(fAccion) {
+    this.ACrearHistoria = function(fHistoria) {
         return  $http({
-          url: "accion/ACrearAccion",
-          data: fAccion,
+          url: "historias/ACrearHistoria",
+          data: fHistoria,
           method: 'POST',
         });
-    //    var labels = ["/VProducto", "/VCrearAccion", ];
+    //    var labels = ["/VHistorias", "/VCrearHistoria", ];
     //    var res = labels[0];
     //    var deferred = $q.defer();
     //    deferred.resolve(res);
     //    return deferred.promise;
     };
 
-    this.VCrearAccion = function(args) {
+    this.VCrearHistoria = function(args) {
         if(typeof args == 'undefined') args={};
         return $http({
-          url: 'accion/VCrearAccion',
+          url: 'historias/VCrearHistoria',
+          method: 'GET',
+          params: args
+        });
+    //    var res = {};
+    //    var deferred = $q.defer();
+    //    deferred.resolve(res);
+    //    return deferred.promise;
+    };
+
+    this.AModifHistoria = function(fHistoria) {
+        return  $http({
+          url: "historias/AModifHistoria",
+          data: fHistoria,
+          method: 'POST',
+        });
+    //    var labels = ["/VHistorias", "/VHistoria", ];
+    //    var res = labels[0];
+    //    var deferred = $q.defer();
+    //    deferred.resolve(res);
+    //    return deferred.promise;
+    };
+
+    this.VHistoria = function(args) {
+        if(typeof args == 'undefined') args={};
+        return $http({
+          url: 'historias/VHistoria',
           method: 'GET',
           params: args
         });
