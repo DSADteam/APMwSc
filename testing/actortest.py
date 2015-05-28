@@ -49,14 +49,6 @@ class actorTester(unittest.TestCase):
         a = self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
     
-    '''
-    def idVacioyDescrip500(self):
-    
-        pnombre = 'teama'
-        pIdProducto = None
-        pdescripcion = 'O'*500
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-
     def testIdNuloyDescripNum(self):
       
         pnombre = 'jeanCarlos'
@@ -64,7 +56,7 @@ class actorTester(unittest.TestCase):
         pdescripcion = 6589
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(pnombre))
-
+    
     def testCharEnIdyDecripNum(self):
   
         pnombre = ''
@@ -73,16 +65,7 @@ class actorTester(unittest.TestCase):
         self.acc.insertar(pnombre,pdescripcion,self.prodId)
         self.assertFalse(self.acc.existeActor(nombre=pnombre))
 
-#Caso malicia
 
-    def testcharEnId(self):
- 
-        pnombre = 'jirafa'
-        pIdProducto = 'idpepe'
-        pdescripcion = 'Actor 2'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
-    
     def testdescripcion501(self):
    
         pnombre = 'perro'
@@ -216,13 +199,6 @@ class actorTester(unittest.TestCase):
         test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
         self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
-    def testModifDescrip501(self):
-      
-        pIdProducto2 = 2
-        pnombre2= 'este'
-        pdescripcion2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
 
     def testModifDescripVacio(self):
     
@@ -247,7 +223,6 @@ class actorTester(unittest.TestCase):
         pdescripcion2 = 'Actor nulo'
         test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
         self.assertFalse(self.acc.existeActor(nombre=pnombre2))
-    '''
 
 
 
