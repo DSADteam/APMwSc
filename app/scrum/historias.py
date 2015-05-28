@@ -17,6 +17,7 @@ from sqlalchemy.sql.expression import text
 historias = Blueprint('historias', __name__)
 
 from base import *
+from app.scrum.actor import clsActor
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -173,11 +174,11 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
         
-    def insertar(self,codigo=None,idProducto=None,idPapa=None,idAccion=None):
+    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None):
         
         comentarioNulo = (codigo == None) or\
         (idProducto!=None) or (idAccion==None)
-        if comentarioNulo or codigo=='':
+        if comentarioNulo or codigo=='' or tipo==None:
             return False
 
         estaEnBd       = self.existeHistoria(codigo=codigo,idProducto=idProducto)
@@ -188,7 +189,7 @@ class clsHistoria():
         
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo) and\
             not tieneLoops:
-            newHis = Historia(codigo,idProducto,idAccion)
+            newHis = Historia(codigo,idProducto,idAccion,tipo)
             self.session.add(newHis)
             self.session.commit()
             return True

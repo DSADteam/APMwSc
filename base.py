@@ -176,6 +176,7 @@ class Historia(db.Model):
     __tablename__   = 'Historias'
     idHistoria      = db.Column(Integer, primary_key = True)
     codigo          = db.Column(String(500), unique = False, nullable=False)
+    tipo            = db.Column(String(500), nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
@@ -190,10 +191,11 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
     
-    def __init__(self,codigo, idProducto,idAccion,idHistoriaPadre=None):
+    def __init__(self,codigo, idProducto,idAccion,tipo,idHistoriaPadre=None):
         self.codigo = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
+        self.tipo        = tipo
         if idHistoriaPadre:
             self.idHistoriaPadre = idHistoriaPadre
 

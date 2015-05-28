@@ -73,8 +73,8 @@ scrumModule.controller('VCrearHistoriaController',
       $scope.VCrearAccion3 = function(idPila) {
         $location.path('/VCrearAccion/'+idPila);
       };
-      $scope.VCrearObjetivo4 = function() {
-        $location.path('/VCrearObjetivo');
+      $scope.VCrearObjetivo4 = function(idPila) {
+        $location.path('/VCrearObjetivo/'+idPila);
       };
 
       $scope.fHistoriaSubmitted = false;
@@ -117,8 +117,8 @@ scrumModule.controller('VHistoriaController',
       $scope.VCrearAccion3 = function(idPila) {
         $location.path('/VCrearAccion/'+idPila);
       };
-      $scope.VCrearObjetivo4 = function() {
-        $location.path('/VCrearObjetivo');
+      $scope.VCrearObjetivo4 = function(idPila) {
+        $location.path('/VCrearObjetivo/'+idPila);
       };
 
       $scope.fHistoriaSubmitted = false;
