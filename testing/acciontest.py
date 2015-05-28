@@ -11,6 +11,7 @@ import unittest
 class accionTester(unittest.TestCase):
     def setUp(self):
         self.acc=clsAccion(engine,sessionDB)
+        
 #TEST INSERTAR
 #Casos regulares
     def tearDown(self):
@@ -19,9 +20,9 @@ class accionTester(unittest.TestCase):
 
     def testinsertar1(self):
         acc = clsAccion()
-        pIdProducto = 1
         pdescripcion = 'Accion 1'
         self.acc.insertar(pdescripcion,pIdProducto)
+
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
     """
     def testinsertar2(self):

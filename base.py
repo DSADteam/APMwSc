@@ -170,6 +170,7 @@ class dbuser(db.Model):
      
 # Clase historias de usuarios
    
+'''
 class Historia(db.Model):
     
     __tablename__ = 'Historias'
@@ -178,16 +179,16 @@ class Historia(db.Model):
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('historias', lazy = 'dynamic'))
 
-    ''' Metodo init
+     Metodo init
         Constructor de las historias de usuarios
-    ''' 
+    
     
     def __init__(self,descripcion, idProducto):
         
         self.descripcion = descripcion
         self.idProducto  = idProducto
     
-
+'''
 from app.scrum.ident import ident
 app.register_blueprint(ident)
 from app.scrum.prod import prod

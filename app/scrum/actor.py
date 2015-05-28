@@ -157,9 +157,9 @@ class clsActor():
                 pass
             else:
                 return False
-
-
+                
         return result.count() > 0
+
     
     def listarActores(self):
         
