@@ -152,6 +152,16 @@ class clsAccion():
                 res = {'idAccion':row.idAccion,'descripcion':row.descripcion}
             else:
                 print("Empty query!")
+        return res    
+
+    def obtenerId(self,descripcion):
+        res = -1
+
+        result = self.session.query(Accion).filter(Accion.descripcion == descripcion)
+        if result!="":
+            for row in result:
+                res = row.idAccion
+            
         return res
 
     def listarAcciones(self):

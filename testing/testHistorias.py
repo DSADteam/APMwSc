@@ -3,39 +3,75 @@ import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../..'))
 sys.path.append(dir)
 
-from app.scrum.prod import clsProducto
+from app.scrum.prod      import clsProducto
 from app.scrum.historias import clsHistoria
+from app.scrum.accion    import clsAccion
 from base import *
 import unittest
 
 class TestHistoria(unittest.TestCase):
     
     def setUp(self):
+        #Sesion de prueba
         self.his = clsHistoria(engine,sessionDB)
+
+        #Clase producto auxiliar para pruebas
+        prod     = clsProducto(engine,sessionDB)
+        prod.insertar("ProductoPruebaHistoria","Descripcion prueba")
+        self.prodId = prod.idProd("ProductoPruebaHistoria")
+
+
+
         
     def tearDown(self):
-        self.historia.borrarFilas()
+        #self.historia.borrarFilas()
+        pass
         
 # TEST INSERTAR
 
 #Casos regulares
 
-    def testinsertar1(self):
-        
-        pIdProducto = 1
-        pcodigo = 'Historia 1'
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
-
+    """
     def testinsertar2(self):
       
         pIdProducto = 2
         pcodigo = 'Historia 2'
         self.his.insertar(pcodigo,pIdProducto)
         self.assertTrue(self.his.existeHistoria(pcodigo==codigo))
-        
+    """
 # Casos fronteras
 
+    def testInsertar500(self):
+        accion          = clsAccion(engine,sessionDB)
+        accion.insertar("Accion prueba 500",self.prodId)
+        idAccion = accion.obtenerId("Accion prueba 500")
+
+        hCodigo   = "a" * 500
+        self.his.insertar(hCodigo,self.prodId,idAccion)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo))    
+
+    def testInsertar501(self):
+        accion          = clsAccion(engine,sessionDB)
+        accion.insertar("Accion prueba 501",self.prodId)
+        idAccion = accion.obtenerId("Accion prueba 501")
+
+        hCodigo   = "a" * 501
+        self.his.insertar(hCodigo,self.prodId,idAccion)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo))
+
+    def testCodigoVacio(self):
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("Accion codigo vacio",self.prodId)
+        idAccion = accion.obtenerId("Accion codigo vacio")
+
+        hCodigo = ''
+
+        self.his.insertar(hCodigo,self.prodId,idAccion)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo))
+        # self.his.insertar(pcodigo,pIdProducto)
+        # self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+
+    """
     def testCampoIdNulo(self):
         
         his = clsHistoria()
@@ -43,14 +79,7 @@ class TestHistoria(unittest.TestCase):
         pcodigo = 'Historyyyy'
         self.his.insertar(pcodigo,pIdProducto)
         self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
-
-    def testcodigoNulo(self):
-        
-        his = clsHistoria()
-        pIdProducto = 1
-        pcodigo = ''
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+    
 
     def testcodigo500(self):
         
@@ -261,6 +290,7 @@ class TestHistoria(unittest.TestCase):
         pcodigo2 = 'Historia nula'
         test = self.his.modificar(pIdProducto2,pcodigo2)
         self.assertFalse(self.his.existeHistoria(codigo=pcodigo2))
+    """
     
 if __name__ == "__main__":
     unittest.main()
