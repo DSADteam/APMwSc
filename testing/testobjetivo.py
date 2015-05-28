@@ -44,7 +44,7 @@ class objetivoTester(unittest.TestCase):
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
          
     # Casos fronteras
-    
+''' 
     # Insertar un objetivo con el minimo numero de caracteres en descripcion
     def testInsertar3(self):
         
@@ -311,6 +311,6 @@ class objetivoTester(unittest.TestCase):
         pDescripcion2 = 501
         self.objetivo.modificar(pIdObjetivo2, pDescripcion2)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))    
-
+'''
 if __name__ == "__main__": 
     unittest.main()   

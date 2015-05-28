@@ -51,7 +51,7 @@ class accionTester(unittest.TestCase):
         pIdProducto = 4
         pdescripcion = 'A'*500
         self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
+        self.assertTrue(self.acc.existeAccion(pdescripcion))
 
     def testNumEnDescrip(self):
         acc = clsAccion()

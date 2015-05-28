@@ -114,18 +114,15 @@ class clsActor():
         self.session = session
         
     def insertar(self,nombre=None,descripcion=None,idProducto=None):
+   
+        if type(nombre) is int:
+            return (False)
+        if type(descripcion) is int:
+            return (False)
+        if type(idProducto) is str:
+            return (False)
         
-        try:
-            nombre = int(nombre)
-        except ValueError:
-            return False
-        try:
-            descripcion = int(descripcion)
-        except ValueError:
-            return False
         
-        if isinstance(IdProducto, str):
-            return False
         
        
         comentarioNulo = (nombre == None) or (descripcion == None) or\
@@ -142,30 +139,30 @@ class clsActor():
             newAct = Actor(nombre,descripcion,idProducto)
             self.session.add(newAct)
             self.session.commit()
+   
             return True
         else:
             return False
         
     def existeActor(self,nombre=None,idActor=None):
         
-        try:
-            nombre = int(nombre)
-        except ValueError:
-            return False
-        if isinstance(IdActor, str):
-            return False
+        if type(nombre) is int:
+            return (False)
+        if type(idActor) is str:
+            return (False)
         
         if(nombre!=None):
-            result  = self.engine.execute("select * from \"Actores\" where \'nombre\'=\'"+nombre+"\';")
+            result  = self.engine.execute("select * from \"Actores\" where \'nombre\'='"+nombre+"';")
         else:
             if (idActor!=None):
-                result  = self.engine.execute("select * from \"Actores\" where \'idActor\'=\'"+str(idActor)+"\';")
+                result  = self.engine.execute("select * from \"Actores\" where \'idActor\'='"+str(idActor)+"';")
             else:
+         
                 return False
         
         contador = 0
         for row in result:
-            contador += 1
+            contador = contador +1
 
         return contador != 0
     
@@ -211,14 +208,11 @@ class clsActor():
         
         if(id==None):
             return False
-         
-        try:
-            nombre = int(nombre)
-        except ValueError:
+        if type(id) is str:
             return False
-        try:
-            descripcion = int(descripcion)
-        except ValueError:
+        if type(nombre) is int:
+            return False
+        if type(descripcion) is int:
             return False
         
         

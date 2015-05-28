@@ -109,11 +109,9 @@ class clsAccion():
         
     def insertar(self,descripcion=None,idProducto=None):
         
-        try:
-            descripcion = int(descripcion)
-        except ValueError:
+        if type(descripcion) is int:
             return False
-        if isinstance(IdProducto, str):
+        if isinstance(idProducto, str):
             return False
         
         comentarioNulo = (descripcion == None) or\
@@ -135,10 +133,10 @@ class clsAccion():
             return False
         
     def existeAccion(self,descripcion=None):
-        try:
-            descripcion = int(descripcion)
-        except ValueError:
+        if type(descripcion) is int:
             return False
+        
+        
         if(descripcion!=None):
             result  = self.engine.execute("select * from \"Acciones\" where \'descripcion\'=\'"+descripcion+"\';")
         else:
@@ -180,6 +178,11 @@ class clsAccion():
 
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None):
+        if type(descripcion) is int:
+            return False
+        if isinstance(id, str):
+            return False
+        
         if(id==None):
             return False
     
