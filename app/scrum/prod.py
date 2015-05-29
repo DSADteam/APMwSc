@@ -83,24 +83,33 @@ def VProducto():
     #Action code goes here, res should be a JSON structure
     prd=clsProducto(engine=engine,session=sessionDB)
     
-    idPila = request.args.get('idPila', 1)
+    idPila = int(request.args.get('idPila', 1))
 
     pilas = prd.listarProductos()
 
 
     
     res['idPila'] = idPila
-    session['idPila'] = idPila    
+    session['idPila'] = int(idPila)   
     print(session)
 
     oActor    = clsActor(engine,sessionDB)
     oAccion   = clsAccion(engine,sessionDB)
     oObjetivo = clsObjetivo(engine,sessionDB)
-
+    pilas = pilas = [{'idPila':1, 'nombre':'Pagos en línea', 'descripcion':'Pagos usando tarjeta de débito'}, {'idPila':2, 'nombre':'Recomendaciones de playas', 'descripcion':'Red social para playeros consumados'}, {'idPila':3, 'nombre':'Tu taxi seguro', 'descripcion':'Toma un taxi privado de forma segura'}, ]
+    i=0
+    for x in pilas:
+        print('el magico numero: '+str(i))
+        i+=1
+        print(x)
+        if x['idPila']==idPila:
+            res['fPila'] = x
+            break
+    print('TRY HARD DUDE')
+    print(res)
     res['data3'] = oActor.listarActoresprod(idPila)
     res['data5'] = oAccion.listarAccionesprod(idPila)
     res['data7'] = oObjetivo.listarObjetivosprod(idPila)
-
 
     #Action code ends here
     return json.dumps(res)
