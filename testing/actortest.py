@@ -9,35 +9,35 @@ from base import *
 import unittest 
 
 class actorTester(unittest.TestCase):
+    
     def setUp(self):
-        self.acc=clsActor(engine,sessionDB)
+        
+        self.act=clsActor(engine,sessionDB)
         prod=clsProducto(engine,sessionDB)
         prod.insertar("nombreprod","unadescripcion")
         self.prodId = prod.idProd("nombreprod")
 
-
-    
 #casos frontera
 
-    def testinsertar500(self):
+    def testInsertar500(self):
         pnombre = "pedro" * 10
         pdescripcion = "holfittt"
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertTrue(self.acc.existeActor(nombre=pnombre,descripcion=pdescripcion))
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertTrue(self.act.existeActor(nombre=pnombre,descripcion=pdescripcion))
     
-    def testdescripcion501(self):
+    def testDescripcion501(self):
         pnombre = 'justAno123' * 500
         pnombre += 's'
         pIdProducto = 4
         pdescripcion = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la descripcion del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.act.existeActor(pnombre))
 
     def testWrongProdId(self):
         pnombre = 'justAnotherTest'
         pdescripcion = 'descripcionNormal'
-        self.acc.insertar(pnombre,pdescripcion,-1)
-        self.assertFalse(self.acc.existeActor(pnombre))
+        self.act.insertar(pnombre,pdescripcion,-1)
+        self.assertFalse(self.act.existeActor(pnombre))
     
 
     #Casos Esquina
@@ -46,41 +46,41 @@ class actorTester(unittest.TestCase):
         pnombre = ''
         pIdProducto = None
         pdescripcion = ''
-        a = self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
+        a = self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.act.existeActor(pnombre))
     
     def testIdNuloyDescripNum(self):
       
         pnombre = 'jeanCarlos'
         pIdProducto = None
         pdescripcion = 6589
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.act.existeActor(pnombre))
     
     def testCharEnIdyDecripNum(self):
   
         pnombre = ''
         pIdProducto = 'bruxw'
         pdescripcion = 345346
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre))
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.act.existeActor(nombre=pnombre))
 
 
-    def testdescripcion501(self):
+    def testDescripcion501(self):
    
         pnombre = 'perro'
         pIdProducto = 3
         pdescripcion = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
-
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.act.existeActor(pnombre))
+        
     def testNumEnDescrip(self):
        
         pnombre = 'chiabe'
         pIdProducto = 4
         pdescripcion = 234
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
-        self.assertFalse(self.acc.existeActor(pnombre))
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
+        self.assertFalse(self.act.existeActor(pnombre))
 
 #TEST MODIFICAR
 #casos regulares
@@ -88,51 +88,40 @@ class actorTester(unittest.TestCase):
     def testModificar1(self):
      
         pnombre = 'nabil'
-        pIdProducto = 1
         pdescripcion = 'Actor1'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
         
         pnombre2= 'coki'
-        pIdProducto2 = 1
         pdescripcion2 = 'Actor N1'
-        test = self.acc.modificar(self.prodId,pnombre2, pdescripcion2)
-        self.assertTrue(self.acc.existeActor(pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2, pdescripcion2)
+        self.assertTrue(self.act.existeActor(pnombre2))
 
 #Casos fronteras
     
     def testDescrip500(self):
        
         pnombre = 'cristina'
-        pIdProducto = 2
         pdescripcion = 'W'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
 
         pnombre2= 'oil'
         pdescripcion2 = 'holaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholahoholaholaho'
-        test = self.acc.modificar(self.prodId,pnombre2, pdescripcion2)
-        self.assertFalse(self.acc.existeActor(pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2, pdescripcion2)
+        self.assertTrue(self.act.existeActor(pnombre2))
 
-        
-    def testModifNoValid(self):
-       
-        pIdProducto = 123
-        pdescripcion = 'Actor 123'
-        pnombre2= 'tini'
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion)
-        self.assertFalse(self.acc.existeActor(pnombre2))
-
+    
     def testDescripAlMin(self):
 
         pnombre = 'roberto'
         pIdProducto = 1
         pdescripcion = 'Actor 1'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
         
         pnombre2= 'nuevo'
         pIdProducto2 = 1
         pdescripcion2 = 'A'
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertTrue(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2,pdescripcion2)
+        self.assertTrue(self.act.existeActor(nombre=pnombre2))
 
 #Casos Esquina
 
@@ -141,52 +130,48 @@ class actorTester(unittest.TestCase):
         pnombre = 'meggie'
         pIdProducto = 1
         pdescripcion = 'Actor 1'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
         
         
         pnombre2= ''
         pdescripcion2 = ''
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
     def testModifIdNulyDescripNum(self):
       
         pnombre = 'latigresa'
         pIdProducto = 1
         pdescripcion = 'Actor 1'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
         
         pnombre2= 'chiabz'
         pIdProducto2 = None
         
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(pIdProducto2,pnombre2,pdescripcion)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
     def testModifIdCharyDecripNum(self):
-
-        pnombre = 'manuela'
-        pIdProducto = 1
-        pdescripcion = 'Actor 1'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
         
+        pIdProducto = 'hola'
         pnombre2= 'estenombre'
-      
+        
         pdescripcion2 = 4567
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(pIdProducto,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
     
     def testModifIdCharyDescripNul(self):
       
         pnombre = 'unnombre'
         pIdProducto = 1
         pdescripcion = 'Actor1'
-        self.acc.insertar(pnombre,pdescripcion,self.prodId)
+        self.act.insertar(pnombre,pdescripcion,self.prodId)
         
         pnombre2= 'yyyyyy'
       
         pdescripcion2 = ''
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
 
 #Casos Malicia
@@ -196,8 +181,8 @@ class actorTester(unittest.TestCase):
         pIdProducto2 = 'hola'
         pdescripcion2 = 'Actor p'
         pnombre2= 'estem'
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
 
     def testModifDescripVacio(self):
@@ -205,24 +190,24 @@ class actorTester(unittest.TestCase):
         pIdProducto2 = 1
         pnombre2= 'nombredos'
         pdescripcion2 = ''
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
     def testModifDescripNum(self):
  
-        pIdProducto2 = 3
-        pnombre2= 'nombretres'
+        pIdProducto2 = 1
+        pnombre2= 'nabil'
         pdescripcion2 = 123
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(self.prodId,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(descripcion=pdescripcion2))
     
     def testModifIdNulo(self):
  
         pIdProducto2 = None
         pnombre2= 'nombrecuatro'
         pdescripcion2 = 'Actor nulo'
-        test = self.acc.modificar(self.prodId,pnombre2,pdescripcion2)
-        self.assertFalse(self.acc.existeActor(nombre=pnombre2))
+        test = self.act.modificar(pIdProducto2,pnombre2,pdescripcion2)
+        self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
 
 

@@ -155,8 +155,6 @@ class clsActor():
             result = self.session.query(Actor).filter(Actor.nombre == nombre).filter(Actor.descripcion == descripcion)
         else:
             return False
-        
-        #print(result.count())
 
         return result.count() > 0
 
@@ -222,8 +220,10 @@ class clsActor():
         if type(descripcion) is int:
             return False
         
-        
-        if id and nombre and descripcion:
+        if(id!=None):
+            result = self.session.query(Actor).filter(Actor.idActor == id)
+            
+        if ((result.count()>0) and nombre and descripcion):
             self.session.query(Actor).filter(Actor.idActor == id).\
                 update({'nombre' : nombre })
             self.session.commit()
