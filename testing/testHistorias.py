@@ -34,7 +34,7 @@ class TestHistoria(unittest.TestCase):
         pIdProducto = 2
         pcodigo = 'Historia 2'
         self.his.insertar(pcodigo,self.prodId)
-        self.assertTrue(self.his.existeHistoria(pcodigo==codigo))
+        self.assertTrue(self.his.existeHistoria(codigo==pcodigo))
     
     """
 # Casos fronteras
