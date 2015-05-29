@@ -94,7 +94,7 @@ def VObjetivo():
     idObjetivo        = request.args.get('idObjetivo', 1)
     res['idObjetivo'] = idObjetivo
     res['fObjetivo']  = obj.mostrarObjetivo(int(idObjetivo))
-    #idObjetivo=idPila
+    res['idPila']  = session['idPila']
     
     #Action code ends here
     return json.dumps(res)

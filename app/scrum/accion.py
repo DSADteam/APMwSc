@@ -80,6 +80,7 @@ def VAccion():
     #pilas = acc.mostrarAccion(idAccion)
     res['fAccion'] = acc.mostrarAccion(int(idAccion))
     #res['fAccion'] = pilas[idPila-1]
+    res['idPila']  = session['idPila']
     
     
     #idAccion = idPila

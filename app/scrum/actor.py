@@ -78,6 +78,7 @@ def VActor():
     idActor        = request.args.get('idActor', 1)
     res['idActor'] = idActor
     res['fActor']  = act.mostrarActor(idActor)
+    res['idPila']  = session['idPila']
 
     #Action code ends here
     return json.dumps(res)
