@@ -26,13 +26,6 @@ class accionTester(unittest.TestCase):
         self.acc.insertar(pdescripcion,self.prodId)
         self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
 
-    
-    def testinsertar2(self):
-        
-        pIdProducto = 2
-        pdescripcion = 'A'
-        self.acc.insertar(pdescripcion,pIdProducto)
-        self.assertTrue(self.acc.existeAccion(descripcion=pdescripcion))
      
 # casos frontera
     

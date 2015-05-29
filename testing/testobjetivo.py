@@ -63,10 +63,9 @@ class objetivoTester(unittest.TestCase):
         
     # Insertar un objetivp con el minimo numero en idObjetivo
     def testInsertar5(self):
-        
-        pIdObjetivo = 4
+
         pDescripcion = 'e'*500
-        self.objetivo.insertar(pIdObjetivo, pDescripcion)
+        self.objetivo.insertar(self.prodId, pDescripcion)
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
      
     # Casos esquinas
@@ -74,9 +73,8 @@ class objetivoTester(unittest.TestCase):
     # Insertar un objetivo con el minimo numero en idObjetivo y el minimo de caracteres en descripcion
     def testInsertar7(self):
         
-        pIdObjetivo = 5
         pDescripcion = 'r'
-        self.objetivo.insertar(pIdObjetivo, pDescripcion)
+        self.objetivo.insertar(self.prodId, pDescripcion)
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
         
     # Casos maliciosos

@@ -227,6 +227,7 @@ class ObjetivosHistoria(db.Model):
     #objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
     #historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
+
     ''' Metodo init
         Constructor de Objetivos asociados a Historias
     ''' 
