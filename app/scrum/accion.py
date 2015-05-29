@@ -56,8 +56,6 @@ def AModifAccion():
     acc=clsAccion(session=sessionDB,engine=engine)
     paso = acc.modificar(idAccion,params['descripcion'])
     print(paso)
-    
-    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -77,7 +75,6 @@ def VAccion():
     #Action code goes here, res should be a JSON structure
     acc=clsAccion(engine=engine,session=sessionDB)
     
-    
     idAccion = request.args.get('idAccion', 1)
     
     #pilas = acc.mostrarAccion(idAccion)
@@ -86,6 +83,7 @@ def VAccion():
     
     
     #idAccion = idPila
+
     #Action code ends here
     return json.dumps(res)
 

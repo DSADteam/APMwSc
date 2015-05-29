@@ -60,10 +60,10 @@ INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que escribo
 INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que probamos la base de datos aprendemos',2);
 INSERT INTO "Objetivos" (descripcion,"idProducto") VALUES ('En tanto que jejeps todos huehuehue',2);
 
-INSERT INTO "Historias" (codigo,"idProducto") VALUES ('Historia1',1);
-INSERT INTO "Historias" (codigo,"idProducto") VALUES ('Historia2',1);
-INSERT INTO "Historias" (codigo,"idProducto") VALUES ('Historia3',1);
-INSERT INTO "Historias" (codigo,"idProducto") VALUES ('Podria escribir algo interesante y decir que todos tienen parciales esta semana y yo no :)',2);
-INSERT INTO "Historias" (codigo,"idProducto") VALUES ('Ellos estudian y yo hago esto D:',2);
-INSERT INTO "Historias" (codigo,"idProducto") VALUES ('Eso no me hace vaga o si?',2);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Historia1',1,3,'tipo 3');
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Historia2',1,2,'tipo 2');
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Historia3',1,1,'tipo 1');
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Podria escribir algo interesante y decir que todos tienen parciales esta semana y yo no :)',2,3,'tipo 3');
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Ellos estudian y yo hago esto D:',2,2,'tipo 2');
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Eso no me hace vaga o si?',2,1,'tipo 1');
 

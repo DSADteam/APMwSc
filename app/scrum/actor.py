@@ -74,6 +74,7 @@ def VActor():
     #Action code goes here, res should be a JSON structur
     act=clsActor(engine=engine,session=sessionDB)
 
+
     idActor        = request.args.get('idActor', 1)
     res['idActor'] = idActor
     res['fActor']  = act.mostrarActor(idActor)
