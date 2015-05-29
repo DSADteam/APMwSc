@@ -185,10 +185,24 @@ class clsHistoria():
         """
 
         #No nulidad
-        nulidadesValidas = idProducto!=None and tipo != None and codigo != None
+        nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
+                           and idAccion != None
         if not nulidadesValidas:
             return False
         
+        tiposCorrectos = (type(codigo)     is str) and \
+                         (type(idProducto) is int) and \
+                         (type(tipo)       is str) and \
+                         (type(idAccion)   is int) and \
+                         (type(idPapa)     is int  or   idPapa   == None)    
+        
+        
+        if tiposCorrectos:
+            pass
+        else:
+            return False
+        
+
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
 
         #Protecciones de funcion
@@ -225,13 +239,14 @@ class clsHistoria():
         return False
         
     def existeHistoria(self,codigo,idProducto):
-        comentarioNulo = ((codigo == None) or (idProducto==None)) 
-        if comentarioNulo:
+        #comentarioNulo = ((codigo == None) or (idProducto==None))
+        tiposCorrectos = (type(codigo) is str) and (type(idProducto) is int) 
+        
+        if tiposCorrectos:
+            result  = self.session.query(Historia).filter(Historia.idProducto == idProducto).filter(Historia.codigo == codigo)
+            return result.count() > 0
+        else:
             return False
-        
-        result  = self.session.query(Historia).filter(Historia.idProducto == idProducto).filter(Historia.codigo == codigo)
-        
-        return result.count() > 0
 
     def listarHistorias(self):
         

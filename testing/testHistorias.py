@@ -29,20 +29,9 @@ class TestHistoria(unittest.TestCase):
         
 # TEST INSERTAR
 
-#Casos regulares
-
-    """
-    def testinsertar2(self):
-      
-        pIdProducto = 2
-        pcodigo = 'Historia 2'
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(pcodigo==codigo))
-    """
 # Casos fronteras
 
     def testInsertar500(self):
-
         accion          = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 500",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 500")
@@ -52,8 +41,13 @@ class TestHistoria(unittest.TestCase):
         self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))    
     
+    def testInsertar500SinAccion(self):
+        hCodigo   = "c" * 500
+        hTipo     = "Historia de test 501"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
+    
     def testInsertar501Codigo(self):
-
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 501",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 501")
@@ -63,46 +57,55 @@ class TestHistoria(unittest.TestCase):
         self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
-    """
+
     def testCodigoVacio(self):
-        
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion codigo vacio",self.prodId)
         idAccion = accion.obtenerId("Accion codigo vacio")
 
         hCodigo = ''
+        hTipo     = "Otro tipo de historia"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
-        self.his.insertar(codigo=hCodigo,idProducto=self.prodId,idAccion=idAccion)
-        self.assertTrue(self.his.existeHistoria(codigo=hCodigo))
-        # self.his.insertar(pcodigo,pIdProducto)
-        # self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
     def testCampoIdNulo(self):
-        
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("Accion para IdProductoNulo",self.prodId)
+        idAccion = accion.obtenerId("Accion codigo vacio")
+
         his = clsHistoria()
         pIdProducto = None
-        pcodigo = 'Historyyyy'
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+        hCodigo  = 'Just Pepe'
+        hTipo    = "Otro tipo de historia"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
+
+    def testProductoInexistente(self):
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("Accion para testProductoInexistente",self.prodId)
+        idAccion = accion.obtenerId("Accion testProductoInexistente")
+
+        his = clsHistoria()
+        pIdProducto = 666
+        hCodigo  = 'Just Pepe with product that doesnt exists'
+        hTipo    = "The number of the beast"
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
     
-
-    def testcodigo500(self):
-        
-        his = clsHistoria()
-        pIdProducto = 4
-        pcodigo = 'Haciendo una prueba donde el espacio de lineas es tan largo que debe dar 500 palabras en la codigo del modulo accion y ya me canse de escribir tanto asi que a partir de ahora pondre puro HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR HODOR y el fin'
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
-
     def testNumEnDescrip(self):
-        
-        his = clsHistoria()
-        pIdProducto = 5
-        pcodigo = 234
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("Accion para testNumEnDescrip",self.prodId)
+        idAccion = accion.obtenerId("Accion testNumEnDes")
+
+        his = clsHistoria(engine,sessionDB)
+        hCodigo = 234
+        hTipo   = "So much tipe, and wow"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
 # Casos Esquinas
+    """
 
     def todosVacios(self):
         
