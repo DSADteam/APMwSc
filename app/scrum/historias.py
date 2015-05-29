@@ -171,6 +171,7 @@ def VHistorias():
 class clsHistoria():
     
     def __init__(self,engine=None,session=None):
+        
         self.engine  = engine
         self.session = session
         
