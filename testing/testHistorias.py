@@ -21,21 +21,21 @@ class TestHistoria(unittest.TestCase):
         prod.insertar("ProductoPruebaHistoria","Descripcion prueba")
         self.prodId = prod.idProd("ProductoPruebaHistoria")
        
-    def tearDown(self):
+    #def tearDown(self):
         #self.historia.borrarFilas()
-        pass
+    #    pass
         
 # TEST INSERTAR
 
 #Casos regulares
-
-    """
+    
     def testinsertar2(self):
       
         pIdProducto = 2
         pcodigo = 'Historia 2'
-        self.his.insertar(pcodigo,pIdProducto)
+        self.his.insertar(pcodigo,self.prodId)
         self.assertTrue(self.his.existeHistoria(pcodigo==codigo))
+    
     """
 # Casos fronteras
 
@@ -72,7 +72,7 @@ class TestHistoria(unittest.TestCase):
         # self.his.insertar(pcodigo,pIdProducto)
         # self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
-    """
+    
     def testCampoIdNulo(self):
         
         his = clsHistoria()

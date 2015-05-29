@@ -214,7 +214,7 @@ class clsHistoria():
         
     def existeHistoria(self,codigo=None, idHistoria=None,idProducto=None):
         comentarioNulo = ((codigo == None) and\
-        (idHistoria==None)) or idProducto==None
+        (idHistoria==None)) or (idProducto==None) or (codigo == '')
         if comentarioNulo:
             return False
         
