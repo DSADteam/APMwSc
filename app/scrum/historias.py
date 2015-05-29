@@ -18,6 +18,9 @@ historias = Blueprint('historias', __name__)
 
 from base import *
 from app.scrum.actor import clsActor
+from app.scrum.objetivo import clsObjetivo
+from app.scrum.accion import clsAccion
+#from app.scrum.prod import clsProducto
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -28,12 +31,20 @@ def ACrearHistoria():
     #Action code goes here, res should be a list with a label and a message
 
 
-    idPila = str(session['idPila'])
-    session.pop("idPila",None)
-    
+    idPila = int(session['idPila'])
+    #session.pop("idPila",None)
+    print('Putos todos................')
+    print(idPila)
+    print(params)
+    print(session)
     his = clsHistoria(session=sessionDB,engine=engine)
-    his.insertar(codigo=params['codigo'],idProducto=idPila)
-    
+    print('INSERTAREEEE: '+params['codigo']+' EN :'+str(idPila))
+    y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila)
+    idHistoria=his.obtId(params['codigo'], idPila)
+    his.asociarActores(params['actores'], idHistoria)
+    his.asociarObjetivos(params['objetivos'], idHistoria)
+    print('MI RESULTADO FUE: ')
+    print(y)
 
     #Datos de prueba
     res['label'] = res['label'] + '/1'
@@ -56,9 +67,10 @@ def AModifHistoria():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    idPila = int(request.args.get('idPila', 1))
+    idPila = int(session['idPila'])
+    print('THIS IS THE PILAAAAAAAAA: '+str(idPila))
     his = clsHistoria(session=sessionDB,engine=engine)
-    his.modificar(int(request.args.get('idPila', 1)),params['codigo'])
+    his.modificar(idPila,params['codigo'])
 
     #Datos de prueba    
     res['label'] = res['label'] + '/' + str(idPila)
@@ -79,28 +91,46 @@ def VCrearHistoria():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
+    
     #Ejemplo de relleno de listas para selectrores
-    res['fHistoria_opcionesActores'] = [
-      {'key':1,'value':'Actor1'},
-      {'key':2,'value':'Actor2'},
-      {'key':3,'value':'Actor3'}]
-    res['fHistoria_opcionesAcciones'] = [
-      {'key':1,'value':'Acccion1'},
-      {'key':2,'value':'Acccion2'},
-      {'key':3,'value':'Acccion3'}]
-    res['fHistoria_opcionesObjetivos'] = [
-      {'key':1,'value':'Objetivo1'},
-      {'key':2,'value':'Objetivo2'},
-      {'key':3,'value':'Objetivo3'}]
+    act=clsActor(engine=engine,session=sessionDB)
+    acc=clsAccion(engine=engine,session=sessionDB)
+    hist=clsHistoria(engine=engine,session=sessionDB)
+    obj=clsObjetivo(engine=engine,session=sessionDB)
+    
+    aux=act.listarActoresprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idActor')
+        x['value']=x.pop('nombre')
+    res['fHistoria_opcionesActores'] = aux
+    print('actores: ')
+    print(aux)
+    aux=acc.listarAccionesprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idAccion')
+        x['value']=x.pop('descripcion')
+    res['fHistoria_opcionesAcciones'] = aux
+    print('acciones: ')
+    print(aux)
+    aux=obj.listarObjetivosprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idObjetivo')
+        x['value']=x.pop('descripcion')
+    res['fHistoria_opcionesObjetivos'] = aux
+    print('objetivos: ')
+    print(aux)
+    aux=hist.listarHistoriasprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idHistoria')
+        x['value']=x.pop('enunciado')
     res['fHistoria_opcionesHistorias'] = [
       {'key':0,'value':'Ninguna'},
       {'key':1,'value':'Historia1'},
       {'key':2,'value':'Historia2'},
       {'key':3,'value':'Historia3'}]
     res['fHistoria_opcionesTiposHistoria'] = [
-      {'key':1,'value':'Opcional'},
-      {'key':2,'value':'Obligatoria'}]
+      {'key':'1','value':'Opcional'},
+      {'key':'2','value':'Obligatoria'}]
     res['fHistoria'] = {'super':0}
 
 
@@ -115,31 +145,49 @@ def VHistoria():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
+    params = request.get_json()
+    print('MIS PARAMS')
+    print(params)
     #Ejemplo de relleno de listas para selectrores
-    res['fHistoria_opcionesActores'] = [
-      {'key':1,'value':'Actor1'},
-      {'key':2,'value':'Actor2'},
-      {'key':3,'value':'Actor3'}]
-    res['fHistoria_opcionesAcciones'] = [
-      {'key':1,'value':'Acccion1'},
-      {'key':2,'value':'Acccion2'},
-      {'key':3,'value':'Acccion3'}]
-    res['fHistoria_opcionesObjetivos'] = [
-      {'key':1,'value':'Objetivo1'},
-      {'key':2,'value':'Objetivo2'},
-      {'key':3,'value':'Objetivo3'}]
+    act=clsActor(engine=engine,session=sessionDB)
+    acc=clsAccion(engine=engine,session=sessionDB)
+    hist=clsHistoria(engine=engine,session=sessionDB)
+    obj=clsObjetivo(engine=engine,session=sessionDB)
+    
+    aux=act.listarActoresprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idActor')
+        x['value']=x.pop('nombre')
+    res['fHistoria_opcionesActores'] = aux
+
+    aux=acc.listarAccionesprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idAccion')
+        x['value']=x.pop('descripcion')
+    res['fHistoria_opcionesAcciones'] = aux
+
+
+    aux=obj.listarObjetivosprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idObjetivo')
+        x['value']=x.pop('descripcion')
+    res['fHistoria_opcionesObjetivos'] = aux
+
+
+    aux=hist.listarHistoriasprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idHistoria')
+        x['value']=x.pop('enunciado')
     res['fHistoria_opcionesHistorias'] = [
       {'key':0,'value':'Ninguna'},
       {'key':1,'value':'Historia1'},
       {'key':2,'value':'Historia2'},
       {'key':3,'value':'Historia3'}]
     res['fHistoria_opcionesTiposHistoria'] = [
-      {'key':1,'value':'Opcional'},
-      {'key':2,'value':'Obligatoria'}]
+      {'key':'1','value':'Opcional'},
+      {'key':'2','value':'Obligatoria'}]
     res['fHistoria'] = {'super':0, 
        'actor':1, 'accion':2, 'objetivo':3, 'tipo':1} 
-
 
     #Action code ends here
     return json.dumps(res)
@@ -174,7 +222,7 @@ class clsHistoria():
         
         self.engine  = engine
         self.session = session
-        
+     
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None):
         
         """
@@ -223,6 +271,47 @@ class clsHistoria():
         else:
             return False
         
+    def obtId(self,codigo=None,idProducto=None):
+        if codigo==None or idProducto==None:
+            return -1
+        
+        res  = self.session.query(Historia).filter(Historia.codigo == codigo)
+        res  = res.filter(Historia.idProducto == idProducto)
+        for i in res:
+            return i.idHistoria
+        
+    def asociarActores(self,idActores=None,idHistoria=None):
+        if idActores==[] or idHistoria==None or idActores==None:
+            return False
+        
+        #Desasociando viejos
+        res  = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
+        res.delete()
+        self.session.commit()
+
+        for id in idActores:
+            newAH = ActoresHistoria(idHistoria,id)
+            self.session.add(newAH)
+            self.session.commit()
+            
+        return True
+
+    def asociarObjetivos(self,idObjetivos=None,idHistoria=None):
+        if idObjetivos==[] or idHistoria==None or idObjetivos==None:
+            return False
+        
+        #Desasociando viejos
+        res  = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
+        res.delete()
+        self.session.commit()
+
+        for id in idObjetivos:
+            newOH = ObjetivosHistoria(idHistoria,id)
+            self.session.add(newOH)
+            self.session.commit()
+            
+        return True
+
     def tieneLoops(self,idProducto=None,idPapa=None,codigo=None):
         
         if idProducto==None or codigo==None or idPapa==None:
@@ -247,6 +336,7 @@ class clsHistoria():
             return result.count() > 0
         else:
             return False
+
 
     def listarHistorias(self):
         
