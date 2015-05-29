@@ -192,14 +192,14 @@ class clsHistoria():
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
 
         #Protecciones de funcion
-        stringsVacios    = codigo == '' and tipo == ''
+        stringsVacios    = codigo == '' or tipo == ''
         estaEnDb         = self.existeHistoria(codigo=codigo,idProducto=idProducto)
         existeProducto   = producto.count() > 0
         longCharValido   = (len(codigo) <= 500) and (len(tipo) <= 500)
         tieneLoops       = self.tieneLoops(idProducto,idPapa,codigo)
         
         esValido = (not stringsVacios) and (not estaEnDb) and existeProducto\
-                    and longCharValido   and (not tieneLoops)
+                    and longCharValido and (not tieneLoops)
         
         if esValido:
             newHis = Historia(codigo,idProducto,idAccion,tipo)
@@ -229,8 +229,8 @@ class clsHistoria():
         if comentarioNulo:
             return False
         
-        result  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.codigo == codigo)
-
+        result  = self.session.query(Historia).filter(Historia.idProducto == idProducto).filter(Historia.codigo == codigo)
+        
         return result.count() > 0
 
     def listarHistorias(self):

@@ -60,7 +60,7 @@ class TestHistoria(unittest.TestCase):
 
         hCodigo   = "b" * 501
         hTipo     = "Historia de test 501"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
     """
