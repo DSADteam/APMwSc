@@ -45,7 +45,7 @@ class TestHistoria(unittest.TestCase):
         hCodigo   = "c" * 500
         hTipo     = "Historia de test 501"
         self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
-        self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
     
     def testInsertar501Codigo(self):
         accion   = clsAccion(engine,sessionDB)
@@ -72,7 +72,7 @@ class TestHistoria(unittest.TestCase):
     def testCampoIdNulo(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para IdProductoNulo",self.prodId)
-        idAccion = accion.obtenerId("Accion codigo vacio")
+        idAccion = accion.obtenerId("Accion para IdProductoNulo")
 
         his = clsHistoria()
         pIdProducto = None
@@ -84,7 +84,7 @@ class TestHistoria(unittest.TestCase):
     def testProductoInexistente(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para testProductoInexistente",self.prodId)
-        idAccion = accion.obtenerId("Accion testProductoInexistente")
+        idAccion = accion.obtenerId("Accion para testProductoInexistente")
 
         his = clsHistoria()
         pIdProducto = 666
@@ -96,7 +96,7 @@ class TestHistoria(unittest.TestCase):
     def testNumEnDescrip(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para testNumEnDescrip",self.prodId)
-        idAccion = accion.obtenerId("Accion testNumEnDes")
+        idAccion = accion.obtenerId("Accion para testNumEnDescrip")
 
         his = clsHistoria(engine,sessionDB)
         hCodigo = 234
@@ -104,46 +104,65 @@ class TestHistoria(unittest.TestCase):
         self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
+    def testTwoHistsOneAct(self):
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("Accion para compartir entre dos historias",self.prodId)
+        idAccion = accion.obtenerId("Accion para compartir entre dos historias")
+
+        #Historia a agregar
+        his = clsHistoria(engine,sessionDB)
+        hCodigo = "Soy Historia 1 y pasare"
+        hTipo   = "Tipo"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
+
+        #Historia que falla al agregar
+        hCodigo = "Soy Historia 2 y pasare tambien"
+        hTipo   = "Tipo"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
+
+
 # Casos Esquinas
-    """
 
-    def todosVacios(self):
-        
-        his = clsHistoria()
+    def testTodosVacios(self):
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = None
-        pcodigo = ''
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+        hCodigo = ''
+        hTipo   = ''
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
-    def idVacioyDescrip500(self):
-        
-        his = clsHistoria()
-        pIdProducto = None
-        pcodigo = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+    def testProdidVacioyDescrip500(self):
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("testProdidVacioyDescrip500",self.prodId)
+        idAccion = accion.obtenerId("testProdidVacioyDescrip500")
 
-    def testIdNuloyDescripNum(self):
-        
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = None
-        pcodigo = 6589
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+        hCodigo     = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
+        hTipo       = "Drai gual. yust anoder bric in de gual"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
     def testCharEnIdyDecripNum(self):
+        accion   = clsAccion(engine,sessionDB)
+        accion.insertar("testCharEnIdyDecripNum",self.prodId)
+        idAccion = accion.obtenerId("testCharEnIdyDecripNum")
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 'bruxw'
-        pcodigo = 345346
-        self.his.insertar(pcodigo,pIdProducto)
-        self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
+        hCodigo     = 345346
+        hTipo       = 'el sue~o desorienta'
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
         
+    """
 # Casos malicias
 
     def testcharEnId(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 'idpepe'
         pcodigo = 'Historia 2'
         self.his.insertar(pcodigo,pIdProducto)
@@ -151,7 +170,7 @@ class TestHistoria(unittest.TestCase):
     
     def testcodigo501(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 3
         pcodigo = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
         self.his.insertar(pcodigo,pIdProducto)
@@ -163,7 +182,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModificar1(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 1
         pcodigo = 'Historia 1'
         self.his.insertar(pcodigo,pIdProducto)
@@ -177,7 +196,7 @@ class TestHistoria(unittest.TestCase):
     
     def testDescrip500(self):
     
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 2
         pcodigo = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
         self.his.insertar(pcodigo,pIdProducto)
@@ -189,7 +208,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifNoValid(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 123
         pcodigo = 'Historia 123'
         test = his.modificar(pIdProducto,pcodigo)
@@ -197,7 +216,7 @@ class TestHistoria(unittest.TestCase):
 
     def testDescripAlMin(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 1
         pcodigo = 'Historia 1'
         self.his.insertar(pcodigo,pIdProducto)
@@ -211,7 +230,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifTodoNul(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 1
         pcodigo = 'Historia 1'
         self.his.insertar(pcodigo,pIdProducto)
@@ -223,7 +242,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifIdNulyDescripNum(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 1
         pcodigo = 'Historia 1'
         self.his.insertar(pcodigo,pIdProducto)
@@ -235,7 +254,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifIdCharyDecripNum(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 1
         pcodigo = 'Historia 1'
         self.his.insertar(pcodigo,pIdProducto)
@@ -247,7 +266,7 @@ class TestHistoria(unittest.TestCase):
     
     def testModifIdCharyDescripNul(self):
        
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto = 1
         pcodigo = 'Historia 1'
         self.his.insertar(pcodigo,pIdProducto)
@@ -261,7 +280,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifCharEnId(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto2 = 'hola'
         pcodigo2 = 'Historia p'
         test = self.his.modificar(pIdProducto2,pcodigo2)
@@ -269,7 +288,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifDescrip501(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto2 = 2
         pcodigo2 = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of WA'
         test = his.modificar(pIdProducto2,pcodigo2)
@@ -277,7 +296,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifDescripVacio(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto2 = 1
         pcodigo2 = ''
         test = self.his.modificar(pIdProducto2,pcodigo2)
@@ -285,7 +304,7 @@ class TestHistoria(unittest.TestCase):
 
     def testModifDescripNum(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto2 = 3
         pcodigo2 = 123
         test = self.his.modificar(pIdProducto2,pcodigo2)
@@ -293,7 +312,7 @@ class TestHistoria(unittest.TestCase):
     
     def testModifIdNulo(self):
         
-        his = clsHistoria()
+        his = clsHistoria(engine,sessionDB)
         pIdProducto2 = None
         pcodigo2 = 'Historia nula'
         test = self.his.modificar(pIdProducto2,pcodigo2)
