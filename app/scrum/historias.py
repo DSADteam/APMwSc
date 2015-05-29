@@ -18,6 +18,9 @@ historias = Blueprint('historias', __name__)
 
 from base import *
 from app.scrum.actor import clsActor
+from app.scrum.objetivo import clsObjetivo
+from app.scrum.accion import clsAccion
+#from app.scrum.prod import clsProducto
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -30,7 +33,10 @@ def ACrearHistoria():
 
     idPila = str(session['idPila'])
     session.pop("idPila",None)
-    
+    print('Putos todos................')
+    print(idPila)
+    print(params)
+    print(session)
     his = clsHistoria(session=sessionDB,engine=engine)
     his.insertar(codigo=params['codigo'],idProducto=idPila)
     
@@ -79,7 +85,7 @@ def VCrearHistoria():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
+    
     #Ejemplo de relleno de listas para selectrores
     res['fHistoria_opcionesActores'] = [
       {'key':1,'value':'Actor1'},
