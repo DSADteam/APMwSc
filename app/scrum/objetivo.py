@@ -116,7 +116,7 @@ class clsObjetivo():
             return False
         
         comentarioNulo = (descripcion == None) or\
-        (idProducto)==None
+        (idProducto)==None or (descripcion == '') 
         if comentarioNulo:
             return False
 
@@ -137,17 +137,16 @@ class clsObjetivo():
         
         if type(descripcion) is int:
             return False
+        if (descripcion==''):
+            return False
         
         if(descripcion!=None):
-            result  = self.engine.execute("select * from \"Objetivos\" where \'descripcion\'=\'"+descripcion+"\';")
+            result = self.session.query(Objetivo).filter(Objetivo.descripcion == descripcion)
         else:
             return False
         
-        contador = 0
-        for row in result:
-            contador += 1
+        return result.count() > 0
 
-        return contador != 0
 
     def mostrarObjetivo(self,idObjetivo):
         result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
@@ -199,7 +198,8 @@ class clsObjetivo():
             return False
         if type(id) is str:
             return False
-        
+        if (len(descripcion)>500):
+            return False
         if(id==None):
             return False
         
