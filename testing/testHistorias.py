@@ -10,6 +10,7 @@ from app.scrum.objetivo  import clsObjetivo
 from base import *
 import unittest
 
+
 class TestHistoria(unittest.TestCase):
     
     def setUp(self):
@@ -20,6 +21,7 @@ class TestHistoria(unittest.TestCase):
         prod     = clsProducto(engine,sessionDB)
         prod.insertar("ProductoPruebaHistoria","Descripcion prueba")
         self.prodId = prod.idProd("ProductoPruebaHistoria")
+
        
     def tearDown(self):
         #self.historia.borrarFilas()
@@ -46,21 +48,22 @@ class TestHistoria(unittest.TestCase):
         idAccion = accion.obtenerId("Accion prueba 500")
 
         hCodigo   = "a" * 500
-        hTipo     = "t" * 500
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo)
+        hTipo     = "Historia de test500"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))    
-    """
+    
+    def testInsertar501Codigo(self):
 
-    def testInsertar501(self):
-
-        accion          = clsAccion(engine,sessionDB)
+        accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 501",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 501")
 
-        hCodigo   = "a" * 501
-        self.his.insertar(hCodigo,self.prodId,idAccion)
-        self.assertTrue(self.his.existeHistoria(codigo=hCodigo))
+        hCodigo   = "b" * 501
+        hTipo     = "Historia de test 501"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
+    """
     def testCodigoVacio(self):
         
         accion   = clsAccion(engine,sessionDB)
