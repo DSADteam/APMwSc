@@ -203,7 +203,7 @@ class clsHistoria():
         existeProducto   = producto.count() > 0
         longCharValido   = (len(codigo) <= 500) and (len(tipo) <= 500)
         tieneLoops       = self.tieneLoops(idProducto,idPapa,codigo)
-        print(estaEnDb)
+        
         esValido = (not stringsVacios) and (not estaEnDb) and existeProducto\
                     and longCharValido   and (not tieneLoops)
         
@@ -230,8 +230,8 @@ class clsHistoria():
                 idPapa=res.idHistoria
         return False
         
-    def existeHistoria(self,codigo,idProducto,idHistoria=None):
-        comentarioNulo = ((codigo == None) and (idHistoria==None)) 
+    def existeHistoria(self,codigo,idProducto):
+        comentarioNulo = ((codigo == None) or (idProducto==None)) 
         if comentarioNulo:
             return False
         
