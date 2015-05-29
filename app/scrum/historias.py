@@ -32,19 +32,12 @@ def ACrearHistoria():
 
 
     idPila = int(session['idPila'])
-    #session.pop("idPila",None)
-    print('Putos todos................')
-    print(idPila)
-    print(params)
-    print(session)
     his = clsHistoria(session=sessionDB,engine=engine)
-    print('INSERTAREEEE: '+params['codigo']+' EN :'+str(idPila))
     y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila)
     idHistoria=his.obtId(params['codigo'], idPila)
     his.asociarActores(params['actores'], idHistoria)
     his.asociarObjetivos(params['objetivos'], idHistoria)
-    print('MI RESULTADO FUE: ')
-    print(y)
+
 
     #Datos de prueba
     res['label'] = res['label'] + '/1'
@@ -68,7 +61,6 @@ def AModifHistoria():
     #Action code goes here, res should be a list with a label and a message
 
     idPila = int(session['idPila'])
-    print('THIS IS THE PILAAAAAAAAA: '+str(idPila))
     his = clsHistoria(session=sessionDB,engine=engine)
     his.modificar(idPila,params['codigo'])
 
@@ -103,22 +95,16 @@ def VCrearHistoria():
         x['key']=x.pop('idActor')
         x['value']=x.pop('nombre')
     res['fHistoria_opcionesActores'] = aux
-    print('actores: ')
-    print(aux)
     aux=acc.listarAccionesprod(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idAccion')
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesAcciones'] = aux
-    print('acciones: ')
-    print(aux)
     aux=obj.listarObjetivosprod(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idObjetivo')
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesObjetivos'] = aux
-    print('objetivos: ')
-    print(aux)
     aux=hist.listarHistoriasprod(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idHistoria')
@@ -146,8 +132,7 @@ def VHistoria():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     params = request.get_json()
-    print('MIS PARAMS')
-    print(params)
+
     #Ejemplo de relleno de listas para selectrores
     act=clsActor(engine=engine,session=sessionDB)
     acc=clsAccion(engine=engine,session=sessionDB)
@@ -205,8 +190,6 @@ def VHistorias():
     his=clsHistoria(engine=engine,session=sessionDB)
     res['idPila'] = session['idPila']
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
-    print('DAAAAAAAAAAAAAAAAAAAAAAAA')
-    print(res['data0'])
     #Action code ends here
     return json.dumps(res)
 

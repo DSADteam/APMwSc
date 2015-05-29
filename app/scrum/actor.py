@@ -28,7 +28,7 @@ def ACrearActor():
     idPila = str(session['idPila'])
 
     act=clsActor(session=sessionDB,engine=engine)
-    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=idPila)
+    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(idPila))
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -107,13 +107,13 @@ class clsActor():
         self.session = session
         
     def insertar(self,nombre=None,descripcion=None,idProducto=None):
-   
-        if type(nombre) is int:
-            return (False)
-        if type(descripcion) is int:
-            return (False)
-        if type(idProducto) is str:
-            return (False)
+
+        tiposCorrectos = (type(descripcion) is str) and \
+                         (type(nombre) is str)      and \
+                         (type(idProducto) is int)
+
+        if not tiposCorrectos:
+            return False
 
 
        

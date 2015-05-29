@@ -244,15 +244,6 @@ class ActoresHistoria(db.Model):
     __tablename__   = 'ActoresHistorias'
     idHistoria      = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     idActor         = db.Column(Integer, db.ForeignKey('Actores.idActor'),     unique = False,  primary_key=True)
-    
-    #actor           = db.relationship('Actor', backref = db.backref('actor'   , lazy = 'dynamic'))
-    #historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-    # actor           = db.relationship('Actor',   backref = db.backref('actor'   , lazy = 'dynamic'))
-    # historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-    #actor           = db.relationship('Actor',   backref = db.backref('actor'   , lazy = 'dynamic'))
-    #historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
 
     ''' Metodo init

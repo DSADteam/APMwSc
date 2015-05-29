@@ -31,7 +31,7 @@ def ACrearObjetivo():
     session.pop("idPila",None)
 
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(descripcion = params['descripcion'], idProducto=idPila)
+    obj.insertar(descripcion = params['descripcion'], idProducto=int(idPila))
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -109,12 +109,17 @@ class clsObjetivo():
         self.session = session
 
     def insertar(self,idProducto=None,descripcion=None):
-        
+        """
         if type(descripcion) is int:
             return False
-        if isinstance(idProducto, str):
+        if type(idProducto, str):
             return False
-        
+        """
+        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int)
+
+        if not tiposCorrectos:
+            return False
+
         comentarioNulo = (descripcion == None) or\
         (idProducto)==None or (descripcion == '') 
         if comentarioNulo:

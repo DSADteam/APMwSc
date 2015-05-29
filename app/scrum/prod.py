@@ -122,8 +122,7 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    session.pop("idPila", None)
-    print(session)
+
 
     prd=clsProducto(engine=engine)
     res['data0'] = prd.listarProductos()
