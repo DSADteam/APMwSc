@@ -177,19 +177,31 @@ class clsHistoria():
         
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None):
         
-        comentarioNulo = (codigo == None) or\
+        """
+        comentarioNulo = (codigo == None) or
         (idProducto!=None) or (idAccion==None)
         if comentarioNulo or codigo=='' or tipo==None:
             return False
+        """
 
-        estaEnBd       = self.existeHistoria(codigo=codigo,idProducto=idProducto)
-        #pr = clsProducto()
-        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
-        longCharValido = (len(codigo) <= 500)
-        tieneLoops = self.tieneLoops(idProducto,idPapa,codigo)
+        #No nulidad
+        nulidadesValidas = idProducto!=None and tipo != None and codigo != None
+        if not nulidadesValidas:
+            return False
         
-        if (not estaEnBd) and (longCharValido) and (not comentarioNulo) and\
-            not tieneLoops:
+        producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+
+        #Protecciones de funcion
+        stringsVacios    = codigo == '' and tipo == ''
+        estaEnDb         = self.existeHistoria(codigo=codigo,idProducto=idProducto)
+        existeProducto   = producto.count() > 0
+        longCharValido   = (len(codigo) <= 500) and (len(tipo) <= 500)
+        tieneLoops       = self.tieneLoops(idProducto,idPapa,codigo)
+        print(estaEnDb)
+        esValido = (not stringsVacios) and (not estaEnDb) and existeProducto\
+                    and longCharValido   and (not tieneLoops)
+        
+        if esValido:
             newHis = Historia(codigo,idProducto,idAccion,tipo)
             self.session.add(newHis)
             self.session.commit()
@@ -212,18 +224,14 @@ class clsHistoria():
                 idPapa=res.idHistoria
         return False
         
-    def existeHistoria(self,codigo=None, idHistoria=None,idProducto=None):
-        comentarioNulo = ((codigo == None) and\
-        (idHistoria==None)) or idProducto==None
+    def existeHistoria(self,codigo,idProducto,idHistoria=None):
+        comentarioNulo = ((codigo == None) and (idHistoria==None)) 
         if comentarioNulo:
             return False
         
-        if(idHistoria!=None):
-            result  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.idHistoria == idHistoria)
-        else:
-            result  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.codigo == codigo)
+        result  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.codigo == codigo)
 
-        return result.count() != 0
+        return result.count() > 0
 
     def listarHistorias(self):
         

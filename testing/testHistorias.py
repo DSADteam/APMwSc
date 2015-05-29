@@ -46,8 +46,10 @@ class TestHistoria(unittest.TestCase):
         idAccion = accion.obtenerId("Accion prueba 500")
 
         hCodigo   = "a" * 500
-        self.his.insertar(hCodigo,self.prodId,idAccion)
-        self.assertTrue(self.his.existeHistoria(codigo=hCodigo))    
+        hTipo     = "t" * 500
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo)
+        self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))    
+    """
 
     def testInsertar501(self):
 
@@ -60,7 +62,7 @@ class TestHistoria(unittest.TestCase):
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo))
 
     def testCodigoVacio(self):
-    	
+        
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion codigo vacio",self.prodId)
         idAccion = accion.obtenerId("Accion codigo vacio")
@@ -72,7 +74,6 @@ class TestHistoria(unittest.TestCase):
         # self.his.insertar(pcodigo,pIdProducto)
         # self.assertTrue(self.his.existeHistoria(codigo=pcodigo))
 
-    """
     def testCampoIdNulo(self):
         
         his = clsHistoria()
