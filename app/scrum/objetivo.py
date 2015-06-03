@@ -221,7 +221,7 @@ class clsObjetivo():
                 update({'descripcion' : descripcion })
             self.session.commit()
             return True
-        else if id and trans:
+        elif id and trans:
             if ((trans==0) or (trans==1)):
                 self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
                     update({'transversalidad' : trans })

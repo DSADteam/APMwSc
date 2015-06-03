@@ -258,7 +258,7 @@ class clsHistoria():
         if type(priori) is int:
             if ((priori<1) and (priori>20)):
                 return False
-        else if type(priori) is str:
+        elif type(priori) is str:
             if not ((priori=='Alta')or(priori=='Media')or(priori=='Baja')):
                 return False
         else:

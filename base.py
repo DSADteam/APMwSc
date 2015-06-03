@@ -135,7 +135,7 @@ class Objetivo(db.Model):
     idObjetivo    = db.Column(Integer, primary_key = True)
     descripcion   = db.Column(String(500), unique = False, nullable=False)
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
-    transversal   = db.Column(Integer, unique = False, nullable=False)
+    transversal   = db.Column(String(15), unique = False, nullable=False)
     producto      = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
     
     ''' Metodo init
