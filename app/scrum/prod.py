@@ -158,33 +158,20 @@ class clsProducto():
 
         #Funcion para insertar un producto. Indice agregado automaticamente
         def insertar(self,nombre,descripcion,escala):
-            """
-            if type(nombre) is int:
-                return (False)
-            if type(descripcion) is int:
-                return (False)
-
-            comentarioNulo = (nombre == None)
-            if comentarioNulo:
-                return False
-            """
-
-            print("Mientras que a mi me llego")
-            print(escala)
 
             tiposCorrectos = (type(nombre) is str) and (type(escala) is str) and\
                              ((type(descripcion) is str) or descripcion == None)
                              
 
             formatoEscala  = (escala == "cualitativo" or escala == "cuantitativo")
-            print(formatoEscala)
+            #print(formatoEscala)
             estaEnBd       = self.existeProducto(nombre=nombre)
             longCharValido = len(nombre) <= 500 #agregar el de la otra variable
 
-            print(tiposCorrectos)
-            print(formatoEscala)
-            print(estaEnBd)
-            print(longCharValido)
+            #print(tiposCorrectos)
+            #print(formatoEscala)
+            #print(estaEnBd)
+            #print(longCharValido)
 
             valido = tiposCorrectos and formatoEscala and (not estaEnBd) \
                      and longCharValido
@@ -251,13 +238,17 @@ class clsProducto():
             self.session.commit()
         
         #Funcion que permite actualizar una descripcion
-        def modificar(self,id=None,descripcion=None):
+        def modificar(self,id=None,descripcion=None,escala=None):
             if (not descripcion):
                 descripcion==""
             if id:
                 self.session.query(Producto).filter(Producto.idProducto == id).\
                     update({'descripcion' : descripcion })
                 self.session.commit()
+                self.session.query(Producto).filter(Producto.idProducto == id).\
+                    update({'escala' : escala })
+                self.session.commit()
+
                 return True
             else:
                 return False
