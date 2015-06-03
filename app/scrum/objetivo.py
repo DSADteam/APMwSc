@@ -115,11 +115,13 @@ class clsObjetivo():
         if type(idProducto, str):
             return False
         """
-        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int) and (type(trans) is int)
+        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int) and (type(trans) is str)\
+                         and (trans!=None)
 
         if not tiposCorrectos:
             return False
-        
+        if not((trans=="transversal") or (trans=="no transversal")):
+            return False
 
         comentarioNulo = (descripcion == None) or\
         (idProducto)==None or (descripcion == '') or (trans==None)
@@ -128,14 +130,13 @@ class clsObjetivo():
 
         estaEnBd       = self.existeObjetivo(descripcion=descripcion)
         
-        if not((trans==0) or (trans==1)):
-            return False
+        
         #pr = clsProducto()
         #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
         longCharValido = (len(descripcion) <= 500)
 
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-            newObj = Objetivo(descripcion,idProducto)
+            newObj = Objetivo(descripcion,idProducto,trans)
             self.session.add(newObj)
             self.session.commit()
             return True
@@ -204,32 +205,27 @@ class clsObjetivo():
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None,trans=None):
         
-        if type(descripcion) is int:
-            return False
-        if type(id) is str:
-            return False
-        if (len(descripcion)>500):
-            return False
-        if(id==None):
-            return False
-        if type(trans) is str:
-            return False
-        
-        if id and descripcion:
+        tipoid=(id!=None) and (type(id) is int) 
+        tipodesc= (type(descripcion) is str) 
+
             
+        tipotransv=(type(trans) is str)
+         
+        
+        if tipoid and tipodesc and tipotransv and ((trans=="transversal") or (trans=="no transversal")):
+            if(len(descripcion)>500): 
+                return False
             self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
                 update({'descripcion' : descripcion })
             self.session.commit()
+            
+            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
+                update({'transversal' : trans })
+            self.session.commit()
             return True
-        elif id and trans:
-            if ((trans==0) or (trans==1)):
-                self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
-                    update({'transversalidad' : trans })
-                self.session.commit()
-            else:
-                return False
         else:
             return False
+       
         
        
     

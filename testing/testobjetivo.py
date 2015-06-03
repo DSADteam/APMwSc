@@ -23,7 +23,7 @@ class objetivoTester(unittest.TestCase):
     def setUp(self):
         self.objetivo=clsObjetivo(engine,sessionDB)
         prod=clsProducto(engine,sessionDB)
-        prod.insertar("nombreprod","unadescripcion")
+        prod.insertar("nombreprod","unadescripcion","cualitativo")
         self.prodId = prod.idProd("nombreprod")
 
 
@@ -34,26 +34,26 @@ class objetivoTester(unittest.TestCase):
     # Insertar un objetivo que no existe
     def testInsertar1(self):
         transv= 'transversal'
-        pDescripcion = 'Terminar tarea'
+        pDescripcion = 'Terminar sitarea'
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
 
      # Insertar un objetivo que existe
     def testInsertar2(self):
         transv= 'transversal'
-        pDescripcion = 'Terminar tarea'
+        pDescripcion = 'Terminar oktarea'
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
     # Insertar un transversal invalido    
     def testInsertar222(self):
         transv= 'chimichurri transversal'
-        pDescripcion = 'Terminar tarea'
+        pDescripcion = 'Terminar kkkkkktarea'
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
         
     def testInsertar2222(self):
-        transv= 09001728888
-        pDescripcion = 'Terminar tarea'
+        transv= 9001728888
+        pDescripcion = 'Terminar l5tarea'
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))    
     # Casos fronteras
@@ -74,17 +74,17 @@ class objetivoTester(unittest.TestCase):
      # Insertar un transversal invalido con descripcion frontera   
     def testInsertar44(self):
         transv= 'este no es transversal'
-        pDescripcion = 'd'*500
+        pDescripcion = 'l'*500
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
     def testInsertar444(self):
         transv= 444
-        pDescripcion = 'd'*500
+        pDescripcion = 'f'*500
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
     def testInsertar4444(self):
         transv= None
-        pDescripcion = 'd'*500
+        pDescripcion = 'x'*500
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
         
@@ -175,13 +175,13 @@ class objetivoTester(unittest.TestCase):
      # Modificar un objetivo que tiene el maximo de caracteres en descripcion y trans inv
     def testModificar555(self):
         transv= 'scrum es lo mejor'
-        pDescripcion2 = 'z'*500
+        pDescripcion2 = '.'*500
         self.objetivo.modificar(self.prodId, pDescripcion2, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion2))
     
-     def testModificar5555(self):
+    def testModificar5555(self):
         transv= 2021
-        pDescripcion2 = 'z'*500
+        pDescripcion2 = ','*500
         self.objetivo.modificar(self.prodId, pDescripcion2, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion2))
    
