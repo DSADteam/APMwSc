@@ -68,7 +68,7 @@ class objetivoTester(unittest.TestCase):
         self.assertTrue(self.objetivo.existeObjetivo(pDescripcion)) 
      # Insertar un transversal invalido con descripcion frontera   
     def testInsertar44(self):
-        transv= 'chiabe transversal'
+        transv= 'este no es transversal'
         pDescripcion = 'd'*500
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
