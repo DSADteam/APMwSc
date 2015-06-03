@@ -74,11 +74,12 @@ class Producto(db.Model):
     nombre        = db.Column(String(500),  unique = True, nullable = False)
     descripcion   = db.Column(String(500),  unique = False)
     escala        = db.Column(String(14),nullable = False)
-    
-    def __init__(self,nombre,descripcion=None):
+
+    def __init__(self,nombre,escala,descripcion=None):
         
         self.nombre      = nombre
         self.descripcion = descripcion
+        self.escala      = escala
         
     def getALL(self):
         

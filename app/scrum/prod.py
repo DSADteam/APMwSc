@@ -30,8 +30,18 @@ def ACrearProducto():
     res = results[0]
     
     #Action code goes here, res should be a list with a label and a message
+
+    print(params)
+    print("AQUI FUE")
+
+    escala = "cualitativo" if (params['escala'] == 1) else "cuantitativo"
+    print(escala)
     prd=clsProducto(session=sessionDB,engine=engine)
-    prd.insertar(nombre=params['descripcion'])
+
+    # Fuck my life, why? esta como volteado jejeps
+    itWorked = prd.insertar(nombre=params['descripcion'],escala=escala,descripcion=params['nombre'])
+    res = results[0] if itWorked else results[1]
+
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -41,6 +51,20 @@ def ACrearProducto():
     return json.dumps(res)
 
 
+@prod.route('/prod/VCrearProducto')
+def VCrearProducto():
+    res = {}
+    if "actor" in session:
+        res['actor']=session['actor']
+    #Action code goes here, res should be a JSON structure
+
+    res['fPila_opcionesEscala'] = [
+      {'key':1,'value':'Alta/Media/Baja'},
+      {'key':2,'value':'Entre 1 y 20'}]
+
+    params = request.get_json()
+    #Action code ends here
+    return json.dumps(res)
 
 
 @prod.route('/prod/AModifProducto', methods=['POST'])
@@ -63,20 +87,6 @@ def AModifProducto():
 
 
 
-@prod.route('/prod/VCrearProducto')
-def VCrearProducto():
-    res = {}
-    if "actor" in session:
-        res['actor']=session['actor']
-    #Action code goes here, res should be a JSON structure
-
-    res['fPila_opcionesEscala'] = [
-      {'key':1,'value':'Alta/Media/Baja'},
-      {'key':2,'value':'Entre 1 y 20'}]
-
-    params = request.get_json()
-    #Action code ends here
-    return json.dumps(res)
 
 
 
@@ -147,7 +157,8 @@ class clsProducto():
                 self.session = session #Necesario para insertar/borrar columnas
 
         #Funcion para insertar un producto. Indice agregado automaticamente
-        def insertar(self,nombre,descripcion=None):
+        def insertar(self,nombre,descripcion,escala):
+            """
             if type(nombre) is int:
                 return (False)
             if type(descripcion) is int:
@@ -156,14 +167,33 @@ class clsProducto():
             comentarioNulo = (nombre == None)
             if comentarioNulo:
                 return False
+            """
 
+            print("Mientras que a mi me llego")
+            print(escala)
+
+            tiposCorrectos = (type(nombre) is str) and (type(escala) is str) and\
+                             ((type(descripcion) is str) or descripcion == None)
+                             
+
+            formatoEscala  = (escala == "cualitativo" or escala == "cuantitativo")
+            print(formatoEscala)
             estaEnBd       = self.existeProducto(nombre=nombre)
-            longCharValido = len(nombre) <= 500
+            longCharValido = len(nombre) <= 500 #agregar el de la otra variable
 
-            if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-                if not descripcion:
-                    descripcion=""
-                newProd = Producto(nombre,descripcion)
+            print(tiposCorrectos)
+            print(formatoEscala)
+            print(estaEnBd)
+            print(longCharValido)
+
+            valido = tiposCorrectos and formatoEscala and (not estaEnBd) \
+                     and longCharValido
+
+            if valido:
+                # Un campo none no deberia representar ningun problema
+                # if not descripcion:
+                    # descripcion=""
+                newProd = Producto(nombre,escala,descripcion)
                 self.session.add(newProd)
                 self.session.commit()
                 return True
