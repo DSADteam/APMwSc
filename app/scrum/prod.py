@@ -75,7 +75,8 @@ def AModifProducto():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     prd=clsProducto(session=sessionDB,engine=engine)
-    prd.modificar(params['idPila'],params['descripcion'])
+    escala = "cualitativo" if (params['escala'] == 1) else "cuantitativo"
+    prd.modificar(session['idPila'],params['nombre'],params['descripcion'],escala)
         
     #Action code ends here
     if "actor" in res:
@@ -111,8 +112,10 @@ def VProducto():
     oActor    = clsActor(engine,sessionDB)
     oAccion   = clsAccion(engine,sessionDB)
     oObjetivo = clsObjetivo(engine,sessionDB)
-    pilas = pilas = [{'idPila':1, 'nombre':'Pagos en línea', 'descripcion':'Pagos usando tarjeta de débito'}, {'idPila':2, 'nombre':'Recomendaciones de playas', 'descripcion':'Red social para playeros consumados'}, {'idPila':3, 'nombre':'Tu taxi seguro', 'descripcion':'Toma un taxi privado de forma segura'}, ]
+    # pilas = pilas = [{'idPila':1, 'nombre':'Pagos en línea', 'descripcion':'Pagos usando tarjeta de débito'}, {'idPila':2, 'nombre':'Recomendaciones de playas', 'descripcion':'Red social para playeros consumados'}, {'idPila':3, 'nombre':'Tu taxi seguro', 'descripcion':'Toma un taxi privado de forma segura'}, ]
     i=0
+
+    # Do you believe in magic?
     for x in pilas:
         print('el magico numero: '+str(i))
         i+=1
@@ -232,12 +235,21 @@ class clsProducto():
             self.session.commit()
         
         #Funcion que permite actualizar una descripcion
-        def modificar(self,id=None,descripcion=None):
+        def modificar(self,id,nombre,descripcion,escala):
             if (not descripcion):
                 descripcion==""
             if id:
+
                 self.session.query(Producto).filter(Producto.idProducto == id).\
-                    update({'descripcion' : descripcion })
+                     update({'descripcion' : descripcion })
+                     
+                self.session.query(Producto).filter(Producto.idProducto == id).\
+                     update({'nombre' : nombre })
+                     
+                self.session.query(Producto).filter(Producto.idProducto == id).\
+                     update({'escala' : escala })
+
+                 
                 self.session.commit()
                 return True
             else:
