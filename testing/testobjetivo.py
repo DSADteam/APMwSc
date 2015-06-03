@@ -50,7 +50,12 @@ class objetivoTester(unittest.TestCase):
         pDescripcion = 'Terminar tarea'
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
-         
+        
+    def testInsertar2222(self):
+        transv= 09001728888
+        pDescripcion = 'Terminar tarea'
+        self.objetivo.insertar(self.prodId, pDescripcion, transv)
+        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))    
     # Casos fronteras
  
     # Insertar un objetivo con el minimo numero de caracteres en descripcion
@@ -72,6 +77,16 @@ class objetivoTester(unittest.TestCase):
         pDescripcion = 'd'*500
         self.objetivo.insertar(self.prodId, pDescripcion, transv)
         self.assertFalse(self.objetivo.existeObjetivo(pDescripcion)) 
+    def testInsertar444(self):
+        transv= 444
+        pDescripcion = 'd'*500
+        self.objetivo.insertar(self.prodId, pDescripcion, transv)
+        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
+    def testInsertar4444(self):
+        transv= None
+        pDescripcion = 'd'*500
+        self.objetivo.insertar(self.prodId, pDescripcion, transv)
+        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion))
         
     # Insertar un objetivp con el minimo numero en idObjetivo
     def testInsertar5(self):
@@ -162,7 +177,13 @@ class objetivoTester(unittest.TestCase):
         transv= 'scrum es lo mejor'
         pDescripcion2 = 'z'*500
         self.objetivo.modificar(self.prodId, pDescripcion2, transv)
-        self.assertTrue(self.objetivo.existeObjetivo(pDescripcion2))
+        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion2))
+    
+     def testModificar5555(self):
+        transv= 2021
+        pDescripcion2 = 'z'*500
+        self.objetivo.modificar(self.prodId, pDescripcion2, transv)
+        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion2))
    
     # Modificar un objetivo que tiene el minimo de caracteres en descripcion
     def testModificar6(self):
