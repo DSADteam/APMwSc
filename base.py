@@ -135,16 +135,18 @@ class Objetivo(db.Model):
     idObjetivo    = db.Column(Integer, primary_key = True)
     descripcion   = db.Column(String(500), unique = False, nullable=False)
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
+    transversal   = db.Column(Integer, unique = False, nullable=False)
     producto      = db.relationship('Producto', backref = db.backref('objetivos', lazy = 'dynamic'))
     
     ''' Metodo init
         Constructor del objetivo
     ''' 
     
-    def __init__(self,descripcion, idProducto):
+    def __init__(self,descripcion, idProducto, transversal):
         
         self.descripcion = descripcion
         self.idProducto  = idProducto
+        self.transversal = transversal
 
 # Class User, used at login for now.
 
@@ -180,6 +182,8 @@ class Historia(db.Model):
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
+    prioriCual      = db.Column(String(5), unique = False, nullable = True)
+    prioriCuan      = db.Column(Integer, unique = False, nullable = True)
     
     # Backrefs
     
@@ -201,13 +205,17 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
 
-    def __init__(self,codigo, idProducto,idAccion,tipo,idHistoriaPadre=None):
+    def __init__(self,codigo, idProducto,idAccion,tipo,idHistoriaPadre=None,prioriCuan=None, prioriCual=None):
         self.codigo = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         self.tipo        = tipo
         if idHistoriaPadre:
             self.idHistoriaPadre = idHistoriaPadre
+        if prioriCual:
+            self.prioriCual = prioriCual
+        if prioriCuan:
+            self.prioriCuan = prioriCuan
 
 # Clase para objetivos de una historia
 

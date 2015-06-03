@@ -31,7 +31,7 @@ def ACrearObjetivo():
     session.pop("idPila",None)
 
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(descripcion = params['descripcion'], idProducto=int(idPila))
+    obj.insertar(idProducto=int(idPila), descripcion = params['descripcion'], trans = params['transversalidad'])
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -108,24 +108,28 @@ class clsObjetivo():
         self.engine  = engine
         self.session = session
 
-    def insertar(self,idProducto=None,descripcion=None):
+    def insertar(self,idProducto=None,descripcion=None,trans=None):
         """
         if type(descripcion) is int:
             return False
         if type(idProducto, str):
             return False
         """
-        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int)
+        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int) and (type(trans) is int)
 
         if not tiposCorrectos:
             return False
+        
 
         comentarioNulo = (descripcion == None) or\
-        (idProducto)==None or (descripcion == '') 
+        (idProducto)==None or (descripcion == '') or (trans==None)
         if comentarioNulo:
             return False
 
         estaEnBd       = self.existeObjetivo(descripcion=descripcion)
+        
+        if not((trans==0) or (trans==1)):
+            return False
         #pr = clsProducto()
         #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
         longCharValido = (len(descripcion) <= 500)
@@ -195,9 +199,10 @@ class clsObjetivo():
         for row in result:
             x=row.idObjetivo
         return x
+    
 
     #Funcion que permite actualizar la descripcion
-    def modificar(self,id=None,descripcion=None):
+    def modificar(self,id=None,descripcion=None,trans=None):
         
         if type(descripcion) is int:
             return False
@@ -207,6 +212,8 @@ class clsObjetivo():
             return False
         if(id==None):
             return False
+        if type(trans) is str:
+            return False
         
         if id and descripcion:
             
@@ -214,6 +221,13 @@ class clsObjetivo():
                 update({'descripcion' : descripcion })
             self.session.commit()
             return True
+        else if id and trans:
+            if ((trans==0) or (trans==1)):
+                self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
+                    update({'transversalidad' : trans })
+                self.session.commit()
+            else:
+                return False
         else:
             return False
         

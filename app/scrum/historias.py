@@ -33,7 +33,7 @@ def ACrearHistoria():
 
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
-    y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila)
+    y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila, prioridad = params['prioridad'])
     idHistoria=his.obtId(params['codigo'], idPila)
     his.asociarActores(params['actores'], idHistoria)
     his.asociarObjetivos(params['objetivos'], idHistoria)
@@ -206,7 +206,7 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
      
-    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None):
+    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,priori=None):
         
         """
         comentarioNulo = (codigo == None) or
@@ -217,7 +217,7 @@ class clsHistoria():
 
         #No nulidad
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
-                           and idAccion != None
+                           and idAccion != None and priori != None
         if not nulidadesValidas:
             return False
         
@@ -225,7 +225,8 @@ class clsHistoria():
                          (type(idProducto) is int) and \
                          (type(tipo)       is str) and \
                          (type(idAccion)   is int) and \
-                         (type(idPapa)     is int  or   idPapa   == None)    
+                         (type(idPapa)     is int  or   idPapa   == None) and \
+                         (type(priori)     is int or str)    
         
         
         if tiposCorrectos:
@@ -247,10 +248,19 @@ class clsHistoria():
                     and longCharValido and (not tieneLoops)
         
         if esValido:
-            newHis = Historia(codigo,idProducto,idAccion,tipo)
+            newHis = Historia(codigo,idProducto,idAccion,tipo,priori)
             self.session.add(newHis)
             self.session.commit()
             return True
+        else:
+            return False
+        
+        if type(priori) is int:
+            if ((priori<1) and (priori>20)):
+                return False
+        else if type(priori) is str:
+            if not ((priori=='Alta')or(priori=='Media')or(priori=='Baja')):
+                return False
         else:
             return False
         
@@ -289,10 +299,13 @@ class clsHistoria():
         self.session.commit()
 
         for id in idObjetivos:
-            newOH = ObjetivosHistoria(idHistoria,id)
-            self.session.add(newOH)
-            self.session.commit()
-            
+            obj = self.session.query(Objetivo).filter(Objetivo.idObjetivo == id)
+            for row in obj:
+                if (row.transversal==1):
+                    newOH = ObjetivosHistoria(idHistoria,id)
+                    self.session.add(newOH)
+                    self.session.commit()
+                    
         return True
 
     def tieneLoops(self,idProducto=None,idPapa=None,codigo=None):
