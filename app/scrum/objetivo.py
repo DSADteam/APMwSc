@@ -26,12 +26,11 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    print(session)
+
     idPila = str(session['idPila'])
-    session.pop("idPila",None)
 
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(idProducto=int(idPila), descripcion = params['descripcion'], trans = params['transversalidad'])
+    obj.insertar(idProducto=int(idPila), descripcion = params['descripcion'], transversal = params['transversal'])
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -50,10 +49,8 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    idObjetivo = params['idObjetivo']
-
     obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(idObjetivo,params['descripcion'])
+    obj.modificar(params['idObjetivo'],params['descripcion'], params['transversal'])
     res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
@@ -70,14 +67,14 @@ def VCrearObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-
-    params = request.get_json()
-
     
     #session['idPila'] = request.args['idPila']
     res['idPila'] = session['idPila']
-    print(session)
+    res['fObjetivo_opcionesTransversalidad'] = [
+      {'key':True, 'value':'transversal'},{'key':False, 'value':'no transversal'},
+    ]
+
+    params = request.get_json()
 
     #Action code ends here
     return json.dumps(res)
@@ -94,8 +91,10 @@ def VObjetivo():
     idObjetivo        = request.args.get('idObjetivo', 1)
     res['idObjetivo'] = idObjetivo
     res['fObjetivo']  = obj.mostrarObjetivo(int(idObjetivo))
-    res['idPila']  = session['idPila']
-    
+    res['idPila']     = session['idPila']
+    res['fObjetivo_opcionesTransversalidad'] = [
+      {'key':True, 'value':'transversal'},{'key':False, 'value':'no transversal'},
+    ]
     #Action code ends here
     return json.dumps(res)
 
@@ -109,17 +108,14 @@ class clsObjetivo():
         self.session = session
 
     def insertar(self,idProducto=None,descripcion=None,trans=None):
-        """
-        if type(descripcion) is int:
-            return False
-        if type(idProducto, str):
-            return False
-        """
-        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int) and (type(trans) is int)
+
+        tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int) and (type(trans) is str)\
+                         and (trans!=None)
 
         if not tiposCorrectos:
             return False
-        
+        if not((trans=="transversal") or (trans=="no transversal")):
+            return False
 
         comentarioNulo = (descripcion == None) or\
         (idProducto)==None or (descripcion == '') or (trans==None)
@@ -128,14 +124,10 @@ class clsObjetivo():
 
         estaEnBd       = self.existeObjetivo(descripcion=descripcion)
         
-        if not((trans==0) or (trans==1)):
-            return False
-        #pr = clsProducto()
-        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
         longCharValido = (len(descripcion) <= 500)
 
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
-            newObj = Objetivo(descripcion,idProducto)
+            newObj = Objetivo(descripcion,idProducto,trans)
             self.session.add(newObj)
             self.session.commit()
             return True
@@ -161,7 +153,7 @@ class clsObjetivo():
         result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
         if result!="":
             for row in result:
-                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion}
+                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal}
             else:
                 print("Empty query!")
         return res
@@ -172,7 +164,7 @@ class clsObjetivo():
         result = self.engine.execute("select * from \"Objetivos\";")
         if result!="":
             for row in result:
-                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
             else:
                 print("Empty query!")
                     
@@ -183,7 +175,7 @@ class clsObjetivo():
         result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
         if result!="":
             for row in result:
-                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion})
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
             else:
                 print("Empty query!")
         
@@ -204,33 +196,23 @@ class clsObjetivo():
     #Funcion que permite actualizar la descripcion
     def modificar(self,id=None,descripcion=None,trans=None):
         
-        if type(descripcion) is int:
-            return False
-        if type(id) is str:
-            return False
-        if (len(descripcion)>500):
-            return False
-        if(id==None):
-            return False
-        if type(trans) is str:
-            return False
+        tipoid=(id!=None) and (type(id) is int) 
+        tipodesc= (type(descripcion) is str) 
+
+        tipotransv=(type(trans) is str)
         
-        if id and descripcion:
-            
+        if tipoid and tipodesc and tipotransv and ((trans=="transversal") or (trans=="no transversal")):
+            if(len(descripcion)>500): 
+                return False
             self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
                 update({'descripcion' : descripcion })
             self.session.commit()
+            
+            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
+                update({'transversal' : trans })
+            self.session.commit()
             return True
-        elif id and trans:
-            if ((trans==0) or (trans==1)):
-                self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
-                    update({'transversalidad' : trans })
-                self.session.commit()
-            else:
-                return False
         else:
             return False
-        
        
-    
 #Use case code ends here

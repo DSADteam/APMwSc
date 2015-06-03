@@ -166,9 +166,9 @@ class clsProducto():
                              ((type(descripcion) is str) or descripcion == None)             
 
             formatoEscala  = (escala == "cualitativo" or escala == "cuantitativo")
+
             estaEnBd       = self.existeProducto(nombre=nombre)
             longCharValido = len(nombre) <= 500 #agregar el de la otra variable
-
 
             valido = tiposCorrectos and formatoEscala and (not estaEnBd) \
                      and longCharValido
@@ -235,6 +235,7 @@ class clsProducto():
             self.session.commit()
         
         #Funcion que permite actualizar una descripcion
+
         def modificar(self,id,nombre,descripcion,escala):
             if (not descripcion):
                 descripcion==""
@@ -251,6 +252,10 @@ class clsProducto():
 
                  
                 self.session.commit()
+                self.session.query(Producto).filter(Producto.idProducto == id).\
+                    update({'escala' : escala })
+                self.session.commit()
+
                 return True
             else:
                 return False

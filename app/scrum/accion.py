@@ -55,7 +55,7 @@ def AModifAccion():
 
     acc=clsAccion(session=sessionDB,engine=engine)
     paso = acc.modificar(idAccion,params['descripcion'])
-    print(paso)
+    res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
