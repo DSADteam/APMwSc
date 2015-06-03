@@ -73,7 +73,8 @@ class Producto(db.Model):
     idProducto    = db.Column(Integer, primary_key = True) #autoincremento
     nombre        = db.Column(String(500),  unique = True, nullable = False)
     descripcion   = db.Column(String(500),  unique = False)
-
+    escala        = db.Column(String(14),nullable = False)
+    
     def __init__(self,nombre,descripcion=None):
         
         self.nombre      = nombre

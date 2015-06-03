@@ -69,6 +69,11 @@ def VCrearProducto():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
+    res['fPila_opcionesEscala'] = [
+      {'key':1,'value':'Alta/Media/Baja'},
+      {'key':2,'value':'Entre 1 y 20'}]
+
     params = request.get_json()
     #Action code ends here
     return json.dumps(res)
@@ -105,11 +110,14 @@ def VProducto():
         if x['idPila']==idPila:
             res['fPila'] = x
             break
-    print('TRY HARD DUDE')
-    print(res)
+    
     res['data3'] = oActor.listarActoresprod(idPila)
     res['data5'] = oAccion.listarAccionesprod(idPila)
     res['data7'] = oObjetivo.listarObjetivosprod(idPila)
+
+    res['fPila_opcionesEscala'] = [
+      {'key':1,'value':'Alta/Media/Baja'},
+      {'key':2,'value':'Entre 1 y 20'}]
 
     #Action code ends here
     return json.dumps(res)
