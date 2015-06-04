@@ -20,7 +20,7 @@ from base import *
 from app.scrum.actor import clsActor
 from app.scrum.objetivo import clsObjetivo
 from app.scrum.accion import clsAccion
-#from app.scrum.prod import clsProducto
+from app.scrum.prod import clsProducto
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -61,8 +61,18 @@ def AModifHistoria():
     #Action code goes here, res should be a list with a label and a message
 
     idPila = int(session['idPila'])
+    print("ESTOS SON MIS PARAMETTEROOORWOEFDESF")
+    print(params)
     his = clsHistoria(session=sessionDB,engine=engine)
-    his.modificar(idPila,params['codigo'])
+    his.modificar(
+                idHistoria = "hola $:",
+                codigo     = params['codigo'],
+                idAccion   = int(params['accion']),
+                tipo       = params['tipo'],
+                idProducto = idPila,
+                prioridad  = params['prioridad'])
+    his.asociarActores(params['actores'], idHistoria)
+    his.asociarObjetivos(params['objetivos'], idHistoria)
 
     #Datos de prueba    
     res['label'] = res['label'] + '/' + str(idPila)
@@ -119,6 +129,12 @@ def VCrearHistoria():
       {'key':'2','value':'Obligatoria'}]
     res['fHistoria'] = {'super':0}
 
+    res['fHistoria_opcionesPrioridad'] = [
+      {'key':1, 'value':'Alta'},
+      {'key':2, 'value':'Media'},
+      {'key':3, 'value':'Baja'},
+    ]
+
 
     #Action code ends here
     return json.dumps(res)
@@ -133,11 +149,15 @@ def VHistoria():
     #Action code goes here, res should be a JSON structure
     params = request.get_json()
 
+    print("ESTOOO FUE AL ENTRAAAAAAR")
+    print(params)
+
     #Ejemplo de relleno de listas para selectrores
     act=clsActor(engine=engine,session=sessionDB)
     acc=clsAccion(engine=engine,session=sessionDB)
     hist=clsHistoria(engine=engine,session=sessionDB)
     obj=clsObjetivo(engine=engine,session=sessionDB)
+    oProd = clsProducto(engine,sessionDB)
 
     
     aux=act.listarActoresprod(int(session['idPila']))
@@ -165,7 +185,7 @@ def VHistoria():
     for x in aux:
         x['key']=x.pop('idHistoria')
         x['value']=x.pop('enunciado')
-    """
+    
     res['fHistoria_opcionesHistorias'] = [
       {'key':0,'value':'Ninguna'},
       {'key':1,'value':'Historia1'},
@@ -176,7 +196,20 @@ def VHistoria():
       {'key':'2','value':'Obligatoria'}]
     res['fHistoria'] = {'super':0, 
        'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
-    """
+
+    if(oProd.getEscala == "cualitativo"):
+        res['fHistoria_opcionesPrioridad'] = [
+          {'key':20, 'value':'Alta'},
+          {'key':13, 'value':'Media'},
+          {'key':7, 'value':'Baja'},
+        ]
+    else:
+        res['fHistoria_opcionesPrioridad'] = []
+        for i in range(1,21):
+            item = {'key':i,'value':i}
+            res['fHistoria_opcionesPrioridad'].append(item)
+         
+    
 
     #Action code ends here
     return json.dumps(res)
@@ -193,10 +226,6 @@ def VHistorias():
     #Datos de prueba
     his=clsHistoria(engine=engine,session=sessionDB)
     res['idPila'] = session['idPila']
-
-    # obligatorio
-    # enunciado = "En tanto que " + actor + " puedo ayudar a " + accion +" para ayudar a " + objetivo
-
 
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
     print(res)
@@ -267,6 +296,64 @@ class clsHistoria():
                 return False
         else:
             return False
+
+    def modificar(self,idHistoria=None,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
+
+
+        #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
+
+        
+        tiposCorrectos = (type(codigo)     is str) and \
+                         (type(idProducto) is int) and \
+                         (type(tipo)       is str) and \
+                         (type(idAccion)   is int) and \
+                         (type(idPapa)     is int  or   idPapa   == None) and \
+                         (type(prioridad)  is int  or str)    
+        
+        
+        if not tiposCorrectos:
+            return False
+
+        
+        
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+             update({'idHistoria' : idHistoria })
+        self.session.commit()
+
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+            update({'codigo':codigo})
+        self.session.commit()
+
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+            update({'idProducto':idProducto})
+        self.session.commit()
+
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+            update({'idPapa':idPapa})
+        self.session.commit()
+
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+            update({'tipo':tipo})
+        self.session.commit()
+
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+            update({'idAccion':idAccion})
+        self.session.commit()
+
+        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+            update({'prioridad':prioridad})
+        self.session.commit()
+
+        self.session.query(ActoresHistoria).filter(
+                                    ActoresHistoria.idHistoria == idHistoria).\
+                delete()
+
+        self.session.query(ObjetivosHistorias).filter(
+                                    ObjetivosHistorias.idHistoria == idHistoria).\
+                delete()
+
+
+
         
     def obtId(self,codigo=None,idProducto=None):
         if codigo==None or idProducto==None:
@@ -401,9 +488,6 @@ class clsHistoria():
                     elif(i < objetivosAsoc.count()-2):
                         enunciado += ", "
                     i+=1
-
-            print("Siiiiiii mira lo que escribi")
-            print(enunciado)
 
             res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':row.prioridad})
 

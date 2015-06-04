@@ -184,6 +184,15 @@ class clsProducto():
             else:
                 return False
 
+        def getEscala(self,idProducto):
+            res = self.session.query(Producto).\
+                        filter(Producto.idProducto == idProducto)
+            for p in res:
+                tipoEscala = p.escala
+
+            return tipoEscala
+
+
         #Funcion booleana, dada un id o descripcion, o ambos, se indica si el objeto esta en la tabla
         def existeProducto(self,id=None,nombre=None):
             if(id != None and nombre==None):
@@ -249,12 +258,9 @@ class clsProducto():
                      
                 self.session.query(Producto).filter(Producto.idProducto == id).\
                      update({'escala' : escala })
+          
+                self.session.commit()
 
-                 
-                self.session.commit()
-                self.session.query(Producto).filter(Producto.idProducto == id).\
-                    update({'escala' : escala })
-                self.session.commit()
 
                 return True
             else:
