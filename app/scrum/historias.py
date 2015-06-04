@@ -372,9 +372,16 @@ class clsHistoria():
             actoresAsoc = self.session.query(ActoresHistoria,Actor).\
                             filter(ActoresHistoria.idHistoria == row.idHistoria).\
                             filter(ActoresHistoria.idActor == Actor.idActor)
-            
+            i = 0
             for actor in actoresAsoc:
-                enunciado += actor[1].nombre + ", "
+                enunciado += actor[1].nombre  
+                if(i==actoresAsoc.count()-2):
+                    enunciado += " y "
+                elif(i < actoresAsoc.count()-2):
+                    enunciado += ", "
+                else:
+                    pass
+                i+=1
 
                 #soon.. verificar si es la ultima columna y cambiar como por un y
 
@@ -395,9 +402,17 @@ class clsHistoria():
                             filter(ObjetivosHistoria.idHistoria == row.idHistoria).\
                             filter(ObjetivosHistoria.idObjetivo == Objetivo.idObjetivo)
             
+            i = 1
             for obj in objetivosAsoc:
                 if (obj[1].transversal == "no transversal"):
-                    enunciado += obj[1].descripcion + ", "
+                    enunciado += obj[1].descripcion
+                    if (i==objetivosAsoc.count()-1):
+                        enunciado += "."
+                    elif(i==objetivosAsoc.count()-2):
+                        enunciado += " y "
+                    elif(i < objetivosAsoc.count()-2):
+                        enunciado += ", "
+                    i+=1
 
             print("Siiiiiii mira lo que escribi")
             print(enunciado)
@@ -418,10 +433,6 @@ class clsHistoria():
         else:
             print("Empty query!")
 
-
-        print("Este es el reeeees")
-        print(res)
-        
         return res
     
     def borrarFilas(self):
