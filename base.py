@@ -180,12 +180,11 @@ class Historia(db.Model):
     __tablename__   = 'Historias'
     idHistoria      = db.Column(Integer, primary_key = True)
     codigo          = db.Column(String(500), unique = False, nullable=False)
-    tipo            = db.Column(String(500), nullable=False)
+    tipo            = db.Column(String(15), nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
-    prioriCual      = db.Column(String(5), unique = False, nullable = True)
-    prioriCuan      = db.Column(Integer, unique = False, nullable = True)
+    prioridad      = db.Column(Integer, unique = False, nullable = True) #Del 1 al 20
     
     # Backrefs
     
