@@ -199,6 +199,8 @@ def VHistorias():
 
 
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
+    
+    
     print(res)
     #Action code ends here
     return json.dumps(res)
@@ -351,6 +353,16 @@ class clsHistoria():
     def listarHistoriasprod(self,idProducto):
         
         res = []
+        conversion=False
+        
+        #Revisando escala de producto
+        result = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+        
+        for row in result:
+            if row.escala=='cualitativo':
+                conversion=True
+                break
+        
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
         
         for row in result:
@@ -389,8 +401,18 @@ class clsHistoria():
 
             print("Siiiiiii mira lo que escribi")
             print(enunciado)
-
-            res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':row.prioridad})
+            
+            prioridad=row.prioridad
+            
+            if conversion:
+                if prioridad<=6:
+                    prioridad='Baja'
+                elif prioridad<=13:
+                    prioridad='Media'
+                else:
+                    prioridad='Alta'
+                    
+            res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad})
 
 
         else:

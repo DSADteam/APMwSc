@@ -1,0 +1,18 @@
+#!/bin/bash
+rm -rf __pyca*;
+git add *;
+read -p "Introduzca mensaje de commit: " mensaje;
+#echo $mensaje;
+
+git commit -m "\""$mesaje"\"";
+
+select ramitax in "NabJav" "MegCris" "RobSam" "Desarrollo" "master";
+do
+    case $ramitax in "NabJav"|"MegCris"|"RobSam"|"Desarrollo"|"master")
+	echo $ramitax;
+	break;
+    esac
+done
+#echo $ramitax;
+
+git push origin $ramitax;
