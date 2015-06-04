@@ -245,10 +245,11 @@ def ACambiarPrioridades():
     lista=params['lista']
     print(lista)
     for x in lista:
-        idHistorias+=x['idHistoria']
-        prioridades+=x['prioridad']
+        idHistorias.append(x['idHistoria'])
+        prioridades.append(x['prioridad'])
+        print("PASOOO ESTA PRIORIDAAAAAAAD" + str(x['prioridad']))
     
-    modificarPrioridades(self,idHistorias,prioridades)
+    hist.modificarPrioridades(idHistorias,prioridades)
     res['label'] = res['label']+ "/"+str(session['idPila'])
 
     #Action code ends here
@@ -348,7 +349,7 @@ class clsHistoria():
 
     def modificarPrioridades(self,idHistorias,prioridades):
 
-        for i in range(len(idHistoria)):
+        for i in range(len(idHistorias)):
             self.session.query(Historia).filter(Historia.idHistoria == idHistorias[i]).\
                  update({'prioridad' : prioridades[i] })
             self.session.commit()
@@ -607,11 +608,11 @@ class clsHistoria():
 
             if conversion:
                 if prioridad<=6:
-                    prioridad='Baja'
-                elif prioridad<=13:
+                    prioridad='Alta'
+                elif prioridad>=7 and prioridad<13:
                     prioridad='Media'
                 else:
-                    prioridad='Alta'
+                    prioridad='Baja'
                     
             res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad})
 
