@@ -354,15 +354,16 @@ class clsHistoria():
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
         
         for row in result:
-            res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
-
+            
             enunciado = "En tanto que "
 
-            actoresAsoc = self.session.query(ActoresHistoria).join(Actor)\
-                            filter(Historia.idHistoria == row.idHistoria)
+            actoresAsoc = self.session.query(ActoresHistoria,Actor).\
+                            filter(ActoresHistoria.idHistoria == row.idHistoria).\
+                            filter(ActoresHistoria.idActor == Actor.idActor)
             
             for actor in actoresAsoc:
-                enunciado += actor.nombre + ", "
+                enunciado += actor[1].nombre + ", "
+
                 #soon.. verificar si es la ultima columna y cambiar como por un y
 
             if (row.tipo == "obligatorio") :
@@ -370,29 +371,31 @@ class clsHistoria():
             else:
                 enunciado += " podria "
 
-            accionEncontrada = self.session.query(Historia).join(Accion)\
-                            filter(Historia.idHistoria == row.idHistoria)
+
+            accionEncontrada = self.session.query(Historia,Accion).\
+                            filter(Historia.idHistoria == row.idHistoria).\
+                            filter(Historia.idAccion == Accion.idAccion)
 
             for acc in accionEncontrada:
-                enunciado += acc.descripcion
+                enunciado += acc[1].descripcion + " para "
 
-            enunciado +=  row.accion " para "
-
-            objetivosAsoc = self.session.query(ObjetivosHistoria).join(Objetivo)\
-                            filter(Historia.idHistoria == row.idHistoria)
+            objetivosAsoc = self.session.query(ObjetivosHistoria,Objetivo).\
+                            filter(ObjetivosHistoria.idHistoria == row.idHistoria).\
+                            filter(ObjetivosHistoria.idObjetivo == Objetivo.idObjetivo)
             
             for obj in objetivosAsoc:
-                if (row.transversal == "no transversal"):
-                    enunciado += obj.descripcion + ", "
+                if (obj[1].transversal == "no transversal"):
+                    enunciado += obj[1].descripcion + ", "
 
             print("Siiiiiii mira lo que escribi")
             print(enunciado)
+
+            res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':row.prioridad})
 
 
         else:
             print("Empty query!")
 
-        result = 
 
         print("Este es el reeeees")
         print(res)

@@ -4,7 +4,7 @@ INSERT INTO "Productos" (nombre,descripcion,escala) VALUES ('Surfeadores diverti
 INSERT INTO "Productos" (nombre,descripcion,escala) VALUES ('Piedreros asociados','Adoro esta materia','cuantitativo');
 INSERT INTO "Productos" (nombre,descripcion,escala) VALUES ('Ingenieria de software','Ojala la abrieran todos los trimestres','cuantitativo');
 
-INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Crear repositorio',1);
+INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('logearme en la pagina',1);
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Documentar todo',1);
 
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Crear repositorio divertido',2);
@@ -44,17 +44,62 @@ INSERT INTO "dbuser" VALUES('Meggie'      ,'meggies2'    ,'2e376b23934d2509220a3
 INSERT INTO "dbuser" VALUES('Ascander'    ,'ascander2'   ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','ascander@correo.com',2);
 INSERT INTO "dbuser" VALUES('Jean Carlos' ,'jeanc2'      ,'2e376b23934d2509220a3d98c8116e61d4a03fa33b94dfadd1f5e94d69ef340d:ff03dc0f9de44c868a6d03d252294458','jeanc@correo.com'   ,2);
 
-INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que hagamos codigo lo continuemos',1,'no transversal');
-INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que todos nos divirtamos todo sera divertido',1,'transversal');
-INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que jejeps todos huehuehue',1,'transversal');
-INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que escribo esto nabil hace prod.py',2,'no transversal');
-INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que probamos la base de datos aprendemos',2,'no transversal');
-INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que jejeps todos huehuehue',2,'transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('hacer las cosas bien',1,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('divertirnos en grande',1,'transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('commer pizza con cada sprint',1,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('usar extreme programing de forma cuidadosa',1,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('crear muchos muchos objetivos',1,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('usar este software para beneficio propio',1,'transversal');
 
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Historia1',1,3,'tipo 3');
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Historia2',1,2,'tipo 2');
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Historia3',1,1,'tipo 1');
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Podria escribir algo interesante y decir que todos tienen parciales esta semana y yo no :)',2,3,'tipo 3');
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Ellos estudian y yo hago esto D:',2,2,'tipo 2');
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo) VALUES ('Eso no me hace vaga o si?',2,1,'tipo 1');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que hagamos codigo lo continuemos2',2,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que todos nos divirtamos todo sera divertido2',2,'transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que jejeps todos huehuehue2',2,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que escribo esto nabil hace prod.py2',2,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que probamos la base de datos aprendemos2',2,'no transversal');
+INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que jejeps todos huehuehue2',2,'transversal');
 
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia1',1,3,'opcional',1);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia2',1,2,'obligatoria',4);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia3',1,1,'opcional',9);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Podria escribir algo interesante y decir que todos tienen parciales esta semana y yo no :)',2,3,'obligatoria',15);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Ellos estudian y yo hago esto D:',2,2,'opcional',12);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Eso no me hace vaga o si?',2,1,'obligatoria',20);
+
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (1,1);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (3,2);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (1,3);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (2,1);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (3,1);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (3,3);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (1,4);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (1,5);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (1,6);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (3,4);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (2,5);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (2,6);
+
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (4,7);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (4,8);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (5,9);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (6,7);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (5,8);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (6,9);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (5,10);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (4,11);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (4,12);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (6,10);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (5,11);
+INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (6,12);
+
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (1,1);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (3,3);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (1,2);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (2,2);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (3,1);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (2,3);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (4,5);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (4,6);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (5,4);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (5,5);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,4);
+INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,6);
