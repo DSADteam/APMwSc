@@ -26,11 +26,13 @@ def ACrearObjetivo():
     results = [{'label':'/VProducto', 'msg':['Objetivo creado']}, {'label':'/VCrearObjetivo', 'msg':['Error al crear objetivo']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    print(params)
     idPila = str(session['idPila'])
 
+    transversalidad = "transversal" if params['transversal'] else "no transversal"
+
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(idProducto=int(idPila), descripcion = params['descripcion'], transversal = params['transversal'])
+    obj.insertar(int(idPila),params['descripcion'],transversalidad)
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -107,7 +109,7 @@ class clsObjetivo():
         self.engine  = engine
         self.session = session
 
-    def insertar(self,idProducto=None,descripcion=None,trans=None):
+    def insertar(self,idProducto,descripcion,trans):
 
         tiposCorrectos = (type(descripcion) is str) and (type(idProducto) is int) and (type(trans) is str)\
                          and (trans!=None)
