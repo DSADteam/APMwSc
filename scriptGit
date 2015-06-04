@@ -1,10 +1,10 @@
 #!/bin/bash
 rm -rf __pyca*;
-git add *;
+#git add *;
 read -p "Introduzca mensaje de commit: " mensaje;
 #echo $mensaje;
 
-git commit -m "\""$mesaje"\"";
+git commit -a -m "\""$mesaje"\"";
 
 select ramitax in "NabJav" "MegCris" "RobSam" "Desarrollo" "master";
 do
