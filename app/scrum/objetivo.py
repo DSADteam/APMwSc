@@ -51,8 +51,10 @@ def AModifObjetivo():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
+    transversalidad = "transversal" if params['transversal'] else "no transversal"
+
     obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(params['idObjetivo'],params['descripcion'], params['transversal'])
+    obj.modificar(params['idObjetivo'],params['descripcion'], transversalidad)
     res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here

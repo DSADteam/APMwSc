@@ -250,10 +250,6 @@ class clsProducto():
                 self.session.query(Producto).filter(Producto.idProducto == id).\
                      update({'escala' : escala })
 
-                 
-                self.session.commit()
-                self.session.query(Producto).filter(Producto.idProducto == id).\
-                    update({'escala' : escala })
                 self.session.commit()
 
                 return True
