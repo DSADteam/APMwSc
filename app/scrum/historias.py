@@ -414,6 +414,7 @@ class clsHistoria():
                         enunciado += ", "
                     i+=1
 
+#de
             print("Siiiiiii mira lo que escribi")
             print(enunciado)
             
