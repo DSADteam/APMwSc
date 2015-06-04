@@ -138,6 +138,7 @@ def VHistoria():
     acc=clsAccion(engine=engine,session=sessionDB)
     hist=clsHistoria(engine=engine,session=sessionDB)
     obj=clsObjetivo(engine=engine,session=sessionDB)
+
     
     aux=act.listarActoresprod(int(session['idPila']))
     for x in aux:
@@ -160,9 +161,11 @@ def VHistoria():
 
 
     aux=hist.listarHistoriasprod(int(session['idPila']))
+    print(aux)
     for x in aux:
         x['key']=x.pop('idHistoria')
         x['value']=x.pop('enunciado')
+    """
     res['fHistoria_opcionesHistorias'] = [
       {'key':0,'value':'Ninguna'},
       {'key':1,'value':'Historia1'},
@@ -172,7 +175,8 @@ def VHistoria():
       {'key':'1','value':'Opcional'},
       {'key':'2','value':'Obligatoria'}]
     res['fHistoria'] = {'super':0, 
-       'actor':1, 'accion':2, 'objetivo':3, 'tipo':1} 
+       'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
+    """
 
     #Action code ends here
     return json.dumps(res)
@@ -189,7 +193,13 @@ def VHistorias():
     #Datos de prueba
     his=clsHistoria(engine=engine,session=sessionDB)
     res['idPila'] = session['idPila']
+
+    # obligatorio
+    # enunciado = "En tanto que " + actor + " puedo ayudar a " + accion +" para ayudar a " + objetivo
+
+
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
+    print(res)
     #Action code ends here
     return json.dumps(res)
 
@@ -207,15 +217,9 @@ class clsHistoria():
         self.session = session
      
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,priori=None):
-        
-        """
-        comentarioNulo = (codigo == None) or
-        (idProducto!=None) or (idAccion==None)
-        if comentarioNulo or codigo=='' or tipo==None:
-            return False
-        """
 
-        #No nulidad
+
+        #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
                            and idAccion != None and priori != None
         if not nulidadesValidas:
@@ -347,13 +351,51 @@ class clsHistoria():
     def listarHistoriasprod(self,idProducto):
         
         res = []
-        #result = self.engine.execute("select * from \"Historias\" where idProducto= "+str(idProducto)+" ;")
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
-        if result!="":
-            for row in result:
-                res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
+        
+        for row in result:
+            res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
+
+            enunciado = "En tanto que "
+
+            actoresAsoc = self.session.query(ActoresHistoria).join(Actor)\
+                            filter(Historia.idHistoria == row.idHistoria)
+            
+            for actor in actoresAsoc:
+                enunciado += actor.nombre + ", "
+                #soon.. verificar si es la ultima columna y cambiar como por un y
+
+            if (row.tipo == "obligatorio") :
+                enunciado += " puedo "
             else:
-                print("Empty query!")
+                enunciado += " podria "
+
+            accionEncontrada = self.session.query(Historia).join(Accion)\
+                            filter(Historia.idHistoria == row.idHistoria)
+
+            for acc in accionEncontrada:
+                enunciado += acc.descripcion
+
+            enunciado +=  row.accion " para "
+
+            objetivosAsoc = self.session.query(ObjetivosHistoria).join(Objetivo)\
+                            filter(Historia.idHistoria == row.idHistoria)
+            
+            for obj in objetivosAsoc:
+                if (row.transversal == "no transversal"):
+                    enunciado += obj.descripcion + ", "
+
+            print("Siiiiiii mira lo que escribi")
+            print(enunciado)
+
+
+        else:
+            print("Empty query!")
+
+        result = 
+
+        print("Este es el reeeees")
+        print(res)
         
         return res
     

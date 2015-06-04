@@ -186,19 +186,7 @@ class Historia(db.Model):
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
     prioriCual      = db.Column(String(5), unique = False, nullable = True)
     prioriCuan      = db.Column(Integer, unique = False, nullable = True)
-    
-    # Backrefs
-    
-    #accion          = db.relationship('Acciones', backref = db.backref('accion', lazy = 'dynamic'))
-    #producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
-    #historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-    #Backrefs
-
-    # accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
-    # producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
-    # historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
+ 
     #accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
     #producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
     #historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
@@ -226,16 +214,6 @@ class ObjetivosHistoria(db.Model):
     __tablename__ = 'ObjetivosHistorias'
     idHistoria    = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     idObjetivo    = db.Column(Integer, db.ForeignKey('Objetivos.idObjetivo'), unique = False, primary_key=True)   
-
-    #objetivo      = db.relationship('Objetivo', backref = db.backref('objetivo', lazy = 'dynamic'))
-    #historia      = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-    # objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
-    # historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-
-    #objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
-    #historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
 
     ''' Metodo init
