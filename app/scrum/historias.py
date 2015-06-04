@@ -38,7 +38,10 @@ def ACrearHistoria():
     his.asociarActores(params['actores'], idHistoria)
     his.asociarObjetivos(params['objetivos'], idHistoria)
 
-
+    print('OBSERVAAAAAAAAAAAD PLEBEYO')
+    print(params)
+    print('OBSERVAAAAAAAAAAAD PLEBEYO')
+    print(session)
     #Datos de prueba
     res['label'] = res['label'] + '/1'
 
@@ -63,6 +66,8 @@ def AModifHistoria():
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
     his.modificar(idPila,params['codigo'])
+    print('Parametros pasados a modificar: wiiiiiiiiiiiii ')
+    print(params)
 
     #Datos de prueba    
     res['label'] = res['label'] + '/' + str(idPila)
@@ -117,8 +122,12 @@ def VCrearHistoria():
     res['fHistoria_opcionesTiposHistoria'] = [
       {'key':'1','value':'Opcional'},
       {'key':'2','value':'Obligatoria'}]
+    res['fHistoria_opcionesPrioridad'] = hist.listarPrioridades(session['idPila'])
     res['fHistoria'] = {'super':0}
 
+    
+    print('Este es un debuggeo sin palabras obscenas.')
+    print(res)
 
     #Action code ends here
     return json.dumps(res)
@@ -218,12 +227,12 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
      
-    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,priori=None):
+    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
 
 
         #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
-                           and idAccion != None and priori != None
+                           and idAccion != None and prioridad != None
         if not nulidadesValidas:
             return False
         
@@ -232,7 +241,7 @@ class clsHistoria():
                          (type(tipo)       is str) and \
                          (type(idAccion)   is int) and \
                          (type(idPapa)     is int  or   idPapa   == None) and \
-                         (type(priori)     is int or str)    
+                         (type(prioridad)     is int or str)    
         
         
         if tiposCorrectos:
@@ -254,7 +263,7 @@ class clsHistoria():
                     and longCharValido and (not tieneLoops)
         
         if esValido:
-            newHis = Historia(codigo,idProducto,idAccion,tipo,priori)
+            newHis = Historia(codigo,idProducto,idAccion,tipo,prioridad,idPapa)
             self.session.add(newHis)
             self.session.commit()
             return True
@@ -349,7 +358,28 @@ class clsHistoria():
                 res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
             else:
                 print("Empty query!")
-                
+    def listarPrioridades(self,idProducto):
+        res=[]
+        conversion=False
+        
+        #Revisando escala de producto
+        result = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+        
+        for row in result:
+            if row.escala=='cualitativo':
+                conversion=True
+                break
+        
+        result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
+        
+        if conversion:
+            res=[{'key':'1','value':'Baja'},{'key':'2','value':'Media'},{'key':'3','value':'Alta'}]
+        else:
+            for i in range(1,20):
+                res+=[{'key':str(i),'value':str(i)}]
+        
+        return res
+    
     def listarHistoriasprod(self,idProducto):
         
         res = []
@@ -414,12 +444,17 @@ class clsHistoria():
                         enunciado += ", "
                     i+=1
 
-#de
+#
             print("Siiiiiii mira lo que escribi")
             print(enunciado)
             
             prioridad=row.prioridad
             
+            print('MIRAME MIRAME')
+            print(row.idHistoria)
+            
+            print('OBSERVAAAAAAAAAAAD')
+            print(prioridad)
             if conversion:
                 if prioridad<=6:
                     prioridad='Baja'
