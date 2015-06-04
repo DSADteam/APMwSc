@@ -1,0 +1,7 @@
+#!/bin/bash
+PGPASSWORD="safepassword";
+set PGPASSWORD="safepassword";
+export PGPASSWORD;
+python3.4 base.py createdb;
+psql -U apmwsc -w  -d apmwsc -a -f data/poblate.sql;
+python3.4 base.py runserver;
