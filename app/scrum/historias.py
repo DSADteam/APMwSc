@@ -38,7 +38,10 @@ def ACrearHistoria():
     his.asociarActores(params['actores'], idHistoria)
     his.asociarObjetivos(params['objetivos'], idHistoria)
 
-
+    print('OBSERVAAAAAAAAAAAD PLEBEYO')
+    print(params)
+    print('OBSERVAAAAAAAAAAAD PLEBEYO')
+    print(session)
     #Datos de prueba
     res['label'] = res['label'] + '/1'
 
@@ -59,13 +62,15 @@ def AModifHistoria():
     results = [{'label':'/VHistorias', 'msg':['Historia modificada']}, {'label':'/VHistoria', 'msg':['Error al modificar historia']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    idHistoria = session['idHistoria']
+    session.pop("idHistoria", None)
 
     idPila = int(session['idPila'])
-    print("ESTOS SON MIS PARAMETTEROOORWOEFDESF")
-    print(params)
     his = clsHistoria(session=sessionDB,engine=engine)
+
     his.modificar(
-                idHistoria = "hola $:",
+                idPapa     = None,
+                idHistoria = idHistoria,
                 codigo     = params['codigo'],
                 idAccion   = int(params['accion']),
                 tipo       = params['tipo'],
@@ -73,6 +78,7 @@ def AModifHistoria():
                 prioridad  = params['prioridad'])
     his.asociarActores(params['actores'], idHistoria)
     his.asociarObjetivos(params['objetivos'], idHistoria)
+
 
     #Datos de prueba    
     res['label'] = res['label'] + '/' + str(idPila)
@@ -127,6 +133,7 @@ def VCrearHistoria():
     res['fHistoria_opcionesTiposHistoria'] = [
       {'key':'1','value':'Opcional'},
       {'key':'2','value':'Obligatoria'}]
+    res['fHistoria_opcionesPrioridad'] = hist.listarPrioridades(session['idPila'])
     res['fHistoria'] = {'super':0}
 
     res['fHistoria_opcionesPrioridad'] = [
@@ -134,6 +141,11 @@ def VCrearHistoria():
       {'key':2, 'value':'Media'},
       {'key':3, 'value':'Baja'},
     ]
+
+
+    
+    print('Este es un debuggeo sin palabras obscenas.')
+    print(res)
 
 
     #Action code ends here
@@ -149,9 +161,9 @@ def VHistoria():
     #Action code goes here, res should be a JSON structure
     params = request.get_json()
 
+
     print("ESTOOO FUE AL ENTRAAAAAAR")
     print(params)
-
     #Ejemplo de relleno de listas para selectrores
     act=clsActor(engine=engine,session=sessionDB)
     acc=clsAccion(engine=engine,session=sessionDB)
@@ -197,7 +209,7 @@ def VHistoria():
     res['fHistoria'] = {'super':0, 
        'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
 
-    if(oProd.getEscala == "cualitativo"):
+    if(oProd.getEscala(session['idPila']) == "cualitativo"):
         res['fHistoria_opcionesPrioridad'] = [
           {'key':20, 'value':'Alta'},
           {'key':13, 'value':'Media'},
@@ -209,6 +221,8 @@ def VHistoria():
             item = {'key':i,'value':i}
             res['fHistoria_opcionesPrioridad'].append(item)
          
+    session['idHistoria'] = request.args['idHistoria']
+
     
 
     #Action code ends here
@@ -228,6 +242,8 @@ def VHistorias():
     res['idPila'] = session['idPila']
 
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
+    
+    
     print(res)
     #Action code ends here
     return json.dumps(res)
@@ -245,12 +261,12 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
      
-    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,priori=None):
+    def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
 
 
         #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
-                           and idAccion != None and priori != None
+                           and idAccion != None and prioridad != None
         if not nulidadesValidas:
             return False
         
@@ -259,7 +275,7 @@ class clsHistoria():
                          (type(tipo)       is str) and \
                          (type(idAccion)   is int) and \
                          (type(idPapa)     is int  or   idPapa   == None) and \
-                         (type(priori)     is int or str)    
+                         (type(prioridad)     is int or str)    
         
         
         if tiposCorrectos:
@@ -281,7 +297,7 @@ class clsHistoria():
                     and longCharValido and (not tieneLoops)
         
         if esValido:
-            newHis = Historia(codigo,idProducto,idAccion,tipo,priori)
+            newHis = Historia(codigo,idProducto,idAccion,tipo,prioridad,idPapa)
             self.session.add(newHis)
             self.session.commit()
             return True
@@ -434,10 +450,41 @@ class clsHistoria():
                 res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
             else:
                 print("Empty query!")
-                
+    def listarPrioridades(self,idProducto):
+        res=[]
+        conversion=False
+        
+        #Revisando escala de producto
+        result = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+        
+        for row in result:
+            if row.escala=='cualitativo':
+                conversion=True
+                break
+        
+        result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
+        
+        if conversion:
+            res=[{'key':'1','value':'Baja'},{'key':'2','value':'Media'},{'key':'3','value':'Alta'}]
+        else:
+            for i in range(1,20):
+                res+=[{'key':str(i),'value':str(i)}]
+        
+        return res
+    
     def listarHistoriasprod(self,idProducto):
         
         res = []
+        conversion=False
+        
+        #Revisando escala de producto
+        result = self.session.query(Producto).filter(Producto.idProducto == idProducto)
+        
+        for row in result:
+            if row.escala=='cualitativo':
+                conversion=True
+                break
+        
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
         
         for row in result:
@@ -489,7 +536,30 @@ class clsHistoria():
                         enunciado += ", "
                     i+=1
 
-            res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':row.prioridad})
+
+            # res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':row.prioridad})
+
+
+            print("Siiiiiii mira lo que escribi")
+            print(enunciado)
+            
+            prioridad=row.prioridad
+            
+            print('MIRAME MIRAME')
+            print(row.idHistoria)
+            
+            print('OBSERVAAAAAAAAAAAD')
+            print(prioridad)
+
+            if conversion:
+                if prioridad<=6:
+                    prioridad='Baja'
+                elif prioridad<=13:
+                    prioridad='Media'
+                else:
+                    prioridad='Alta'
+                    
+            res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad})
 
 
         else:
