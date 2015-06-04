@@ -239,11 +239,11 @@ def ACambiarPrioridades():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     hist=clsHistoria(engine=engine,session=sessionDB)
-    print('ESTOY EN LA DE CAMBIAR holis')
+    
     idHistorias=[]
     prioridades=[]
     lista=params['lista']
-    print(lista)
+    
     for x in lista:
         idHistorias.append(x['idHistoria'])
         prioridades.append(x['prioridad'])
@@ -277,8 +277,7 @@ def VPrioridades():
 
     aux = his.listarHistoriasprod(int(session['idPila']))
     
-    print("holis vale.")
-    print(aux)
+    
     res['fPrioridades'] = { 'idPila':session['idPila'], 'lista': aux}
 
     #Action code ends here
