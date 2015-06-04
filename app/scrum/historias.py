@@ -20,7 +20,6 @@ from base import *
 from app.scrum.actor import clsActor
 from app.scrum.objetivo import clsObjetivo
 from app.scrum.accion import clsAccion
-from app.scrum.prod import clsProducto
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -132,10 +131,7 @@ def VCrearHistoria():
       {'key':'2','value':'Obligatoria'}]
     res['fHistoria_opcionesPrioridad'] = hist.listarPrioridades(session['idPila'])
     res['fHistoria'] = {'super':0}
-
-
     
-
 
     #Action code ends here
     return json.dumps(res)
@@ -156,6 +152,9 @@ def VHistoria():
     acc=clsAccion(engine=engine,session=sessionDB)
     hist=clsHistoria(engine=engine,session=sessionDB)
     obj=clsObjetivo(engine=engine,session=sessionDB)
+
+    from app.scrum.prod import clsProducto
+
     oProd = clsProducto(engine,sessionDB)
 
     
@@ -215,8 +214,6 @@ def VHistoria():
     #Action code ends here
     return json.dumps(res)
 
-
-
 @historias.route('/historias/VHistorias')
 def VHistorias():
     res = {}
@@ -241,10 +238,18 @@ def ACambiarPrioridades():
     results = [{'label':'/VHistorias', 'msg':['Prioridades reasignadas']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
-    print('ESTOY EN LA DE CAMBIAR MWBO')
-    print(params)
-    res['label'] = res['label']+'/1'
+    hist=clsHistoria(engine=engine,session=sessionDB)
+    print('ESTOY EN LA DE CAMBIAR holis')
+    idHistorias=[]
+    prioridades=[]
+    lista=params['lista']
+    print(lista)
+    for x in lista:
+        idHistorias+=x['idHistoria']
+        prioridades+=x['prioridad']
+    
+    modificarPrioridades(self,idHistorias,prioridades)
+    res['label'] = res['label']+ "/"+str(session['idPila'])
 
     #Action code ends here
     if "actor" in res:
@@ -340,6 +345,13 @@ class clsHistoria():
             return True
         else:
             return False
+
+    def modificarPrioridades(self,idHistorias,prioridades):
+
+        for i in range(len(idHistoria)):
+            self.session.query(Historia).filter(Historia.idHistoria == idHistorias[i]).\
+                 update({'prioridad' : prioridades[i] })
+            self.session.commit()
 
     def modificar(
                     self,
