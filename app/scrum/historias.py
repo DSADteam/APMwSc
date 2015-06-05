@@ -112,7 +112,7 @@ def VCrearHistoria():
         x['key']=x.pop('idAccion')
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesAcciones'] = aux
-    aux=obj.listarObjetivosprod(int(session['idPila']))
+    aux=obj.listarObjetivosprodt(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idObjetivo')
         x['value']=x.pop('descripcion')
@@ -171,7 +171,7 @@ def VHistoria():
     res['fHistoria_opcionesAcciones'] = aux
 
 
-    aux=obj.listarObjetivosprod(int(session['idPila']))
+    aux=obj.listarObjetivosprodt(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idObjetivo')
         x['value']=x.pop('descripcion')
@@ -536,6 +536,7 @@ class clsHistoria():
                                               #Eliminar verificacion de transversalidad.
         
         res = []
+        orden = []
         conversion=False
         
         #Revisando escala de producto
@@ -548,6 +549,7 @@ class clsHistoria():
         
         result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
         
+        contador=0
         for row in result:
             
             enunciado = "En tanto que "
@@ -612,15 +614,20 @@ class clsHistoria():
                     prioridad='Media'
                 else:
                     prioridad='Baja'
-                    
-            res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad})
+            
+            rexaux={'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad}
+            orden.append((row.prioridad,rexaux))
 
+        orden.sort(key=lambda tup: tup[0])
+
+        for x in orden:
+            res.append(x[1])
 
         else:
             pass
 
         return res
-    
+        
     def borrarFilas(self):
         
         self.session.query(Historia).delete()

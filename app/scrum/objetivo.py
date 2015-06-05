@@ -182,6 +182,20 @@ class clsObjetivo():
                 print("Empty query!")
         
         return res
+
+    def listarObjetivosprodt(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                if row.transversal=='no transversal':
+                    res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+            else:
+                print("Empty query!")
+        
+        return res
     
     def borrarFilas(self):
         
