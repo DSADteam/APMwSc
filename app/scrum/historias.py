@@ -197,9 +197,9 @@ def VHistoria():
 
     if(oProd.getEscala(session['idPila']) == "cualitativo"):
         res['fHistoria_opcionesPrioridad'] = [
-          {'key':20, 'value':'Alta'},
-          {'key':13, 'value':'Media'},
-          {'key':7, 'value':'Baja'},
+          {'key':1, 'value':'Alta'},
+          {'key':7, 'value':'Media'},
+          {'key':13, 'value':'Baja'},
         ]
     else:
         res['fHistoria_opcionesPrioridad'] = []
@@ -412,7 +412,7 @@ class clsHistoria():
             update({'idProducto':idProducto})
         self.session.commit()
 
-        if (idPapa != None):
+        if (idPapa != None or idPapa != 0):
             self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
                 update({'idHistoriaPadre':idPapa})
             self.session.commit()
@@ -615,6 +615,8 @@ class clsHistoria():
                     prioridad='Media'
                 else:
                     prioridad='Baja'
+
+
             
             rexaux={'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad}
             orden.append((row.prioridad,rexaux))
