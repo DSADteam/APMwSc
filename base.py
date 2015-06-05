@@ -180,24 +180,11 @@ class Historia(db.Model):
     __tablename__   = 'Historias'
     idHistoria      = db.Column(Integer, primary_key = True)
     codigo          = db.Column(String(500), unique = False, nullable=False)
-    tipo            = db.Column(String(500), nullable=False)
+    tipo            = db.Column(String(15), nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
-    prioriCual      = db.Column(String(5), unique = False, nullable = True)
-    prioriCuan      = db.Column(Integer, unique = False, nullable = True)
-    
-    # Backrefs
-    
-    #accion          = db.relationship('Acciones', backref = db.backref('accion', lazy = 'dynamic'))
-    #producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
-    #historia        = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-    #Backrefs
-
-    # accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
-    # producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
-    # historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
+    prioridad      = db.Column(Integer, unique = False) #Del 1 al 20
 
     #accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
     #producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
@@ -207,18 +194,15 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
 
-    def __init__(self,codigo, idProducto,idAccion,tipo,idHistoriaPadre=None,prioriCuan=None, prioriCual=None):
+    def __init__(self,codigo, idProducto,idAccion,tipo,prioridad,idHistoriaPadre=None):
         self.codigo = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         self.tipo        = tipo
         if idHistoriaPadre:
             self.idHistoriaPadre = idHistoriaPadre
-        if prioriCual:
-            self.prioriCual = prioriCual
-        if prioriCuan:
-            self.prioriCuan = prioriCuan
-
+        self.prioridad=prioridad
+        
 # Clase para objetivos de una historia
 
 class ObjetivosHistoria(db.Model):
@@ -226,16 +210,6 @@ class ObjetivosHistoria(db.Model):
     __tablename__ = 'ObjetivosHistorias'
     idHistoria    = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     idObjetivo    = db.Column(Integer, db.ForeignKey('Objetivos.idObjetivo'), unique = False, primary_key=True)   
-
-    #objetivo      = db.relationship('Objetivo', backref = db.backref('objetivo', lazy = 'dynamic'))
-    #historia      = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-    # objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
-    # historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
-
-    #objetivo   = db.relationship('Objetivo', backref = db.backref('objetivo'  , lazy = 'dynamic'))
-    #historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
 
 
     ''' Metodo init
