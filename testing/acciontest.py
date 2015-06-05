@@ -13,7 +13,7 @@ class accionTester(unittest.TestCase):
     def setUp(self):
         self.acc=clsAccion(engine,sessionDB)
         prod=clsProducto(engine,sessionDB)
-        prod.insertar("nombreprod","unadescripcion")
+        prod.insertar("nombreprod","unadescripcion","cualitativo")
         self.prodId = prod.idProd("nombreprod")
         
 #TEST INSERTAR

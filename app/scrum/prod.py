@@ -246,20 +246,27 @@ class clsProducto():
         #Funcion que permite actualizar una descripcion
 
         def modificar(self,id,nombre,descripcion,escala):
+            tiposCorrectos = (type(nombre) is str) and (type(escala) is str) and\
+                             ((type(descripcion) is str))
+            formatoEscala  = (escala == "cualitativo" or escala == "cuantitativo")                
+            
+            
+            
             if (not descripcion):
                 descripcion==""
-            if id:
-
-                self.session.query(Producto).filter(Producto.idProducto == id).\
-                     update({'descripcion' : descripcion })
+                
+            if id and tiposCorrectos and formatoEscala:
+                if len(nombre)<= 500 and len(descripcion) <= 500: 
+                    self.session.query(Producto).filter(Producto.idProducto == id).\
+                        update({'descripcion' : descripcion })
                      
-                self.session.query(Producto).filter(Producto.idProducto == id).\
-                     update({'nombre' : nombre })
+                    self.session.query(Producto).filter(Producto.idProducto == id).\
+                        update({'nombre' : nombre })
                      
-                self.session.query(Producto).filter(Producto.idProducto == id).\
-                     update({'escala' : escala })
+                    self.session.query(Producto).filter(Producto.idProducto == id).\
+                        update({'escala' : escala })
                      
-                self.session.commit()
+                    self.session.commit()
             
                 return True
             else:

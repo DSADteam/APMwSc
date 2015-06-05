@@ -14,7 +14,7 @@ class actorTester(unittest.TestCase):
         
         self.act=clsActor(engine,sessionDB)
         prod=clsProducto(engine,sessionDB)
-        prod.insertar("nombreprod","unadescripcion")
+        prod.insertar("nombreprod","unadescripcion","cualitativo")
         self.prodId = prod.idProd("nombreprod")
 
 #casos frontera

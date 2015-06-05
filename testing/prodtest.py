@@ -120,16 +120,10 @@ class MdlTest(unittest.TestCase):
         self.prod.insertar(string, descripcion=descripcion, escala=escala)
         self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
 
-    # def testStringNumber(self):
-
-    # 	nombre = 123
-    # 	descripcion = "ó" * 500
-    # 	escala = 'cuantitativo'
-    # 	self.prod.insertar(nombre=nombre, descripcion=descripcion, escala=escala)
-    # 	self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    
 
     def testDescripcionNumber(self):
-
+        
         string = 'Holaaaa'
         descripcion = 1234
         escala = 'cualitativo'
@@ -137,12 +131,77 @@ class MdlTest(unittest.TestCase):
         self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
 
     # Modificar de producto
-
-    # def testModif1(self):
-
-    #     descripcion = 'holas'
-    #     escala = 'cualitativo'
-    #     self.prod.modificar(1, descripcion=descripcion, escala=escala)
-    #     self.assertTrue(self.prod.existeProducto(id=int),"Error, no se encontro el producto")
+    #Valido
+    def testModif1(self):
+        string = "cualquiernombre"
+        descripcion = 'holas'
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    #Fronteras   
+    def testModif2(self):
+        string = "o"*500
+        descripcion = 'holas'
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+         
+    def testModif3(self):
+        string = "cualquiernombredos"
+        descripcion = "o"*500
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    
+    def testModif4(self):
+        string = "cualquiernombretres"
+        descripcion = 'u'*501
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    
+    def testModif8(self):
+        string = "unstring"
+        descripcion = 'holas'
+        escala = 'no es cualitativo ok'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    #Esquina     
+    def testModif5(self):
+        string = 'k'*501
+        descripcion = 'z'*501
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    #Malicia    
+    def testModif6(self):
+        string = None
+        descripcion = 'holas'
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+        
+    def testModif7(self):
+        string = "holahola"
+        descripcion = 454545
+        escala = 'cualitativo'
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+    
+    def testModif88(self):
+        string = "unstring"
+        descripcion = 'holas'
+        escala = 78787878
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+        
+    def testModif9(self):
+        string = "unstring"
+        descripcion = 'holas'
+        escala = None
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+        
+   
 
 unittest.main()
