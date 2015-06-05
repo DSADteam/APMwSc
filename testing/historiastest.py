@@ -74,7 +74,7 @@ class TestHistoria(unittest.TestCase):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para IdProductoNulo",self.prodId)
         idAccion = accion.obtenerId("Accion para IdProductoNulo")
-        prioridad=1
+        prioridad="baja"
         his = clsHistoria()
         pIdProducto = None
         hCodigo  = 'Just Pepe'
@@ -128,11 +128,11 @@ class TestHistoria(unittest.TestCase):
 
     def testTodosVacios(self):
         his = clsHistoria(engine,sessionDB)
-        prioridad=1
+        prioridad="alta"
         pIdProducto = None
         hCodigo = ''
         hTipo   = ''
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
     def testProdidVacioyDescrip500(self):
@@ -144,19 +144,33 @@ class TestHistoria(unittest.TestCase):
         pIdProducto = None
         hCodigo     = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
         hTipo       = "Drai gual. yust anoder bric in de gual"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
     def testCharEnIdyDecripNum(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("testCharEnIdyDecripNum",self.prodId)
         idAccion = accion.obtenerId("testCharEnIdyDecripNum")
-        prioridad=1
+        prioridad="media"
         his = clsHistoria(engine,sessionDB)
         pIdProducto = 'bruxw'
         hCodigo     = 345346
         hTipo       = 'el sue~o desorienta'
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
+        
+    # Tests de modificar
+    def testCharEnIdyDecripNum2(self):
+        accion          = clsAccion(engine,sessionDB)
+        accion.insertar("testCharEnIdyDecripNum2",self.prodId)
+        idAccion = accion.obtenerId("testCharEnIdyDecripNum2")
+        prioridad=1
+        pIdProducto=12
+        hCodigo   = "yy" * 250
+        hTipo     = "Historia"
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        prioridad2=21
+        self.his.modificar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad2)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
         
     """
