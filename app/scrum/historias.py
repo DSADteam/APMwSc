@@ -412,9 +412,10 @@ class clsHistoria():
             update({'idProducto':idProducto})
         self.session.commit()
 
-        self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
-            update({'idHistoriaPadre':idPapa})
-        self.session.commit()
+        if (idPapa != None):
+            self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
+                update({'idHistoriaPadre':idPapa})
+            self.session.commit()
 
         self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
             update({'tipo':tipo})
