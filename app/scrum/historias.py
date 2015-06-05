@@ -323,7 +323,7 @@ class clsHistoria():
         stringsVacios    = codigo == '' or tipo == ''
         estaEnDb         = self.existeHistoria(codigo=codigo,idProducto=idProducto)
         existeProducto   = producto.count() > 0
-        longCharValido   = (len(codigo) <= 500) and (len(tipo) <= 500)
+        longCharValido   = (len(codigo) <= 500) and (len(tipo) <= 15)
         tieneLoops       = self.tieneLoops(idProducto,idPapa,codigo)
         
         esValido = (not stringsVacios) and (not estaEnDb) and existeProducto\

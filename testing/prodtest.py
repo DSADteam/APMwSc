@@ -148,7 +148,7 @@ class MdlTest(unittest.TestCase):
          
     def testModif3(self):
         string = "cualquiernombredos"
-        descripcion = "o"*500
+        descripcion = '"o"*500'
         escala = 'cualitativo'
         self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
         self.assertTrue(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
@@ -198,6 +198,13 @@ class MdlTest(unittest.TestCase):
     def testModif9(self):
         string = "unstring"
         descripcion = 'holas'
+        escala = None
+        self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
+        self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
+        
+    def testModif10(self):
+        string = None
+        descripcion = None
         escala = None
         self.prod.modificar(1,string, descripcion=descripcion, escala=escala)
         self.assertFalse(self.prod.existeProducto(nombre=string),"Error, no se encontro el producto")
