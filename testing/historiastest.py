@@ -19,7 +19,7 @@ class TestHistoria(unittest.TestCase):
 
         #Clase producto auxiliar para pruebas
         prod     = clsProducto(engine,sessionDB)
-        prod.insertar("ProductoPruebaHistoria","Descripcion prueba")
+        prod.insertar("ProductoPruebaHistoria","Descripcion prueba","cualitativo")
         self.prodId = prod.idProd("ProductoPruebaHistoria")
 
        
@@ -35,26 +35,27 @@ class TestHistoria(unittest.TestCase):
         accion          = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 500",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 500")
-
+        prioridad=1
         hCodigo   = "a" * 500
-        hTipo     = "Historia de test500"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        hTipo     = "Historia dst500"
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))    
     
     def testInsertar500SinAccion(self):
+        prioridad=1
         hCodigo   = "c" * 500
         hTipo     = "Historia de test 501"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
     
     def testInsertar501Codigo(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion prueba 501",self.prodId)
         idAccion = accion.obtenerId("Accion prueba 501")
-
+        prioridad=1
         hCodigo   = "b" * 501
         hTipo     = "Historia de test 501"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
 
@@ -62,10 +63,10 @@ class TestHistoria(unittest.TestCase):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion codigo vacio",self.prodId)
         idAccion = accion.obtenerId("Accion codigo vacio")
-
+        prioridad=1
         hCodigo = ''
         hTipo     = "Otro tipo de historia"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
 
@@ -73,53 +74,53 @@ class TestHistoria(unittest.TestCase):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para IdProductoNulo",self.prodId)
         idAccion = accion.obtenerId("Accion para IdProductoNulo")
-
+        prioridad="baja"
         his = clsHistoria()
         pIdProducto = None
         hCodigo  = 'Just Pepe'
         hTipo    = "Otro tipo de historia"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
     def testProductoInexistente(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para testProductoInexistente",self.prodId)
         idAccion = accion.obtenerId("Accion para testProductoInexistente")
-
+        prioridad=1
         his = clsHistoria()
         pIdProducto = 666
         hCodigo  = 'Just Pepe with product that doesnt exists'
         hTipo    = "The number of the beast"
-        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
     
     def testNumEnDescrip(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para testNumEnDescrip",self.prodId)
         idAccion = accion.obtenerId("Accion para testNumEnDescrip")
-
+        prioridad=1
         his = clsHistoria(engine,sessionDB)
         hCodigo = 234
         hTipo   = "So much tipe, and wow"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
     def testTwoHistsOneAct(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("Accion para compartir entre dos historias",self.prodId)
         idAccion = accion.obtenerId("Accion para compartir entre dos historias")
-
+        prioridad=1
         #Historia a agregar
         his = clsHistoria(engine,sessionDB)
         hCodigo = "Soy Historia 1 y pasare"
         hTipo   = "Tipo"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
         #Historia que falla al agregar
         hCodigo = "Soy Historia 2 y pasare tambien"
         hTipo   = "Tipo"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion)
+        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=idAccion,prioridad=prioridad)
         self.assertTrue(self.his.existeHistoria(codigo=hCodigo,idProducto=self.prodId))
 
 
@@ -127,34 +128,49 @@ class TestHistoria(unittest.TestCase):
 
     def testTodosVacios(self):
         his = clsHistoria(engine,sessionDB)
+        prioridad="alta"
         pIdProducto = None
         hCodigo = ''
         hTipo   = ''
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
     def testProdidVacioyDescrip500(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("testProdidVacioyDescrip500",self.prodId)
         idAccion = accion.obtenerId("testProdidVacioyDescrip500")
-
+        prioridad=1
         his = clsHistoria(engine,sessionDB)
         pIdProducto = None
         hCodigo     = 'El Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of Wall of TEXT of W'
         hTipo       = "Drai gual. yust anoder bric in de gual"
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
 
     def testCharEnIdyDecripNum(self):
         accion   = clsAccion(engine,sessionDB)
         accion.insertar("testCharEnIdyDecripNum",self.prodId)
         idAccion = accion.obtenerId("testCharEnIdyDecripNum")
-        
+        prioridad="media"
         his = clsHistoria(engine,sessionDB)
         pIdProducto = 'bruxw'
         hCodigo     = 345346
         hTipo       = 'el sue~o desorienta'
-        self.his.insertar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None)
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
+        
+    # Tests de modificar
+    def testCharEnIdyDecripNum2(self):
+        accion          = clsAccion(engine,sessionDB)
+        accion.insertar("testCharEnIdyDecripNum2",self.prodId)
+        idAccion = accion.obtenerId("testCharEnIdyDecripNum2")
+        prioridad=1
+        pIdProducto=12
+        hCodigo   = "yy" * 250
+        hTipo     = "Historia"
+        self.his.insertar(hCodigo,pIdProducto,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad)
+        prioridad2=21
+        self.his.modificar(hCodigo,self.prodId,idPapa=None,tipo=hTipo,idAccion=None,prioridad=prioridad2)
         self.assertFalse(self.his.existeHistoria(codigo=hCodigo,idProducto=pIdProducto))
         
     """
