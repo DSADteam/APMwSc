@@ -249,8 +249,7 @@ class clsProducto():
             tiposCorrectos = (type(nombre) is str) and (type(escala) is str) and\
                              ((type(descripcion) is str))
             formatoEscala  = (escala == "cualitativo" or escala == "cuantitativo")                
-            print("hola")
-            print (tiposCorrectos)
+            
             
             if (not descripcion):
                 descripcion==""
