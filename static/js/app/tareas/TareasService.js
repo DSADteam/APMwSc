@@ -1,35 +1,22 @@
-scrumModule.service('prodService', ['$q', '$http', function($q, $http) {
+scrumModule.service('tareasService', ['$q', '$http', function($q, $http) {
 
-    this.VProductos = function(args) {
-        if(typeof args == 'undefined') args={};
-        return $http({
-          url: 'prod/VProductos',
-          method: 'GET',
-          params: args
-        });
-    //    var res = {};
-    //    var deferred = $q.defer();
-    //    deferred.resolve(res);
-    //    return deferred.promise;
-    };
-
-    this.AModifProducto = function(fPila) {
+    this.ACrearTarea = function(fTarea) {
         return  $http({
-          url: "prod/AModifProducto",
-          data: fPila,
+          url: "tareas/ACrearTarea",
+          data: fTarea,
           method: 'POST',
         });
-    //    var labels = ["/VProductos", ];
+    //    var labels = ["/VHistoria", "/VCrearTarea", ];
     //    var res = labels[0];
     //    var deferred = $q.defer();
     //    deferred.resolve(res);
     //    return deferred.promise;
     };
 
-    this.VProducto = function(args) {
+    this.VCrearTarea = function(args) {
         if(typeof args == 'undefined') args={};
         return $http({
-          url: 'prod/VProducto',
+          url: 'tareas/VCrearTarea',
           method: 'GET',
           params: args
         });
@@ -39,23 +26,23 @@ scrumModule.service('prodService', ['$q', '$http', function($q, $http) {
     //    return deferred.promise;
     };
 
-    this.ACrearProducto = function(fPila) {
+    this.AModifTarea = function(fTarea) {
         return  $http({
-          url: "prod/ACrearProducto",
-          data: fPila,
+          url: "tareas/AModifTarea",
+          data: fTarea,
           method: 'POST',
         });
-    //    var labels = ["/VProductos", "/VCrearProducto", ];
+    //    var labels = ["/VHistoria", "/VCrearTarea", ];
     //    var res = labels[0];
     //    var deferred = $q.defer();
     //    deferred.resolve(res);
     //    return deferred.promise;
     };
 
-    this.VCrearProducto = function(args) {
+    this.VTarea = function(args) {
         if(typeof args == 'undefined') args={};
         return $http({
-          url: 'prod/VCrearProducto',
+          url: 'tareas/VTarea',
           method: 'GET',
           params: args
         });
@@ -65,4 +52,17 @@ scrumModule.service('prodService', ['$q', '$http', function($q, $http) {
     //    return deferred.promise;
     };
 
+    this.AElimTarea = function(args) {
+        if(typeof args == 'undefined') args={};
+        return $http({
+          url: 'tareas/AElimTarea',
+          method: 'GET',
+          params: args
+        });
+    //    var labels = ["/VHistoria", "/VTarea", ];
+    //    var res = labels[0];
+    //    var deferred = $q.defer();
+    //    deferred.resolve(res);
+    //    return deferred.promise;
+    };
 }]);

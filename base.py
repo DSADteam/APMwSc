@@ -255,6 +255,8 @@ from app.scrum.accion import accion
 app.register_blueprint(accion)
 from app.scrum.historias import historias
 app.register_blueprint(historias)
+from app.scrum.tareas import tareas
+app.register_blueprint(tareas)
 
 if __name__ == '__main__':
     app.config.update(
