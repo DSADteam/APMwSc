@@ -58,6 +58,13 @@ def VCrearProducto():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+    #Inicio de nueva inter faz
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
+    #fin nueva interfaz
+
     res['fPila_opcionesEscala'] = [
       {'key':1,'value':'Alta/Media/Baja'},
       {'key':2,'value':'Entre 1 y 20'}]
@@ -87,16 +94,20 @@ def AModifProducto():
     return json.dumps(res)
 
 
-
-
-
-
 @prod.route('/prod/VProducto')
 def VProducto():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    
+    #inicio nueva interfaz
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
+    #fin
+
     prd=clsProducto(engine=engine,session=sessionDB)
     
     idPila = int(request.args.get('idPila', 1))
@@ -143,7 +154,13 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
+    print("El usuario que entro fue " + session['usuario'])
+    #ini
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
+    #fin
 
     prd=clsProducto(engine=engine)
     res['data0'] = prd.listarProductos()

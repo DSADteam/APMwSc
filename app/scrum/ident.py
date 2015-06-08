@@ -28,6 +28,11 @@ def AIdentificar():
         res=results[0]
     else:
         res=results[3]
+
+    us = clsDBUser(engine,sessionDB)
+    session['usuario'] = us.obtenerNombre(params.get('usuario'))
+    print("Aquien encontre fue a! " + session['usuario']) 
+
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -64,6 +69,8 @@ def VLogin():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     
+    #Agregado en nueva version de interfaz
+    session.pop('usuario', None)
 
     #Action code ends here
     return json.dumps(res)
@@ -160,6 +167,17 @@ class clsDBUser():
                 out +=u.username+" "+u.password+" "+u.fullname+\
                 " "+u.email+" "+str(u.idActor)+'\n'
         return out
+
+    '''
+        Metodo obtenerNombre
+        Dado un usuario, busca su nombre asociado
+    '''
+    def obtenerNombre(self,username):
+        query = self.session.query(dbuser).filter(dbuser.username == username).first()
+        if query != None:
+            return query.fullname
+        else:
+            return ""
         
     ''' Metodo eliminar
         Elimina dentro de la base de datos a un usuario
