@@ -40,8 +40,6 @@ def ACrearAccion():
             session['actor'] = res['actor']
     return json.dumps(res)
 
-
-
 @accion.route('/accion/AModifAccion', methods=['POST'])
 def AModifAccion():
     #POST/PUT parameters
@@ -65,7 +63,32 @@ def AModifAccion():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@accion.route('/accion/AElimAccion')
+def AElimAccion():
+    print("Hola1")
+    #GET parameter
+    #params = request.get_json() #No se si es este
+    idAccion = request.args['idAccion'] #O con este funciona
+    results = [{'label':'/VProducto', 'msg':['Accion eliminada']}, {'label':'/VAccion', 'msg':['No se pudo eliminar esta acción']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
+    print("Hola2")
 
+    idAccion = params['idAccion']
+    idPila = session['idPila']
+
+    acc = clsAccion(session=sessionDB,engine=engine)
+    acc.eliminar(idAccion)
+    res['label'] = res['label'] + '/' + str(idPila)
+    print("Hola3")
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
 
 @accion.route('/accion/VAccion')
 def VAccion():
@@ -93,8 +116,6 @@ def VAccion():
 
     #Action code ends here
     return json.dumps(res)
-
-
 
 @accion.route('/accion/VCrearAccion')
 def VCrearAccion():
@@ -228,6 +249,18 @@ class clsAccion():
             return True
         else:
             return False
+    #Funcion que permite eliminar la accion
+    def eliminar(self,idAccion):
 
+        print("VOY A ELIMINAAAR")
+        result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
+        print(result)
+        if result:
+            print(result)
+            self.session.query(Accion).delete()
+            self.session.commit()
+            return True
+        else:
+            return False
 
 #Use case code ends here

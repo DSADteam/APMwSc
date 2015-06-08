@@ -39,7 +39,28 @@ def ACrearActor():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@actor.route('/actor/AElimActor')
+def AElimActor():
+    #GET parameter
+    idActor = request.args['idActor']
+    results = [{'label':'/VProducto', 'msg':['Actor eliminado']}, {'label':'/VActor', 'msg':['No se pudo eliminar este actor']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
 
+    idActor = params['idActor']
+    idPila = session['idPila']
+
+    act = clsActor(session=sessionDB,engine=engine)
+    act.eliminar(idActor)
+    res['label'] = res['label'] + '/' + str(idPila)
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
 
 @actor.route('/actor/AModifActor', methods=['POST'])
 def AModifActor():
@@ -249,4 +270,16 @@ class clsActor():
         else:
             return False
 
+    #Funcion que permite eliminar el actor
+    def eliminar(self,idActor):
+
+        result = self.session.query(Actor).filter(Actor.idActor == idActor)
+        print(result)
+        if result:
+            print(result)
+            self.session.query(Actor).delete()
+            self.session.commit()
+            return True
+        else:
+            return False
 #Use case code ends here

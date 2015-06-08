@@ -43,6 +43,29 @@ def ACrearObjetivo():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@objetivo.route('/objetivo/AElimObjetivo')
+def AElimObjetivo():
+    #GET parameter
+    idObjetivo = request.args['idObjetivo']
+    results = [{'label':'/VProducto', 'msg':['Objetivo eliminado']}, {'label':'/VObjetivo', 'msg':['No se pudo eliminar este objetivo']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
+
+    idObjetivo = params['idObjetivo']
+    idPila = session['idPila']
+
+    obj = clsObjetivo(session=sessionDB,engine=engine)
+    obj.eliminar(idObjetivo)
+    res['label'] = res['label'] + '/' + str(idPila)
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
+
 @objetivo.route('/objetivo/AModifObjetivo', methods=['POST'])
 def AModifObjetivo():
     #POST/PUT parameters
@@ -241,4 +264,17 @@ class clsObjetivo():
         else:
             return False
        
+    #Funcion que permite eliminar la accion
+    def eliminar(self,idObjetivo):
+
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        print(result)
+        if result:
+            print(result)
+            self.session.query(Objetivo).delete()
+            self.session.commit()
+            return True
+        else:
+            return False
+
 #Use case code ends here
