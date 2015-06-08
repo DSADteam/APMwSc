@@ -48,6 +48,9 @@ def AModifActor():
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
 
     idActor = params['idActor']
     
@@ -72,6 +75,11 @@ def VActor():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structur
+
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+
     act=clsActor(engine=engine,session=sessionDB)
 
 
@@ -91,6 +99,11 @@ def VCrearActor():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+      
 
 
     res['idPila'] = session['idPila']

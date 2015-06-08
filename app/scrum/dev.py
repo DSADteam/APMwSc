@@ -10,8 +10,10 @@ def VDesarrollador():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
-
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    
     #Action code ends here
     return json.dumps(res)
 

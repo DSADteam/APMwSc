@@ -71,7 +71,11 @@ def VCrearObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
+
     #session['idPila'] = request.args['idPila']
     res['idPila'] = session['idPila']
     res['fObjetivo_opcionesTransversalidad'] = [
@@ -89,6 +93,10 @@ def VObjetivo():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
 
     obj=clsObjetivo(engine=engine,session=sessionDB)
 

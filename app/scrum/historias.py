@@ -95,8 +95,13 @@ def VCrearHistoria():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
     
-    #Ejemplo de relleno de listas para selectrores
+    #Ejemplo de relleno de listas para selectores
     act=clsActor(engine=engine,session=sessionDB)
     acc=clsAccion(engine=engine,session=sessionDB)
     hist=clsHistoria(engine=engine,session=sessionDB)
@@ -145,6 +150,10 @@ def VHistoria():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
     params = request.get_json()
+
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
 
 
     #Ejemplo de relleno de listas para selectrores
@@ -220,6 +229,9 @@ def VHistorias():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
 
     #Datos de prueba
     his=clsHistoria(engine=engine,session=sessionDB)
@@ -247,7 +259,7 @@ def ACambiarPrioridades():
     for x in lista:
         idHistorias.append(x['idHistoria'])
         prioridades.append(x['prioridad'])
-        print("PASOOO ESTA PRIORIDAAAAAAAD" + str(x['prioridad']))
+        
     
     hist.modificarPrioridades(idHistorias,prioridades)
     res['label'] = res['label']+ "/"+str(session['idPila'])
@@ -268,6 +280,10 @@ def VPrioridades():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
 
     his=clsHistoria(engine=engine,session=sessionDB)
     res['idPila'] = session['idPila']

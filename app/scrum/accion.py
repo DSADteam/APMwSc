@@ -73,6 +73,12 @@ def VAccion():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
+
     acc=clsAccion(engine=engine,session=sessionDB)
     
     idAccion = request.args.get('idAccion', 1)
@@ -96,6 +102,10 @@ def VCrearAccion():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
+    if 'usuario' not in session:
+      res['logout'] = '/'
+      return json.dumps(res)
+    res['usuario'] = session['usuario']
 
     res['idPila'] = session['idPila']
 
