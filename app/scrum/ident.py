@@ -30,8 +30,8 @@ def AIdentificar():
         res=results[3]
 
     us = clsDBUser(engine,sessionDB)
-    session['usuario'] = us.obtenerNombre(params.get('usuario'))
-    print("Aquien encontre fue a! " + session['usuario']) 
+    nombre = us.obtenerNombre(params.get('usuario'))
+    session['usuario'] = {'nombre': nombre } 
 
     #Action code ends here
     if "actor" in res:

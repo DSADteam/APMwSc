@@ -100,7 +100,7 @@ def VProducto():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    
+
     #inicio nueva interfaz
     if 'usuario' not in session:
       res['logout'] = '/'
@@ -118,7 +118,7 @@ def VProducto():
     
     res['idPila'] = idPila
     session['idPila'] = int(idPila)   
-    print(session)
+    
 
     oActor    = clsActor(engine,sessionDB)
     oAccion   = clsAccion(engine,sessionDB)
@@ -154,7 +154,7 @@ def VProductos():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-    print("El usuario que entro fue " + session['usuario'])
+    
     #ini
     if 'usuario' not in session:
       res['logout'] = '/'
