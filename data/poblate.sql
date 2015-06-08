@@ -58,12 +58,12 @@ INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto
 INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que probamos la base de datos aprendemos2',2,'no transversal');
 INSERT INTO "Objetivos" (descripcion,"idProducto",transversal) VALUES ('En tanto que jejeps todos huehuehue2',2,'transversal');
 
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia1',1,3,'opcional',1);
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia2',1,2,'obligatoria',4);
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia3',1,1,'opcional',9);
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Podria escribir algo interesante y decir que todos tienen parciales esta semana y yo no :)',2,3,'obligatoria',15);
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Ellos estudian y yo hago esto D:',2,2,'opcional',12);
-INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Eso no me hace vaga o si?',2,1,'obligatoria',20);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia de pizza',1,3,'opcional',1);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historias de surf',1,2,'obligatoria',4);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historias de la abuelita piedrera',1,1,'opcional',9);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Historia super divertida',2,3,'obligatoria',15);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Todos trabajamos :)',2,2,'opcional',12);
+INSERT INTO "Historias" (codigo,"idProducto","idAccion",tipo,prioridad) VALUES ('Eso no me hace vaga o si? SI',2,1,'obligatoria',20);
 
 INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (1,1);
 INSERT INTO "ObjetivosHistorias" ("idHistoria","idObjetivo") VALUES (3,2);
@@ -103,3 +103,13 @@ INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (5,4);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (5,5);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,4);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,6);
+
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Ponerle peperoni a todo"    ',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Comprar combo de ser posible',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Surfear sin reglas'          ,2);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Esperar la ola'              ,2);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Hacer brownies felices'      ,3);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Tatuaje en la espalda como la abuela',3);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Comprar unicornios'          ,4);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Echar codigo como locos y sufrir',5);
+INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Ser vagos como M'            ,6);

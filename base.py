@@ -195,7 +195,7 @@ class Historia(db.Model):
     ''' 
 
     def __init__(self,codigo, idProducto,idAccion,tipo,prioridad,idHistoriaPadre=None):
-        self.codigo = codigo
+        self.codigo      = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         self.tipo        = tipo
@@ -238,6 +238,22 @@ class ActoresHistoria(db.Model):
         
         self.idHistoria = idHistoria
         self.idActor    = idActor
+
+class Tarea(db.Model):
+    
+    __tablename__ = 'Tareas'
+    idTarea       = db.Column(Integer, primary_key = True)
+    descripcion   = db.Column(String(500), unique = False, nullable=False)
+    idHistoria    = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
+
+    ''' Metodo init
+        Constructor de Tareas de una historia
+    ''' 
+    
+    def __init__(self,descripcion,idActor):
+        
+        self.descripcion = descripcion
+        self.idHistoria  = idHistoria
 
 from app.scrum.ident import ident
 app.register_blueprint(ident)

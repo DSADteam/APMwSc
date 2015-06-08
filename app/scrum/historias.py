@@ -217,7 +217,7 @@ def VHistoria():
             res['fHistoria_opcionesPrioridad'].append(item)
          
     session['idHistoria'] = request.args['idHistoria']
-
+    res['idHistoria']     = session['idHistoria']
     
 
     #Action code ends here
