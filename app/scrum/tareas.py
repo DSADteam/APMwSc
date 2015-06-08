@@ -107,11 +107,128 @@ def VTarea():
     return json.dumps(res)
 
 
-
-
-
 #Use case code starts here
+class clsTarea():
+    
+    def __init__(self,engine=None,session=None):
+        
+        self.engine  = engine
+        self.session = session
+
+    def insertar(self,idHistoria,descripcion):
+
+        tiposCorrectos = (type(descripcion) is str) and \
+                         (type(idHistoria)  is int)
+
+        #unless tipos correctos
+        if not tiposCorrectos:
+            return false
+
+        estaEnBd       = self.existeHistoria(descripcion=descripcion)
+        
+        longCharValido = (len(descripcion) <= 500)
+
+        if (not estaEnBd) and (longCharValido):
+            newObj = Tarea(descripcion,idHistoria)
+            self.session.add(newObj)
+            self.session.commit()
+            return True
+        else:
+            return False
 
 
+    ##Me quede por aqui
+    def existeHistoria(self,descripcion=None):
+        
+        if not(type(descripcion) is str):
+            return False
+        
+        if(descripcion!=None):
+            result = self.session.query(Objetivo).filter(Objetivo.descripcion == descripcion)
+        else:
+            return False
+        
+        return result.count() > 0
+
+
+    def mostrarObjetivo(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        if result!="":
+            for row in result:
+                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal}
+            else:
+                print("Empty query!")
+        return res
+
+    def listarObjetivos(self):
+        
+        res = []
+        result = self.engine.execute("select * from \"Objetivos\";")
+        if result!="":
+            for row in result:
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+            else:
+                print("Empty query!")
+                    
+    def listarObjetivosprod(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+            else:
+                print("Empty query!")
+        
+        return res
+
+    def listarObjetivosprodt(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                if row.transversal=='no transversal':
+                    res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+            else:
+                print("Empty query!")
+        
+        return res
+    
+    def borrarFilas(self):
+        
+        self.session.query(Objetivo).delete()
+        self.session.commit()
+
+    def getProdId(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        for row in result:
+            x=row.idObjetivo
+        return x
+    
+
+    #Funcion que permite actualizar la descripcion
+    def modificar(self,id=None,descripcion=None,trans=None):
+        
+        tipoid=(id!=None) and (type(id) is int) 
+        tipodesc= (type(descripcion) is str) 
+
+        tipotransv=(type(trans) is str)
+        
+        if tipoid and tipodesc and tipotransv and ((trans=="transversal") or (trans=="no transversal")):
+            if(len(descripcion)>500): 
+                return False
+            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
+                update({'descripcion' : descripcion })
+            self.session.commit()
+            
+            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
+                update({'transversal' : trans })
+            self.session.commit()
+            return True
+        else:
+            return False
+       
 #Use case code ends here
-
