@@ -1,7 +1,24 @@
 # -*- coding: utf-8 -*-
 from flask import request, session, Blueprint, json
 
+import sys
+import os
+dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+sys.path.append(dir)
+
+#Dependencias flask
+from flask import request, session, Blueprint, json
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.expression import text
+
 tareas = Blueprint('tareas', __name__)
+
+from base import *
+from app.scrum.historias import clsActor
+
+
 
 
 @tareas.route('/tareas/ACrearTarea', methods=['POST'])
@@ -124,7 +141,8 @@ class clsTarea():
         if not tiposCorrectos:
             return false
 
-        estaEnBd       = self.existeTarea(descripcion=descripcion)
+        #Dos tareas identicas de una historia no tiene sentido
+        estaEnBd       = self.existeTarea(descripcion,idHistoria)
         
         longCharValido = (len(descripcion) <= 500)
 
@@ -137,14 +155,15 @@ class clsTarea():
             return False
 
 
-    ##Me quede por aqui
-    def existeTarea(self,descripcion):
+    def existeTarea(self,descripcion,idHistoria):
         
-        if not(type(descripcion) is str):
+        if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
         
         if(descripcion!=None):
-            result = self.session.query(Objetivo).filter(Objetivo.descripcion == descripcion)
+            result = self.session.query(Tarea).\
+            filter(Tarea.descripcion == descripcion).\
+            filter(Tarea.idHistoria  == idHistoria)
         else:
             return False
         
@@ -155,16 +174,18 @@ class clsTarea():
         
         res = []
         #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
-        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
+        result = self.session.query(Objetivo).filter(Tarea.idHistoria  == idHistoria)
         if result!="":
             for row in result:
-                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+                #Conjeturas, no se que lleva esto en historias
+                res.append({'idHistoria':row.idHistoria,'descripcion':row.descripcion})
             else:
                 print("Empty query!")
         
         return res
 
-    
+    ##Me quede por aqui
+
     def borrarFilas(self):
         
         self.session.query(Objetivo).delete()
