@@ -124,7 +124,7 @@ class clsTarea():
         if not tiposCorrectos:
             return false
 
-        estaEnBd       = self.existeHistoria(descripcion=descripcion)
+        estaEnBd       = self.existeTarea(descripcion=descripcion)
         
         longCharValido = (len(descripcion) <= 500)
 
@@ -138,7 +138,7 @@ class clsTarea():
 
 
     ##Me quede por aqui
-    def existeHistoria(self,descripcion=None):
+    def existeTarea(self,descripcion):
         
         if not(type(descripcion) is str):
             return False
@@ -150,27 +150,8 @@ class clsTarea():
         
         return result.count() > 0
 
-
-    def mostrarObjetivo(self,idObjetivo):
-        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
-        if result!="":
-            for row in result:
-                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal}
-            else:
-                print("Empty query!")
-        return res
-
-    def listarObjetivos(self):
-        
-        res = []
-        result = self.engine.execute("select * from \"Objetivos\";")
-        if result!="":
-            for row in result:
-                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
-            else:
-                print("Empty query!")
                     
-    def listarObjetivosprod(self,idProducto):
+    def listarTareasHistoria(self,idHistoria):
         
         res = []
         #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
@@ -183,34 +164,15 @@ class clsTarea():
         
         return res
 
-    def listarObjetivosprodt(self,idProducto):
-        
-        res = []
-        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
-        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
-        if result!="":
-            for row in result:
-                if row.transversal=='no transversal':
-                    res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
-            else:
-                print("Empty query!")
-        
-        return res
     
     def borrarFilas(self):
         
         self.session.query(Objetivo).delete()
         self.session.commit()
 
-    def getProdId(self,idObjetivo):
-        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
-        for row in result:
-            x=row.idObjetivo
-        return x
-    
 
     #Funcion que permite actualizar la descripcion
-    def modificar(self,id=None,descripcion=None,trans=None):
+    def modificar(self,descripcion=None,idHistoria=None):
         
         tipoid=(id!=None) and (type(id) is int) 
         tipodesc= (type(descripcion) is str) 
@@ -232,3 +194,43 @@ class clsTarea():
             return False
        
 #Use case code ends here
+    """
+    ESTA VAINA NO LA NECESITAMOS
+    def mostrarObjetivo(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        if result!="":
+            for row in result:
+                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal}
+            else:
+                print("Empty query!")
+        return res
+
+    def listarTareas(self):
+        
+        res = []
+        result = self.engine.execute("select * from \"Objetivos\";")
+        if result!="":
+            for row in result:
+                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+            else:
+                print("Empty query!")
+    def listarObjetivosprodt(self,idProducto):
+        
+        res = []
+        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
+        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
+        if result!="":
+            for row in result:
+                if row.transversal=='no transversal':
+                    res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
+            else:
+                print("Empty query!")
+        
+        return res
+    def getProdId(self,idObjetivo):
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        for row in result:
+            x=row.idObjetivo
+        return x
+    
+    """
