@@ -20,6 +20,7 @@ from base import *
 from app.scrum.actor import clsActor
 from app.scrum.objetivo import clsObjetivo
 from app.scrum.accion import clsAccion
+from app.scrum.tareas import clsTarea
 
 @historias.route('/historias/ACrearHistoria', methods=['POST'])
 def ACrearHistoria():
@@ -33,12 +34,16 @@ def ACrearHistoria():
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
     y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila, prioridad = params['prioridad'])
-    idHistoria=his.obtId(params['codigo'], idPila)
-    his.asociarActores(params['actores'], idHistoria)
-    his.asociarObjetivos(params['objetivos'], idHistoria)
+    if not y:
+        res=results[1]
+    else:
+        idHistoria=his.obtId(params['codigo'], idPila)
+        his.asociarActores(params['actores'], idHistoria)
+        his.asociarObjetivos(params['objetivos'], idHistoria)
 
+    res['label'] = res['label'] + '/' + str(idPila)
     #Datos de prueba
-    res['label'] = res['label'] + '/1'
+    #res['label'] = res['label'] + '/1'
 
     #Action code ends here
     if "actor" in res:
@@ -59,11 +64,13 @@ def AModifHistoria():
     #Action code goes here, res should be a list with a label and a message
     idHistoria = int(session['idHistoria'])
 
-    session.pop("idHistoria", None)
+    #session.pop("idHistoria", None)
 
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
-    his.modificar(
+    print('MIRAAAME MIRAAAME')
+    print(params['super'])
+    x=his.modificar(
                 idHistoria=idHistoria,
                 codigo=params['codigo'],
                 idProducto=idPila,
@@ -71,13 +78,17 @@ def AModifHistoria():
                 idAccion=int(params['accion']),
                 prioridad=params['prioridad'],
                 idPapa=params['super'])
-    
-    his.asociarActores(params['actores'], idHistoria)
-    his.asociarObjetivos(params['objetivos'], idHistoria)
+    if not x:
+        res=results[1]
+        res['label'] = res['label'] + '/' + str(session['idHistoria'])
+    else:
+        res['label'] = res['label'] + '/' + str(session['idPila'])
+        his.asociarActores(params['actores'], idHistoria)
+        his.asociarObjetivos(params['objetivos'], idHistoria)
 
 
     #Datos de prueba    
-    res['label'] = res['label'] + '/' + str(idPila)
+    #res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
     if "actor" in res:
@@ -215,10 +226,14 @@ def VHistoria():
         for i in range(1,21):
             item = {'key':i,'value':i}
             res['fHistoria_opcionesPrioridad'].append(item)
+
+    tar=clsTarea(session=sessionDB,engine=engine)
+
+    res['data2'] = tar.listarTareasHistoria(int(request.args['idHistoria']))    
          
     session['idHistoria'] = request.args['idHistoria']
     res['idHistoria']     = session['idHistoria']
-    
+    session['codHistoria']= hist.obtCode(int(session['idHistoria']))    
 
     #Action code ends here
     return json.dumps(res)
@@ -428,7 +443,7 @@ class clsHistoria():
             update({'idProducto':idProducto})
         self.session.commit()
 
-        if (idPapa != None or idPapa != 0):
+        if (idPapa != None and idPapa != 0):
             self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
                 update({'idHistoriaPadre':idPapa})
             self.session.commit()
@@ -467,6 +482,14 @@ class clsHistoria():
         res  = res.filter(Historia.idProducto == idProducto)
         for i in res:
             return i.idHistoria
+
+    def obtCode(self,idHistoria=None):
+        if idHistoria==None:
+            return -1
+        
+        res  = self.session.query(Historia).filter(Historia.idHistoria == idHistoria)
+        for i in res:
+            return i.codigo
         
     def asociarActores(self,idActores=None,idHistoria=None):
         if idActores==[] or idHistoria==None or idActores==None:

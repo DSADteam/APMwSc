@@ -32,7 +32,9 @@ def ACrearObjetivo():
     transversalidad = "transversal" if params['transversal'] else "no transversal"
 
     obj=clsObjetivo(session=sessionDB, engine = engine)
-    obj.insertar(int(idPila),params['descripcion'],transversalidad)
+    x=obj.insertar(int(idPila),params['descripcion'],transversalidad)
+    if not x:
+        res=results[1]
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -54,8 +56,12 @@ def AModifObjetivo():
     transversalidad = "transversal" if params['transversal'] else "no transversal"
 
     obj=clsObjetivo(session=sessionDB,engine=engine)
-    obj.modificar(params['idObjetivo'],params['descripcion'], transversalidad)
-    res['label'] = res['label'] + '/' + str(session['idPila'])
+    x=obj.modificar(params['idObjetivo'],params['descripcion'], transversalidad)
+    if not x:
+        res=results[1]
+        res['label'] = res['label'] + '/' + str(params['idObjetivo'])
+    else:
+        res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
     if "actor" in res:

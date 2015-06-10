@@ -128,9 +128,9 @@ def VProducto():
 
     # Do you believe in magic?
     for x in pilas:
-        print('el magico numero: '+str(i))
+        #print('el magico numero: '+str(i))
         i+=1
-        print(x)
+        #print(x)
         if x['idPila']==idPila:
             res['fPila'] = x
             break

@@ -28,7 +28,10 @@ def ACrearActor():
     idPila = str(session['idPila'])
 
     act=clsActor(session=sessionDB,engine=engine)
-    act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(idPila))
+    print(params['nombre']+params['descripcion']+'wiiiiiiiiiiiiiiiiiii')
+    x=act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(idPila))
+    if not x:
+        res=results[1]
     res['label'] = res['label'] + '/' + idPila
 
     #Action code ends here
@@ -55,9 +58,12 @@ def AModifActor():
     idActor = params['idActor']
     
     act=clsActor(session=sessionDB,engine=engine)
-    act.modificar(idActor,params['nombre'],params['descripcion'])
-    
-    res['label'] = res['label'] + '/' + str(session['idPila'])
+    x=act.modificar(idActor,params['nombre'],params['descripcion'])
+    if not x:
+        res=results[1]
+        res['label'] = res['label'] + '/' + str(params['idActor'])
+    else:
+        res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
     if "actor" in res:

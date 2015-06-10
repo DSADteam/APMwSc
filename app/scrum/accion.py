@@ -27,8 +27,9 @@ def ACrearAccion():
     idPila = session['idPila']
 
     acc=clsAccion(session=sessionDB,engine=engine)
-    acc.insertar(descripcion=params['descripcion'],idProducto=idPila)
-    
+    x=acc.insertar(descripcion=params['descripcion'],idProducto=idPila)
+    if not x:
+        res=results[1]
     res['label'] = res['label'] + '/' + str(idPila)
     res['idPila'] = idPila
 
@@ -54,8 +55,12 @@ def AModifAccion():
     idPila = session['idPila']
 
     acc=clsAccion(session=sessionDB,engine=engine)
-    paso = acc.modificar(idAccion,params['descripcion'])
-    res['label'] = res['label'] + '/' + str(idPila)
+    x = acc.modificar(idAccion,params['descripcion'])
+    if not x:
+        res=results[1]
+        res['label'] = res['label'] + '/' + str(params['idAccion'])
+    else:
+        res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
     if "actor" in res:

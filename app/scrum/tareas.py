@@ -28,10 +28,16 @@ def ACrearTarea():
     results = [{'label':'/VHistoria', 'msg':['Tarea creada']}, {'label':'/VCrearTarea', 'msg':['No se pudo crear tarea.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    print('Bruh, here im bitttchhhhhhhhhhhhhhhhhh')
+    idHistoria = int(request.args['idHistoria'])
 
-    idHistoria = 2
-    res['label'] = res['label'] + '/' + repr(idHistoria)
-
+    tar=clsTarea(session=sessionDB, engine = engine)
+    x=tar.insertar(idHistoria,params['descripcion'])
+    if not x:
+        res=results[1]
+    res['label'] = res['label'] + '/' + str(idHistoria)
+    print('VIVE EN UNA PINA DEBAJO DEL MAR')
+    print(res)
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -72,7 +78,6 @@ def AModifTarea():
 
     idHistoria = 2
     res['label'] = res['label'] + '/' + repr(idHistoria)
-
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -86,17 +91,24 @@ def AModifTarea():
 @tareas.route('/tareas/VCrearTarea')
 def VCrearTarea():
     #GET parameter
-    idHistoria = request.args['idHistoria']
+    idHistoria = int(request.args['idHistoria'])
     res = {}
     if "actor" in session:
-        res['actor']=session['actor']
+        res['actor']=session['actor']   
     #Action code goes here, res should be a JSON structure
 
     if 'usuario' not in session:
       res['logout'] = '/'
       return json.dumps(res)
-    res['usuario'] = session['usuario']
-    res['codHistoria'] = 'H01'
+    res['usuario'] = session['usuario']['nombre']
+    res['idHistoria']=idHistoria
+    aux=sessionDB.query(Historia).filter(Historia.idHistoria == idHistoria)
+    for u in aux:
+        aux=u.codigo
+        break
+    res['codHistoria'] = aux
+    print('ASDASDASDASDA')
+    print(res)
 
 
     #Action code ends here
@@ -117,9 +129,11 @@ def VTarea():
       res['logout'] = '/'
       return json.dumps(res)
     res['usuario'] = session['usuario']
-    res['codHistoria'] = 'H01'
-
-
+    res['codHistoria'] = session['codHistoria']
+    tat=clsTarea(session=sessionDB,engine=engine)
+    res['fTarea']=tat.mostraTarea(idTarea)
+    print('MIRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    print(session)
     #Action code ends here
     return json.dumps(res)
 
@@ -154,6 +168,18 @@ class clsTarea():
         else:
             return False
 
+    def getDescript(self,idTarea):
+        
+        if not((type(idTarea) is int)):
+            return False
+        
+        if(idTarea!=None):
+            result = self.session.query(Tarea).\
+            filter(Tarea.idTarea == idTarea)
+        else:
+            return False
+        for i in result:
+            return i.descripcion
 
     def existeTarea(self,descripcion,idHistoria):
         
@@ -174,11 +200,11 @@ class clsTarea():
         
         res = []
         #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
-        result = self.session.query(Objetivo).filter(Tarea.idHistoria  == idHistoria)
+        result = self.session.query(Tarea).filter(Tarea.idHistoria  == idHistoria)
         if result!="":
             for row in result:
                 #Conjeturas, no se que lleva esto en historias
-                res.append({'idHistoria':row.idHistoria,'descripcion':row.descripcion})
+                res.append({'idTarea':row.idTarea,'descripcion':row.descripcion})
             else:
                 print("Empty query!")
         
@@ -215,17 +241,17 @@ class clsTarea():
             return False
        
 #Use case code ends here
-    """
-    ESTA VAINA NO LA NECESITAMOS
-    def mostrarObjetivo(self,idObjetivo):
-        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+    def mostraTarea(self,idTarea):
+        result = self.session.query(Tarea).filter(Tarea.idTarea == idTarea)
         if result!="":
             for row in result:
-                res = {'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal}
+                res = {'idTarea':row.idTarea,'descripcion':row.descripcion}
             else:
                 print("Empty query!")
         return res
 
+    """
+    ESTA VAINA NO LA NECESITAMOS
     def listarTareas(self):
         
         res = []
