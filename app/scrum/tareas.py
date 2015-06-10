@@ -29,12 +29,16 @@ def ACrearTarea():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     print('Bruh, here im bitttchhhhhhhhhhhhhhhhhh')
-    idHistoria = int(request.args['idHistoria'])
+    print(params)
+    idHistoria = int(session['idHistoria'])
 
     tar=clsTarea(session=sessionDB, engine = engine)
-    x=tar.insertar(idHistoria,params['descripcion'])
+    x=tar.borrarTarea(params['idTarea'])
     if not x:
         res=results[1]
+    else:
+        session.pop('idHistoria',None)
+        session.pop('idTarea',None)
     res['label'] = res['label'] + '/' + str(idHistoria)
     print('VIVE EN UNA PINA DEBAJO DEL MAR')
     print(res)
@@ -56,7 +60,18 @@ def AElimTarea():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    res['label'] = res['label'] + '/1'
+    print('AAAAAAAAAAAAAAA')
+    print(params)
+    idHistoria = int(params['idHistoria'])
+    res['label'] = res['label'] + '/' + repr(idHistoria)
+
+    tat=clsTarea(session=sessionDB,engine=engine)
+    x=tat.modificar(params['idTarea'],params['descripcion'])
+    if not x:
+        res=results[1]
+        res['label'] = res['label'] + '/' + str(params['idTarea'])
+    else:
+        res['label'] = res['label']
 
     #Action code ends here
     if "actor" in res:
@@ -72,12 +87,21 @@ def AElimTarea():
 def AModifTarea():
     #POST/PUT parameters
     params = request.get_json()
-    results = [{'label':'/VHistoria', 'msg':['Tarea modificada']}, {'label':'/VCrearTarea', 'msg':['No se pudo modificar esta tarea.']}, ]
+    results = [{'label':'/VHistoria', 'msg':['Tarea modificada']}, {'label':'/VTarea', 'msg':['No se pudo modificar esta tarea.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
-    idHistoria = 2
+    print('HOOOOOOOOOOOOOOOOOOOOOOOOOLIS')
+    print(params)
+    idHistoria = params['idHistoria']
     res['label'] = res['label'] + '/' + repr(idHistoria)
+
+    tat=clsTarea(session=sessionDB,engine=engine)
+    x=tat.modificar(params['idTarea'],params['descripcion'])
+    if not x:
+        res=results[1]
+        res['label'] = res['label'] + '/' + str(params['idTarea'])
+    else:
+        res['label'] = res['label']
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -110,7 +134,7 @@ def VCrearTarea():
     print('ASDASDASDASDA')
     print(res)
 
-
+    session['idHistoria']=idHistoria
     #Action code ends here
     return json.dumps(res)
 
@@ -153,13 +177,13 @@ class clsTarea():
 
         #unless tipos correctos
         if not tiposCorrectos:
-            return false
+            return False
 
         #Dos tareas identicas de una historia no tiene sentido
         estaEnBd       = self.existeTarea(descripcion,idHistoria)
         
         longCharValido = (len(descripcion) <= 500)
-
+        print('holavale')
         if (not estaEnBd) and (longCharValido):
             newObj = Tarea(descripcion,idHistoria)
             self.session.add(newObj)
@@ -185,7 +209,7 @@ class clsTarea():
         
         if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
-        
+        print('holavale1')
         if(descripcion!=None):
             result = self.session.query(Tarea).\
             filter(Tarea.descripcion == descripcion).\
@@ -212,40 +236,36 @@ class clsTarea():
 
     ##Me quede por aqui
 
-    def borrarFilas(self):
+    def borrarTarea(self,idTarea=None):
         
-        self.session.query(Objetivo).delete()
+        self.session.query(Tarea).filter(Tarea.idTarea  == idTarea).delete()
         self.session.commit()
 
 
     #Funcion que permite actualizar la descripcion
-    def modificar(self,descripcion=None,idHistoria=None):
+    def modificar(self,idTarea=None,descripcion=None):
         
-        tipoid=(id!=None) and (type(id) is int) 
+        tipoid=(idTarea!=None) and (type(idTarea) is int) 
         tipodesc= (type(descripcion) is str) 
 
-        tipotransv=(type(trans) is str)
-        
-        if tipoid and tipodesc and tipotransv and ((trans=="transversal") or (trans=="no transversal")):
-            if(len(descripcion)>500): 
-                return False
-            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
-                update({'descripcion' : descripcion })
-            self.session.commit()
-            
-            self.session.query(Objetivo).filter(Objetivo.idObjetivo == id).\
-                update({'transversal' : trans })
-            self.session.commit()
-            return True
-        else:
+        if not (tipoid and tipodesc):
             return False
-       
+        
+        if(len(descripcion)>500): 
+            return False
+
+        self.session.query(Tarea).filter(Tarea.idTarea == idTarea).\
+            update({'descripcion' : descripcion })
+        self.session.commit()
+        return True
+
+
 #Use case code ends here
     def mostraTarea(self,idTarea):
         result = self.session.query(Tarea).filter(Tarea.idTarea == idTarea)
         if result!="":
             for row in result:
-                res = {'idTarea':row.idTarea,'descripcion':row.descripcion}
+                res = {'idTarea':row.idTarea,'descripcion':row.descripcion,'idHistoria':row.idHistoria}
             else:
                 print("Empty query!")
         return res

@@ -6,9 +6,9 @@ read -p "Introduzca mensaje de commit: " mensaje;
 
 git commit -a -m "\""$mesaje"\"";
 
-select ramitax in "NabJav" "MegCris" "RobSam" "Desarrollo" "master";
+select ramitax in "Tareas" "Eliminar" "NabJav" "MegCris" "RobSam" "Desarrollo" "master";
 do
-    case $ramitax in "NabJav"|"MegCris"|"RobSam"|"Desarrollo"|"master")
+    case $ramitax in "Tareas" | "Eliminar" | "NabJav"|"MegCris"|"RobSam"|"Desarrollo"|"master")
 	echo $ramitax;
 	break;
     esac

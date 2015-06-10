@@ -250,7 +250,7 @@ class Tarea(db.Model):
         Constructor de Tareas de una historia
     ''' 
     
-    def __init__(self,descripcion,idActor):
+    def __init__(self,descripcion,idHistoria):
         
         self.descripcion = descripcion
         self.idHistoria  = idHistoria
