@@ -24,7 +24,6 @@ def ACrearActor():
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
     res = results[0]
 
-
     idPila = str(session['idPila'])
 
     act=clsActor(session=sessionDB,engine=engine)
@@ -42,12 +41,11 @@ def ACrearActor():
 @actor.route('/actor/AElimActor')
 def AElimActor():
     #GET parameter
-    idActor = request.args['idActor']
     results = [{'label':'/VProducto', 'msg':['Actor eliminado']}, {'label':'/VActor', 'msg':['No se pudo eliminar este actor']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    idActor = params['idActor']
+    idActor = session['idActor']
     idPila = session['idPila']
 
     act = clsActor(session=sessionDB,engine=engine)
@@ -104,10 +102,10 @@ def VActor():
     act=clsActor(engine=engine,session=sessionDB)
 
 
-    idActor        = request.args.get('idActor', 1)
-    res['idActor'] = idActor
-    res['fActor']  = act.mostrarActor(idActor)
-    res['idPila']  = session['idPila']
+    idActor            = request.args.get('idActor', 1)
+    res['fActor']      = act.mostrarActor(idActor)
+    res['idPila']      = session['idPila']
+    session['idActor'] = idActor
 
     #Action code ends here
     return json.dumps(res)
@@ -273,12 +271,10 @@ class clsActor():
     #Funcion que permite eliminar el actor
     def eliminar(self,idActor):
 
-        result = self.session.query(Actor).filter(Actor.idActor == idActor)
-        print(result)
+        self.session.query(ActoresHistoria).filter(ActoresHistoria.idActor == idActor).delete()
+
+        result = self.session.query(Actor).filter(Actor.idActor == idActor).delete()
         if result:
-            print(result)
-            self.session.query(Actor).delete()
-            self.session.commit()
             return True
         else:
             return False

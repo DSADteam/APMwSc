@@ -50,12 +50,11 @@ def ACrearHistoria():
 @historias.route('/historias/AElimHistoria')
 def AElimHistoria():
     #GET parameter
-    idHistoria = request.args['idHistoria']
     results = [{'label':'/VHistorias', 'msg':['Historia eliminada']}, {'label':'/VHistoria', 'msg':['No se pudo eliminar esta historia']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    idHistoria = params['idHistoria']
+    idHistoria = session['idHistoria']
     idPila = session['idPila']
 
     his = clsHistoria(session=sessionDB,engine=engine)
@@ -643,12 +642,20 @@ class clsHistoria():
     #Funcion que permite eliminar la historia
     def eliminar(self,idHistoria):
 
-        result = self.session.query(Historia).filter(Historia.idHistoria == idHistoria)
-        print(result)
+        # Desasociando viejos
+        res  = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
+        res.delete()
+        self.session.commit()
+
+        # Desasociando viejos
+        res  = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
+        res.delete()
+        self.session.commit()
+
+        self.session.query(Tarea).filter(Tarea.idHistoria == idHistoria).delete()
+
+        result = self.session.query(Historia).filter(Historia.idHistoria == idHistoria).delete()
         if result:
-            print(result)
-            self.session.query(Historia).delete()
-            self.session.commit()
             return True
         else:
             return False

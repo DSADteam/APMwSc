@@ -65,22 +65,17 @@ def AModifAccion():
 
 @accion.route('/accion/AElimAccion')
 def AElimAccion():
-    print("Hola1")
     #GET parameter
-    #params = request.get_json() #No se si es este
-    idAccion = request.args['idAccion'] #O con este funciona
     results = [{'label':'/VProducto', 'msg':['Accion eliminada']}, {'label':'/VAccion', 'msg':['No se pudo eliminar esta acción']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    print("Hola2")
 
-    idAccion = params['idAccion']
+    idAccion = session['idAccion']
     idPila = session['idPila']
 
     acc = clsAccion(session=sessionDB,engine=engine)
     acc.eliminar(idAccion)
     res['label'] = res['label'] + '/' + str(idPila)
-    print("Hola3")
 
     #Action code ends here
     if "actor" in res:
@@ -104,12 +99,10 @@ def VAccion():
 
     acc=clsAccion(engine=engine,session=sessionDB)
     
-    idAccion = request.args.get('idAccion', 1)
-    
-    #pilas = acc.mostrarAccion(idAccion)
-    res['fAccion'] = acc.mostrarAccion(int(idAccion))
-    #res['fAccion'] = pilas[idPila-1]
-    res['idPila']  = session['idPila']
+    idAccion            = request.args.get('idAccion', 1)
+    res['fAccion']      = acc.mostrarAccion(int(idAccion))
+    res['idPila']       = session['idPila']
+    session['idAccion'] = idAccion
     
     
     #idAccion = idPila
@@ -252,13 +245,25 @@ class clsAccion():
     #Funcion que permite eliminar la accion
     def eliminar(self,idAccion):
 
-        print("VOY A ELIMINAAAR")
-        result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
-        print(result)
-        if result:
-            print(result)
-            self.session.query(Accion).delete()
+        result = self.session.query(Historia).filter(Historia.idAccion == idAccion)
+
+        for i in result:
+
+            idHistoria = i.idHistoria
+            # Desasociando viejos
+            res  = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
+            res.delete()
             self.session.commit()
+
+            # Desasociando viejos
+            res  = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
+            res.delete()
+            self.session.commit()
+
+            self.session.query(Historia).filter(Historia.idHistoria == idHistoria).delete()
+
+        result = self.session.query(Accion).filter(Accion.idAccion == idAccion).delete()
+        if result:
             return True
         else:
             return False
