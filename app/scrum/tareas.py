@@ -28,20 +28,21 @@ def ACrearTarea():
     results = [{'label':'/VHistoria', 'msg':['Tarea creada']}, {'label':'/VCrearTarea', 'msg':['No se pudo crear tarea.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    print('Bruh, here im bitttchhhhhhhhhhhhhhhhhh')
-    print(params)
+    
     idHistoria = int(session['idHistoria'])
+    print(idHistoria)
 
     tar=clsTarea(session=sessionDB, engine = engine)
-    x=tar.borrarTarea(params['idTarea'])
+    x=tar.insertar(idHistoria,params['descripcion'])
+    
     if not x:
         res=results[1]
     else:
         session.pop('idHistoria',None)
         session.pop('idTarea',None)
+    
     res['label'] = res['label'] + '/' + str(idHistoria)
-    print('VIVE EN UNA PINA DEBAJO DEL MAR')
-    print(res)
+    
     #Action code ends here
     if "actor" in res:
         if res['actor'] is None:
@@ -60,18 +61,19 @@ def AElimTarea():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-    print('AAAAAAAAAAAAAAA')
-    print(params)
-    idHistoria = int(params['idHistoria'])
-    res['label'] = res['label'] + '/' + repr(idHistoria)
 
-    tat=clsTarea(session=sessionDB,engine=engine)
-    x=tat.modificar(params['idTarea'],params['descripcion'])
+
+    tar=clsTarea(session=sessionDB, engine = engine)
+    x=tar.borrarTarea(int(session['idTarea']))
+    
     if not x:
         res=results[1]
-        res['label'] = res['label'] + '/' + str(params['idTarea'])
     else:
-        res['label'] = res['label']
+        session.pop('idTarea',None)
+    
+    res['label'] = res['label'] + '/' + str(session['idHistoria'])
+    print('VIVE EN UNA PINA DEBAJO DEL MAR')
+    print(res)
 
     #Action code ends here
     if "actor" in res:
@@ -90,8 +92,7 @@ def AModifTarea():
     results = [{'label':'/VHistoria', 'msg':['Tarea modificada']}, {'label':'/VTarea', 'msg':['No se pudo modificar esta tarea.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    print('HOOOOOOOOOOOOOOOOOOOOOOOOOLIS')
-    print(params)
+    
     idHistoria = params['idHistoria']
     res['label'] = res['label'] + '/' + repr(idHistoria)
 
@@ -148,16 +149,17 @@ def VTarea():
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
-
+     
     if 'usuario' not in session:
       res['logout'] = '/'
       return json.dumps(res)
     res['usuario'] = session['usuario']
     res['codHistoria'] = session['codHistoria']
     tat=clsTarea(session=sessionDB,engine=engine)
-    res['fTarea']=tat.mostraTarea(idTarea)
-    print('MIRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-    print(session)
+    res['fTarea']  = tat.mostraTarea(idTarea)
+    session['idTarea'] = idTarea
+
+    
     #Action code ends here
     return json.dumps(res)
 
@@ -183,7 +185,7 @@ class clsTarea():
         estaEnBd       = self.existeTarea(descripcion,idHistoria)
         
         longCharValido = (len(descripcion) <= 500)
-        print('holavale')
+        
         if (not estaEnBd) and (longCharValido):
             newObj = Tarea(descripcion,idHistoria)
             self.session.add(newObj)
@@ -209,7 +211,7 @@ class clsTarea():
         
         if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
-        print('holavale1')
+        
         if(descripcion!=None):
             result = self.session.query(Tarea).\
             filter(Tarea.descripcion == descripcion).\
@@ -219,11 +221,21 @@ class clsTarea():
         
         return result.count() > 0
 
+    def existeIdTarea(self,idHistoria):
+        if not((type(idHistoria) is int)) :
+            return False
+        
+        
+        result = self.session.query(Tarea).\
+        filter(Tarea.idHistoria == idHistoria)
+        
+        
+        return result.count() > 0
+
                     
     def listarTareasHistoria(self,idHistoria):
         
         res = []
-        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
         result = self.session.query(Tarea).filter(Tarea.idHistoria  == idHistoria)
         if result!="":
             for row in result:
@@ -234,12 +246,22 @@ class clsTarea():
         
         return res
 
-    ##Me quede por aqui
 
     def borrarTarea(self,idTarea=None):
         
-        self.session.query(Tarea).filter(Tarea.idTarea  == idTarea).delete()
-        self.session.commit()
+        if not(type(idTarea) is int):
+            return False
+
+        print("Voy a reir")
+        
+        if (self.existeIdTarea(idTarea)):
+            self.session.query(Tarea).filter(Tarea.idTarea  == idTarea).delete()
+            self.session.commit()
+            print("Voy a bailar")
+            return True
+        else:
+            print("mori vivir lalalaa")
+            return False
 
 
     #Funcion que permite actualizar la descripcion
@@ -260,9 +282,10 @@ class clsTarea():
         return True
 
 
-#Use case code ends here
+    #Use case code ends here
     def mostraTarea(self,idTarea):
         result = self.session.query(Tarea).filter(Tarea.idTarea == idTarea)
+        res = {}
         if result!="":
             for row in result:
                 res = {'idTarea':row.idTarea,'descripcion':row.descripcion,'idHistoria':row.idHistoria}
@@ -270,34 +293,3 @@ class clsTarea():
                 print("Empty query!")
         return res
 
-    """
-    ESTA VAINA NO LA NECESITAMOS
-    def listarTareas(self):
-        
-        res = []
-        result = self.engine.execute("select * from \"Objetivos\";")
-        if result!="":
-            for row in result:
-                res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
-            else:
-                print("Empty query!")
-    def listarObjetivosprodt(self,idProducto):
-        
-        res = []
-        #result = self.engine.execute("select * from \"Objetivos\" where idProducto= "+str(idProducto)+" ;")
-        result = self.session.query(Objetivo).filter(Objetivo.idProducto == idProducto)
-        if result!="":
-            for row in result:
-                if row.transversal=='no transversal':
-                    res.append({'idObjetivo':row.idObjetivo,'descripcion':row.descripcion, 'transversal':row.transversal})
-            else:
-                print("Empty query!")
-        
-        return res
-    def getProdId(self,idObjetivo):
-        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
-        for row in result:
-            x=row.idObjetivo
-        return x
-    
-    """
