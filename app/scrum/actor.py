@@ -24,7 +24,6 @@ def ACrearActor():
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
     res = results[0]
 
-
     idPila = str(session['idPila'])
 
     act=clsActor(session=sessionDB,engine=engine)
@@ -42,7 +41,27 @@ def ACrearActor():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@actor.route('/actor/AElimActor')
+def AElimActor():
+    #GET parameter
+    results = [{'label':'/VProducto', 'msg':['Actor eliminado']}, {'label':'/VActor', 'msg':['No se pudo eliminar este actor']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
 
+    idActor = session['idActor']
+    idPila = session['idPila']
+
+    act = clsActor(session=sessionDB,engine=engine)
+    act.eliminar(idActor)
+    res['label'] = res['label'] + '/' + str(idPila)
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
 
 @actor.route('/actor/AModifActor', methods=['POST'])
 def AModifActor():
@@ -89,10 +108,10 @@ def VActor():
     act=clsActor(engine=engine,session=sessionDB)
 
 
-    idActor        = request.args.get('idActor', 1)
-    res['idActor'] = idActor
-    res['fActor']  = act.mostrarActor(idActor)
-    res['idPila']  = session['idPila']
+    idActor            = request.args.get('idActor', 1)
+    res['fActor']      = act.mostrarActor(idActor)
+    res['idPila']      = session['idPila']
+    session['idActor'] = idActor
 
     #Action code ends here
     return json.dumps(res)
@@ -255,4 +274,14 @@ class clsActor():
         else:
             return False
 
+    #Funcion que permite eliminar el actor
+    def eliminar(self,idActor):
+
+        self.session.query(ActoresHistoria).filter(ActoresHistoria.idActor == idActor).delete()
+
+        result = self.session.query(Actor).filter(Actor.idActor == idActor).delete()
+        if result:
+            return True
+        else:
+            return False
 #Use case code ends here

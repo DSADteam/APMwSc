@@ -30,7 +30,6 @@ def ACrearHistoria():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
-
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
     y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila, prioridad = params['prioridad'])
@@ -53,7 +52,27 @@ def ACrearHistoria():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@historias.route('/historias/AElimHistoria')
+def AElimHistoria():
+    #GET parameter
+    results = [{'label':'/VHistorias', 'msg':['Historia eliminada']}, {'label':'/VHistoria', 'msg':['No se pudo eliminar esta historia']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
 
+    idHistoria = session['idHistoria']
+    idPila = session['idPila']
+
+    his = clsHistoria(session=sessionDB,engine=engine)
+    his.eliminar(idHistoria)
+    res['label'] = res['label'] + '/' + str(idPila)
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
 
 @historias.route('/historias/AModifHistoria', methods=['POST'])
 def AModifHistoria():
@@ -86,7 +105,6 @@ def AModifHistoria():
         his.asociarActores(params['actores'], idHistoria)
         his.asociarObjetivos(params['objetivos'], idHistoria)
 
-
     #Datos de prueba    
     #res['label'] = res['label'] + '/' + str(idPila)
 
@@ -97,8 +115,6 @@ def AModifHistoria():
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
-
-
 
 @historias.route('/historias/VCrearHistoria')
 def VCrearHistoria():
@@ -148,11 +164,8 @@ def VCrearHistoria():
     res['fHistoria_opcionesPrioridad'] = hist.listarPrioridades(session['idPila'])
     res['fHistoria'] = {'super':0}
     
-
     #Action code ends here
     return json.dumps(res)
-
-
 
 @historias.route('/historias/VHistoria')
 def VHistoria():
@@ -166,7 +179,6 @@ def VHistoria():
       res['logout'] = '/'
       return json.dumps(res)
 
-
     #Ejemplo de relleno de listas para selectrores
     act=clsActor(engine=engine,session=sessionDB)
     acc=clsAccion(engine=engine,session=sessionDB)
@@ -177,7 +189,6 @@ def VHistoria():
 
     oProd = clsProducto(engine,sessionDB)
 
-    
     aux=act.listarActoresprod(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idActor')
@@ -190,13 +201,11 @@ def VHistoria():
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesAcciones'] = aux
 
-
     aux=obj.listarObjetivosprodt(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idObjetivo')
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesObjetivos'] = aux
-
 
     aux=hist.listarHistoriasprod(int(session['idPila']))
 
@@ -232,8 +241,10 @@ def VHistoria():
     res['data2'] = tar.listarTareasHistoria(int(request.args['idHistoria']))    
          
     session['idHistoria'] = request.args['idHistoria']
+
     res['idHistoria']     = session['idHistoria']
     session['codHistoria']= hist.obtCode(int(session['idHistoria']))    
+
 
     #Action code ends here
     return json.dumps(res)
@@ -253,7 +264,6 @@ def VHistorias():
     res['idPila'] = session['idPila']
 
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
-    
     
     #Action code ends here
     return json.dumps(res)
@@ -275,7 +285,6 @@ def ACambiarPrioridades():
         idHistorias.append(x['idHistoria'])
         prioridades.append(x['prioridad'])
         
-    
     hist.modificarPrioridades(idHistorias,prioridades)
     res['label'] = res['label']+ "/"+str(session['idPila'])
 
@@ -314,8 +323,6 @@ def VPrioridades():
     #Action code ends here
     return json.dumps(res)
 
-
-
 #Use case code starts here
 
 class clsHistoria():
@@ -326,7 +333,6 @@ class clsHistoria():
         self.session = session
      
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
-
 
         #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
@@ -341,12 +347,10 @@ class clsHistoria():
                          (type(idPapa)     is int  or   idPapa   == None) and \
                          (type(prioridad)     is int or str)    
         
-        
         if tiposCorrectos:
             pass
         else:
             return False
-        
 
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
 
@@ -410,12 +414,10 @@ class clsHistoria():
                          (type(idPapa)     is int  or   idPapa   == None) and \
                          (type(prioridad)     is int or str)    
         
-        
         if tiposCorrectos:
             pass
         else:
             return False
-        
 
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
 
@@ -429,7 +431,6 @@ class clsHistoria():
         
         esValido = (not stringsVacios) and (not estaEnDb) and existeProducto\
                     and longCharValido and (not tieneLoops) and rangoVal
-        
         
         self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
              update({'idHistoria' : idHistoria })
@@ -471,8 +472,6 @@ class clsHistoria():
         self.session.commit()
 
         return True
-
-
         
     def obtId(self,codigo=None,idProducto=None):
         if codigo==None or idProducto==None:
@@ -638,12 +637,6 @@ class clsHistoria():
                     elif(i < objetivosAsoc.count()-2):
                         enunciado += ", "
                     i+=1
-
-
-            # res.append({'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':row.prioridad})
-
-
-
             
             prioridad=row.prioridad
 
@@ -654,9 +647,7 @@ class clsHistoria():
                     prioridad='Media'
                 else:
                     prioridad='Baja'
-
-
-            
+           
             rexaux={'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad}
             orden.append((row.prioridad,rexaux))
 
@@ -675,16 +666,25 @@ class clsHistoria():
         self.session.query(Historia).delete()
         self.session.commit()
 
-    # #Funcion que permite actualizar la codigo
-    # def modificar(self,id=None,codigo=None):
-        
-    #     if id and codigo:
-            
-    #         self.session.query(Historia).filter(Historia.idHistoria == id).\
-    #             update({'codigo' : codigo })
-    #         self.session.commit()
-    #         return True
-    #     else:
-    #         return False
+    #Funcion que permite eliminar la historia
+    def eliminar(self,idHistoria):
+
+        # Desasociando viejos
+        res  = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
+        res.delete()
+        self.session.commit()
+
+        # Desasociando viejos
+        res  = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
+        res.delete()
+        self.session.commit()
+
+        self.session.query(Tarea).filter(Tarea.idHistoria == idHistoria).delete()
+
+        result = self.session.query(Historia).filter(Historia.idHistoria == idHistoria).delete()
+        if result:
+            return True
+        else:
+            return False
 
 #Use case code ends here

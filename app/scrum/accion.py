@@ -41,8 +41,6 @@ def ACrearAccion():
             session['actor'] = res['actor']
     return json.dumps(res)
 
-
-
 @accion.route('/accion/AModifAccion', methods=['POST'])
 def AModifAccion():
     #POST/PUT parameters
@@ -70,7 +68,27 @@ def AModifAccion():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@accion.route('/accion/AElimAccion')
+def AElimAccion():
+    #GET parameter
+    results = [{'label':'/VProducto', 'msg':['Accion eliminada']}, {'label':'/VAccion', 'msg':['No se pudo eliminar esta acción']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
 
+    idAccion = session['idAccion']
+    idPila = session['idPila']
+
+    acc = clsAccion(session=sessionDB,engine=engine)
+    acc.eliminar(idAccion)
+    res['label'] = res['label'] + '/' + str(idPila)
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
 
 @accion.route('/accion/VAccion')
 def VAccion():
@@ -86,20 +104,16 @@ def VAccion():
 
     acc=clsAccion(engine=engine,session=sessionDB)
     
-    idAccion = request.args.get('idAccion', 1)
-    
-    #pilas = acc.mostrarAccion(idAccion)
-    res['fAccion'] = acc.mostrarAccion(int(idAccion))
-    #res['fAccion'] = pilas[idPila-1]
-    res['idPila']  = session['idPila']
+    idAccion            = request.args.get('idAccion', 1)
+    res['fAccion']      = acc.mostrarAccion(int(idAccion))
+    res['idPila']       = session['idPila']
+    session['idAccion'] = idAccion
     
     
     #idAccion = idPila
 
     #Action code ends here
     return json.dumps(res)
-
-
 
 @accion.route('/accion/VCrearAccion')
 def VCrearAccion():
@@ -233,6 +247,30 @@ class clsAccion():
             return True
         else:
             return False
+    #Funcion que permite eliminar la accion
+    def eliminar(self,idAccion):
 
+        result = self.session.query(Historia).filter(Historia.idAccion == idAccion)
+
+        for i in result:
+
+            idHistoria = i.idHistoria
+            # Desasociando viejos
+            res  = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
+            res.delete()
+            self.session.commit()
+
+            # Desasociando viejos
+            res  = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
+            res.delete()
+            self.session.commit()
+
+            self.session.query(Historia).filter(Historia.idHistoria == idHistoria).delete()
+
+        result = self.session.query(Accion).filter(Accion.idAccion == idAccion).delete()
+        if result:
+            return True
+        else:
+            return False
 
 #Use case code ends here

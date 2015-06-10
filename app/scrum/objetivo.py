@@ -45,6 +45,28 @@ def ACrearObjetivo():
             session['actor'] = res['actor']
     return json.dumps(res)
 
+@objetivo.route('/objetivo/AElimObjetivo')
+def AElimObjetivo():
+    #GET parameter
+    results = [{'label':'/VProducto', 'msg':['Objetivo eliminado']}, {'label':'/VObjetivo', 'msg':['No se pudo eliminar este objetivo']}, ]
+    res = results[0]
+    #Action code goes here, res should be a list with a label and a message
+
+    idObjetivo = session['idObjetivo']
+    idPila = session['idPila']
+
+    obj = clsObjetivo(session=sessionDB,engine=engine)
+    obj.eliminar(idObjetivo)
+    res['label'] = res['label'] + '/' + str(idPila)
+
+    #Action code ends here
+    if "actor" in res:
+        if res['actor'] is None:
+            session.pop("actor", None)
+        else:
+            session['actor'] = res['actor']
+    return json.dumps(res)
+
 @objetivo.route('/objetivo/AModifObjetivo', methods=['POST'])
 def AModifObjetivo():
     #POST/PUT parameters
@@ -106,10 +128,10 @@ def VObjetivo():
 
     obj=clsObjetivo(engine=engine,session=sessionDB)
 
-    idObjetivo        = request.args.get('idObjetivo', 1)
-    res['idObjetivo'] = idObjetivo
-    res['fObjetivo']  = obj.mostrarObjetivo(int(idObjetivo))
-    res['idPila']     = session['idPila']
+    idObjetivo            = request.args.get('idObjetivo', 1)
+    res['fObjetivo']      = obj.mostrarObjetivo(int(idObjetivo))
+    res['idPila']         = session['idPila']
+    session['idObjetivo'] = idObjetivo
     res['fObjetivo_opcionesTransversalidad'] = [
       {'key':True, 'value':'transversal'},{'key':False, 'value':'no transversal'},
     ]
@@ -247,4 +269,14 @@ class clsObjetivo():
         else:
             return False
        
+    #Funcion que permite eliminar la accion
+    def eliminar(self,idObjetivo):
+
+        self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idObjetivo == idObjetivo).delete()
+
+        result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo).delete()
+        if result:
+            return True
+        else:
+            return False
 #Use case code ends here
