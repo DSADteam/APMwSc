@@ -235,26 +235,28 @@ class objetivoTester(unittest.TestCase):
 
     # TEST ELIMINAR
 
+    # Eliminar objetivo inexistente
     def testElimInexistente(self):
         pIdObjetivo = 190223
-        pdescripcion = self.objetivo.query(Objetivo).filter(Objetivo.idObjetivo == pIdObjetivo)
+        pdescripcion = ''
         self.objetivo.eliminar(pIdObjetivo)
         self.assertFalse(self.objetivo.existeObjetivo(descripcion=pdescripcion))
 
+    # Eliminar objetivo que sea None
     def testElimVacio(self):
-        idObjetivo = None
-        pdescripcion = self.objetivo.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        pIdObjetivo = None
+        pdescripcion = ''
         self.objetivo.eliminar(pIdObjetivo)
         self.assertFalse(self.objetivo.existeObjetivo(descripcion=pdescripcion))
 
+    # Eliminar objetivo existente
     def testElimExistente(self):
-        pdescripcion = 'Objetivo Elim'
-        self.objetivo.insertar(pdescripcion,self.prodId)
-        
-        idObjetivo = self.objetivo.query(Objetivo).filter(Objetivo.descripcion == pdescripcion)
-        self.objetivo.eliminar(idObjetivo)
-        self.assertFalse(self.objetivo.existeObjetivo(descripcion=pdescripcion))
+        pIdObjetivo = 1
+        pdescripcion = 'Objetivo 1'
+        ptrans = 'transversal'
+        self.objetivo.insertar(self.prodId, pdescripcion, ptrans)
+        self.objetivo.eliminar(pIdObjetivo)
+        self.assertTrue(self.objetivo.existeObjetivo(descripcion=pdescripcion))
     
-
 if __name__ == "__main__": 
     unittest.main()   
