@@ -181,6 +181,7 @@ class clsTarea():
         if not tiposCorrectos:
             return False
 
+
         #Dos tareas identicas de una historia no tiene sentido
         estaEnBd       = self.existeTarea(descripcion,idHistoria)
         
