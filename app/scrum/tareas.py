@@ -64,7 +64,7 @@ def AElimTarea():
 
 
     tar=clsTarea(session=sessionDB, engine = engine)
-    x=tar.borrarTarea(int(session['idTarea']))
+    x=tar.eliminar(int(session['idTarea']))
     
     if not x:
         res=results[1]
@@ -212,6 +212,8 @@ class clsTarea():
         if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
         
+        if (descripcion==''):
+            return False
         if(descripcion!=None):
             result = self.session.query(Tarea).\
             filter(Tarea.descripcion == descripcion).\
@@ -232,6 +234,15 @@ class clsTarea():
         
         return result.count() > 0
 
+    def obtenerId(self,descripcion):
+        res = -1
+
+        result = self.session.query(Tarea).filter(Tarea.descripcion == descripcion)
+        if result!="":
+            for row in result:
+                res = row.idTarea
+            
+        return res
                     
     def listarTareasHistoria(self,idHistoria):
         
@@ -247,20 +258,16 @@ class clsTarea():
         return res
 
 
-    def borrarTarea(self,idTarea=None):
+    def eliminar(self,idTarea=None):
         
         if not(type(idTarea) is int):
             return False
-
-        print("Voy a reir")
         
         if (self.existeIdTarea(idTarea)):
             self.session.query(Tarea).filter(Tarea.idTarea  == idTarea).delete()
             self.session.commit()
-            print("Voy a bailar")
             return True
         else:
-            print("mori vivir lalalaa")
             return False
 
 
