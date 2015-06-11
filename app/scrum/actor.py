@@ -44,7 +44,7 @@ def ACrearActor():
 @actor.route('/actor/AElimActor')
 def AElimActor():
     #GET parameter
-    results = [{'label':'/VProducto', 'msg':['Actor eliminado']}, {'label':'/VActor', 'msg':['No se pudo eliminar este actor']}, ]
+    results = [{'label':'/VProducto', 'msg':['Actor eliminado']}, {'label':'/VActor', 'msg':['No se pudo eliminar este actor']}, {'label': '/VActor', 'msg' : ["Hay usuarios asociado al actor, no es posible eliminar"]} , ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
@@ -52,7 +52,11 @@ def AElimActor():
     idPila = session['idPila']
 
     act = clsActor(session=sessionDB,engine=engine)
-    act.eliminar(idActor)
+    resultado = act.eliminar(idActor)
+
+    if not resultado:
+        res = results[2]
+
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
@@ -277,7 +281,9 @@ class clsActor():
     #Funcion que permite eliminar el actor
     def eliminar(self,idActor):
 
-        if (idActor==None):
+        usuariosAfectados = self.session.query(dbuser).filter(dbuser.idActor == idActor)
+
+        if (idActor==None) or (usuariosAfectados.count() > 0) :
             return False
 
         self.session.query(ActoresHistoria).filter(ActoresHistoria.idActor == idActor).delete()
