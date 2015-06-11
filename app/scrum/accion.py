@@ -256,8 +256,11 @@ class clsAccion():
         result = self.session.query(Historia).filter(Historia.idAccion == idAccion)
 
         for i in result:
-
+        
             idHistoria = i.idHistoria
+
+            self.session.query(Tarea).filter(Tarea.idHistoria == idHistoria).delete()
+
             # Desasociando viejos
             res  = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
             res.delete()
