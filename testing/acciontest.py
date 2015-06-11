@@ -203,6 +203,28 @@ class accionTester(unittest.TestCase):
         test = self.acc.modificar(pIdProducto2,pdescripcion2)
         self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion2))
     
+    # TEST ELIMINAR
+
+    def testElimInexistente(self):
+        pIdAccion = 190223
+        pdescripcion = self.acc.query(Accion).filter(Accion.idAccion == pIdAccion)
+        self.acc.eliminar(pIdAccion)
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
+
+    def testElimVacio(self):
+        idAccion = None
+        pdescripcion = self.acc.query(Accion).filter(Accion.idAccion == idAccion)
+        self.acc.eliminar(pIdAccion)
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
+
+    def testElimExistente(self):
+        pdescripcion = 'Accion Elim'
+        self.acc.insertar(pdescripcion,self.prodId)
+        
+        idAccion = self.acc.query(Accion).filter(Accion.descripcion == pdescripcion)
+        self.acc.eliminar(idAccion)
+        self.assertFalse(self.acc.existeAccion(descripcion=pdescripcion))
+
 
 unittest.main()
     

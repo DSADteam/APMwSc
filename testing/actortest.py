@@ -209,6 +209,28 @@ class actorTester(unittest.TestCase):
         test = self.act.modificar(pIdProducto2,pnombre2,pdescripcion2)
         self.assertFalse(self.act.existeActor(nombre=pnombre2))
 
+    # TEST ELIMINAR
+
+    def testElimInexistente(self):
+        pIdActor = 190223
+        pdescripcion = self.act.query(Actor).filter(Actor.idActor == pIdActor)
+        self.act.eliminar(pIdActor)
+        self.assertFalse(self.act.existeActor(descripcion=pdescripcion))
+
+    def testElimVacio(self):
+        idActor = None
+        pdescripcion = self.act.query(Actor).filter(Actor.idActor == idActor)
+        self.act.eliminar(pIdActor)
+        self.assertFalse(self.act.existeActor(descripcion=pdescripcion))
+
+    def testElimExistente(self):
+        pdescripcion = 'Actor Elim'
+        self.act.insertar(pdescripcion,self.prodId)
+        
+        idActor = self.act.query(Actor).filter(Actor.descripcion == pdescripcion)
+        self.act.eliminar(idActor)
+        self.assertFalse(self.act.existeActor(descripcion=pdescripcion))
+
 
 
 if __name__ == "__main__":

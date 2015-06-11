@@ -231,7 +231,30 @@ class objetivoTester(unittest.TestCase):
         transv= 'transversal'
         pDescripcion2 = 501
         self.objetivo.modificar(self.prodId, pDescripcion2, transv)
-        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion2))    
+        self.assertFalse(self.objetivo.existeObjetivo(pDescripcion2))
+
+    # TEST ELIMINAR
+
+    def testElimInexistente(self):
+        pIdObjetivo = 190223
+        pdescripcion = self.objetivo.query(Objetivo).filter(Objetivo.idObjetivo == pIdObjetivo)
+        self.objetivo.eliminar(pIdObjetivo)
+        self.assertFalse(self.objetivo.existeObjetivo(descripcion=pdescripcion))
+
+    def testElimVacio(self):
+        idObjetivo = None
+        pdescripcion = self.objetivo.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo)
+        self.objetivo.eliminar(pIdObjetivo)
+        self.assertFalse(self.objetivo.existeObjetivo(descripcion=pdescripcion))
+
+    def testElimExistente(self):
+        pdescripcion = 'Objetivo Elim'
+        self.objetivo.insertar(pdescripcion,self.prodId)
+        
+        idObjetivo = self.objetivo.query(Objetivo).filter(Objetivo.descripcion == pdescripcion)
+        self.objetivo.eliminar(idObjetivo)
+        self.assertFalse(self.objetivo.existeObjetivo(descripcion=pdescripcion))
+    
 
 if __name__ == "__main__": 
     unittest.main()   

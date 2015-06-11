@@ -277,6 +277,9 @@ class clsActor():
     #Funcion que permite eliminar el actor
     def eliminar(self,idActor):
 
+        if (idActor==None):
+            return False
+
         self.session.query(ActoresHistoria).filter(ActoresHistoria.idActor == idActor).delete()
 
         result = self.session.query(Actor).filter(Actor.idActor == idActor).delete()

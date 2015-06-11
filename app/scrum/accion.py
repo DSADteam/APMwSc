@@ -250,6 +250,9 @@ class clsAccion():
     #Funcion que permite eliminar la accion
     def eliminar(self,idAccion):
 
+        if (idAccion==None):
+            return False
+            
         result = self.session.query(Historia).filter(Historia.idAccion == idAccion)
 
         for i in result:

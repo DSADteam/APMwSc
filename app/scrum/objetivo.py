@@ -272,6 +272,9 @@ class clsObjetivo():
     #Funcion que permite eliminar la accion
     def eliminar(self,idObjetivo):
 
+        if (idObjetivo==None):
+            return False
+
         self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idObjetivo == idObjetivo).delete()
 
         result = self.session.query(Objetivo).filter(Objetivo.idObjetivo == idObjetivo).delete()
