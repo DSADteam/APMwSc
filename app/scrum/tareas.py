@@ -212,13 +212,20 @@ class clsTarea():
         if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
         
-        if(descripcion!=None):
-            result = self.session.query(Tarea).\
-            filter(Tarea.descripcion == descripcion).\
-            filter(Tarea.idHistoria  == idHistoria)
-        else:
-            return False
         
+        result = self.session.query(Tarea).\
+        filter(Tarea.descripcion == descripcion).\
+        filter(Tarea.idHistoria  == idHistoria)
+        
+        
+        return result.count() > 0
+
+    def obtenerId(self,descripcion):
+        if not(type(descripcion) is str):
+            return False
+
+        result = self.session.query(Tarea).filter(Tarea.descripcion == descripcion)
+
         return result.count() > 0
 
     def existeIdTarea(self,idHistoria):

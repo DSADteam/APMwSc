@@ -216,11 +216,11 @@ class tareaTester(unittest.TestCase):
 
     # Eliminar tarea existente
     def testElimExistente(self):
-        pdescripcion = "Una tarea inventada por ahi"
-        pIdTarea = self.tar.obtenerId(pdescripcion)
+        pdescripcion = "Tarea de testElimExistente"
         self.tar.insertar(self.histId, pdescripcion)
+        pIdTarea = self.tar.obtenerId(pdescripcion)
         self.tar.eliminar(pIdTarea)
-        self.assertTrue(self.tar.existeTarea(pdescripcion,self.histId))
+        self.assertFalse(self.tar.existeTarea(pdescripcion,self.histId))
 
 if __name__ == "__main__":
     unittest.main()
