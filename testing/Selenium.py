@@ -32,6 +32,17 @@ class Seltest(unittest.TestCase):
         Select(driver.find_element_by_id("fPila_escala")).select_by_visible_text("Alta/Media/Baja")
         driver.find_element_by_xpath("//button[@type='submit']").click()
         
+        driver.find_element_by_link_text("Ver").click()
+        driver.find_element_by_id("fPila_nombre").clear()
+        driver.find_element_by_id("fPila_nombre").send_keys("dfdfdfdf")
+        driver.find_element_by_id("fPila_nombre").clear()
+        driver.find_element_by_id("fPila_nombre").send_keys("tiene que funcionar")
+        driver.find_element_by_id("fPila_descripcion").clear()
+        driver.find_element_by_id("fPila_descripcion").send_keys("una descripcion nn")
+        Select(driver.find_element_by_id("fPila_escala")).select_by_visible_text("Alta/Media/Baja")
+        driver.find_element_by_xpath("//button[@type='submit']").click()
+     
+        
         assert "No results found." not in driver.page_source
         
     
