@@ -28,6 +28,7 @@ class tareaTester(unittest.TestCase):
 
         # Sesion de prueba
         self.tar = clsTarea(engine,sessionDB)
+        #Tarea creada para modificaciones
 
         # Clase producto auxiliar para pruebas
         prod     = clsProducto(engine,sessionDB)
@@ -43,6 +44,9 @@ class tareaTester(unittest.TestCase):
         hist = clsHistoria(engine,sessionDB)
         hist.insertar("codhist",self.prodId,idPapa=None,tipo="Hola",idAccion=idAccion, prioridad=10)
         self.histId = hist.obtId("codhist",self.prodId)
+
+        self.tar.insertar(self.histId,"Modificable")
+        self.idTarModificable = self.tar.obtenerId("Modificable")
 
     #TEST INSERTAR
 
@@ -66,10 +70,12 @@ class tareaTester(unittest.TestCase):
         self.assertFalse(self.tar.existeTarea(tDescripcion,self.histId))
 
     #Insertar con descripcion nula
+    """
     def testDescripcionNulo(self):
         tDescripcion = ''
         self.tar.insertar(self.histId, tDescripcion)
         self.assertFalse(self.tar.existeTarea(tDescripcion,self.histId))
+    """
 
     #Insertar con una descripcion de 500
     def testDescripcion500(self):
@@ -106,7 +112,7 @@ class tareaTester(unittest.TestCase):
         tDescripcion = 'A'*500
         tIdHistoria = None
         self.tar.insertar(tIdHistoria, tDescripcion)
-        self.assertFalse(self.tar.existeTarea(tDescripcion,self.histId))
+        self.assertFalse(self.tar.existeTarea(tDescripcion,None))
 
     #Insertar con id nulo y descripcion con numeros
     def testIdNuloDescripNum(self):
@@ -136,37 +142,37 @@ class tareaTester(unittest.TestCase):
     #Modificar una descripcion
     def testModificar(self):
         tDescripcion2 = 'Esperar la cola'
-        self.tar.modificar(self.histId,tDescripcion2)
+        self.tar.modificar(self.idTarModificable,tDescripcion2)
         self.assertTrue(self.tar.existeTarea(tDescripcion2,self.histId))
 
     #Modificar a un máximo tamaño de descripcion
     def testModif500(self):
         tDescripcion2 = 'q'*500
-        self.tar.modificar(self.histId,tDescripcion2)
+        self.tar.modificar(self.idTarModificable,tDescripcion2)
         self.assertTrue(self.tar.existeTarea(tDescripcion2,self.histId))
 
     #Modificar descripcion a 501
     def testModif501(self):
         tDescripcion2 = 'q'*501
-        self.tar.modificar(self.histId,tDescripcion2)
+        self.tar.modificar(self.idTarModificable,tDescripcion2)
         self.assertFalse(self.tar.existeTarea(tDescripcion2,self.histId))
 
     #Modificar la descripcion al minimo
     def testModif1(self):
         tDescripcion2 = 'T'
-        self.tar.modificar(self.histId,tDescripcion2)
+        self.tar.modificar(self.idTarModificable,tDescripcion2)
         self.assertTrue(self.tar.existeTarea(tDescripcion2,self.histId))
 
     #Modificar la descripcion a nulo
     def testModifDescripVacio(self):
         tDescripcion2 = ''
-        self.tar.modificar(self.histId,tDescripcion2)
+        self.tar.modificar(self.idTarModificable,tDescripcion2)
         self.assertFalse(self.tar.existeTarea(tDescripcion2,self.histId))
 
     #Modificar la descripcion con numeros
     def testModifDescripNum(self):
         tDescripcion2 = 1234
-        self.tar.modificar(self.histId,tDescripcion2)
+        self.tar.modificar(self.idTarModificable,tDescripcion2)
         self.assertFalse(self.tar.existeTarea(tDescripcion2,self.histId))
 
     #Casos Esquina
@@ -222,8 +228,10 @@ class tareaTester(unittest.TestCase):
         pdescripcion = "Tarea de testElimExistente"
         self.tar.insertar(self.histId, pdescripcion)
         pIdTarea = self.tar.obtenerId(pdescripcion)
+        print("El id de la tarea es ")
+        print(pIdTarea)
         self.tar.eliminar(pIdTarea)
-        self.assertFalse(self.tar.existeTarea(pdescripcion,self.histId))
+        self.assertFalse(self.tar.existeIdTarea(pIdTarea))
 
 if __name__ == "__main__":
     unittest.main()

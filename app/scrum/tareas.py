@@ -227,15 +227,15 @@ class clsTarea():
 
         result = self.session.query(Tarea).filter(Tarea.descripcion == descripcion)
 
-        return result.count() > 0
+        return result.first().idTarea
 
-    def existeIdTarea(self,idHistoria):
-        if not((type(idHistoria) is int)) :
+    def existeIdTarea(self,idTarea):
+        if not((type(idTarea) is int)) :
             return False
         
         
         result = self.session.query(Tarea).\
-        filter(Tarea.idHistoria == idHistoria)
+        filter(Tarea.idTarea == idTarea)
         
         
         return result.count() > 0
