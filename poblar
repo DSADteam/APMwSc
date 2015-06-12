@@ -5,5 +5,5 @@ export PGPASSWORD;
 python3.4 base.py createdb;
 psql -E -U apmwsc -w -q -d apmwsc  -f data/poblate.sql;
 echo "=====DB poblada.======="
-python3.4 base.py runserver
+#python3.4 base.py runserver
   

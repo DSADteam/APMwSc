@@ -103,8 +103,6 @@ class tareaTester(unittest.TestCase):
         tIdHistoria = None
         self.tar.insertar(tIdHistoria, tDescripcion)
         res = self.tar.existeTarea(tDescripcion,self.histId)
-        print("MI RES ES: ")
-        print(res)
         self.assertFalse(res)
 
     #Insertar con id vacio y descripcion de 500
@@ -228,8 +226,6 @@ class tareaTester(unittest.TestCase):
         pdescripcion = "Tarea de testElimExistente"
         self.tar.insertar(self.histId, pdescripcion)
         pIdTarea = self.tar.obtenerId(pdescripcion)
-        print("El id de la tarea es ")
-        print(pIdTarea)
         self.tar.eliminar(pIdTarea)
         self.assertFalse(self.tar.existeIdTarea(pIdTarea))
 

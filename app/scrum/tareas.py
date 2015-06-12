@@ -174,6 +174,10 @@ class clsTarea():
 
     def insertar(self,idHistoria,descripcion):
 
+        if(descripcion==''):
+            return False
+
+
         tiposCorrectos = (type(descripcion) is str) and \
                          (type(idHistoria)  is int)
 
@@ -260,15 +264,11 @@ class clsTarea():
         if not(type(idTarea) is int):
             return False
 
-        print("Voy a reir")
-        
         if (self.existeIdTarea(idTarea)):
             self.session.query(Tarea).filter(Tarea.idTarea  == idTarea).delete()
             self.session.commit()
-            print("Voy a bailar")
             return True
         else:
-            print("mori vivir lalalaa")
             return False
 
 
@@ -282,6 +282,9 @@ class clsTarea():
             return False
         
         if(len(descripcion)>500): 
+            return False
+
+        if(descripcion==''):
             return False
 
         self.session.query(Tarea).filter(Tarea.idTarea == idTarea).\
