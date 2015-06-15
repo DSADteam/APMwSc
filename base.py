@@ -261,7 +261,8 @@ class Tarea(db.Model):
 class Categoria(db.Model):
     
     __tablename__    = 'Categorias'
-    nombreCategoria  = db.Column(String(100), primary_key = True)
+    idCat            = db.Column(Integer, primary_key = True)
+    nombreCategoria  = db.Column(String(100),unique = True,nullable=False)
     peso             = db.Column(Integer, nullable=False)
     
     
