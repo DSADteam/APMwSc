@@ -181,6 +181,7 @@ class Historia(db.Model):
     idHistoria      = db.Column(Integer, primary_key = True)
     codigo          = db.Column(String(500), unique = False, nullable=False)
     tipo            = db.Column(String(15), nullable=False)
+    peso            = db.Column(Integer, nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
@@ -241,11 +242,11 @@ class ActoresHistoria(db.Model):
 
 class Tarea(db.Model):
     
-    __tablename__ = 'Tareas'
-    idTarea       = db.Column(Integer, primary_key = True)
-    descripcion   = db.Column(String(500), unique = False, nullable=False)
-    idHistoria    = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
-
+    __tablename__    = 'Tareas'
+    idTarea          = db.Column(Integer, primary_key = True)
+    descripcion      = db.Column(String(500), unique = False, nullable=False)
+    idHistoria       = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
+    nombreCategoria  = db.Column(String(100), db.ForeignKey('Categorias.nombreCategoria'), unique = False)
     ''' Metodo init
         Constructor de Tareas de una historia
     ''' 
@@ -254,6 +255,23 @@ class Tarea(db.Model):
         
         self.descripcion = descripcion
         self.idHistoria  = idHistoria
+
+class Categoria(db.Model):
+    
+    __tablename__    = 'Categorias'
+    nombreCategoria  = db.Column(String(100), primary_key = True)
+    peso             = db.Column(Integer, nullable=False)
+    
+    
+    ''' Metodo init
+        Constructor de Categorias de Tareas
+    ''' 
+    
+    def __init__(self,nombreCategoria,peso):
+        
+        self.nombreCategoria = nombreCategoria
+        self.peso  = peso
+
 
 from app.scrum.ident import ident
 app.register_blueprint(ident)
