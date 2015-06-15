@@ -181,7 +181,6 @@ class Historia(db.Model):
     idHistoria      = db.Column(Integer, primary_key = True)
     codigo          = db.Column(String(500), unique = False, nullable=False)
     tipo            = db.Column(String(15), nullable=False)
-    peso            = db.Column(Integer, nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
@@ -200,7 +199,6 @@ class Historia(db.Model):
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         self.tipo        = tipo
-        self.peso        = peso
         if idHistoriaPadre:
             self.idHistoriaPadre = idHistoriaPadre
         self.prioridad=prioridad
