@@ -195,11 +195,12 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
 
-    def __init__(self,codigo, idProducto,idAccion,tipo,prioridad,idHistoriaPadre=None):
+    def __init__(self,codigo, idProducto,idAccion,tipo,peso,prioridad,idHistoriaPadre=None):
         self.codigo      = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
         self.tipo        = tipo
+        self.peso        = peso
         if idHistoriaPadre:
             self.idHistoriaPadre = idHistoriaPadre
         self.prioridad=prioridad
@@ -251,10 +252,11 @@ class Tarea(db.Model):
         Constructor de Tareas de una historia
     ''' 
     
-    def __init__(self,descripcion,idHistoria):
+    def __init__(self,descripcion,idHistoria,nombreCategoria):
         
         self.descripcion = descripcion
         self.idHistoria  = idHistoria
+        self.nombreCategoria  = nombreCategoria
 
 class Categoria(db.Model):
     
