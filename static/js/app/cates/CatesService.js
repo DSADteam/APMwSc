@@ -1,22 +1,22 @@
-scrumModule.service('tareasService', ['$q', '$http', function($q, $http) {
+scrumModule.service('catesService', ['$q', '$http', function($q, $http) {
 
-    this.ACrearTarea = function(fTarea) {
+    this.ACrearCategoria = function(fCategoria) {
         return  $http({
-          url: "tareas/ACrearTarea",
-          data: fTarea,
+          url: "cates/ACrearCategoria",
+          data: fCategoria,
           method: 'POST',
         });
-    //    var labels = ["/VHistoria", "/VCrearTarea", ];
+    //    var labels = ["/VCategorias", "/VCategorias", ];
     //    var res = labels[0];
     //    var deferred = $q.defer();
     //    deferred.resolve(res);
     //    return deferred.promise;
     };
 
-    this.VCrearTarea = function(args) {
+    this.VCategorias = function(args) {
         if(typeof args == 'undefined') args={};
         return $http({
-          url: 'tareas/VCrearTarea',
+          url: 'cates/VCategorias',
           method: 'GET',
           params: args
         });
@@ -26,23 +26,36 @@ scrumModule.service('tareasService', ['$q', '$http', function($q, $http) {
     //    return deferred.promise;
     };
 
-    this.AModifTarea = function(fTarea) {
+    this.AElimCategoria = function(args) {
+        if(typeof args == 'undefined') args={};
+        return $http({
+          url: 'cates/AElimCategoria',
+          method: 'GET',
+          params: args
+        });
+    //    var labels = ["/VCategorias", "/VCategorias", ];
+    //    var res = labels[0];
+    //    var deferred = $q.defer();
+    //    deferred.resolve(res);
+    //    return deferred.promise;
+    };
+    this.AModifCategoria = function(fCategoria) {
         return  $http({
-          url: "tareas/AModifTarea",
-          data: fTarea,
+          url: "cates/AModifCategoria",
+          data: fCategoria,
           method: 'POST',
         });
-    //    var labels = ["/VHistoria", "/VCrearTarea", ];
+    //    var labels = ["/VCategorias", "/VCategorias", ];
     //    var res = labels[0];
     //    var deferred = $q.defer();
     //    deferred.resolve(res);
     //    return deferred.promise;
     };
 
-    this.VTarea = function(args) {
+    this.VCategoria = function(args) {
         if(typeof args == 'undefined') args={};
         return $http({
-          url: 'tareas/VTarea',
+          url: 'cates/VCategoria',
           method: 'GET',
           params: args
         });
@@ -52,17 +65,4 @@ scrumModule.service('tareasService', ['$q', '$http', function($q, $http) {
     //    return deferred.promise;
     };
 
-    this.AElimTarea = function(args) {
-        if(typeof args == 'undefined') args={};
-        return $http({
-          url: 'tareas/AElimTarea',
-          method: 'GET',
-          params: args
-        });
-    //    var labels = ["/VHistoria", "/VTarea", ];
-    //    var res = labels[0];
-    //    var deferred = $q.defer();
-    //    deferred.resolve(res);
-    //    return deferred.promise;
-    };
 }]);
