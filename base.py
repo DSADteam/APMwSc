@@ -248,15 +248,17 @@ class Tarea(db.Model):
     descripcion      = db.Column(String(500), unique = False, nullable=False)
     idHistoria       = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     nombreCategoria  = db.Column(String(100), db.ForeignKey('Categorias.nombreCategoria'), unique = False)
+    peso             = db.Column(Integer, nullable=False)
     ''' Metodo init
         Constructor de Tareas de una historia
     ''' 
     
-    def __init__(self,descripcion,idHistoria,nombreCategoria):
+    def __init__(self,descripcion,idHistoria,nombreCategoria,peso):
         
         self.descripcion = descripcion
         self.idHistoria  = idHistoria
         self.nombreCategoria  = nombreCategoria
+        self.peso  = peso
 
 class Categoria(db.Model):
     
