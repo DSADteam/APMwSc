@@ -647,8 +647,14 @@ class clsHistoria():
                     prioridad='Media'
                 else:
                     prioridad='Baja'
-           
-            rexaux={'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad}
+                    
+            tareasAsociadas = self.session.query(Tarea).\
+                            filter(Tarea.idHistoria == row.idHistoria)
+            contadorpeso=0
+            for tar in tareasAsociadas:
+                contadorpeso=contadorpeso + tar.peso
+                            
+            rexaux={'idHistoria':row.idHistoria,'enunciado':enunciado,'prioridad':prioridad,'peso':contadorpeso}
             orden.append((row.prioridad,rexaux))
 
         orden.sort(key=lambda tup: tup[0])
