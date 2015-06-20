@@ -33,9 +33,8 @@ def ACrearTarea():
     print(idHistoria)
 
     tar=clsTarea(session=sessionDB, engine = engine)
-    print(params['descripcion'])
-    print(params['peso'])
-    print('AQUI000000000000000000000000000000000000000000054574546464646')
+    print(params['categoria'])
+    print('CATEGORIA ARRIBA')
     x=tar.insertar(idHistoria,descripcion=params['descripcion'],nombreCategoria=params['categoria'],peso=params['peso'])
     
     if not x:
@@ -184,22 +183,22 @@ class clsTarea():
         if(descripcion==''):
             return False
 
-
+       
         tiposCorrectos = (type(descripcion) is str) and \
-                         (type(idHistoria)  is int) and \
-                         (type(nombreCategoria) is str) and \
-                         (type(peso)  is int)
+                         (type(idHistoria)  is int) #and \
+                         #(type(nombreCategoria) is str) and \
+                         #(type(peso)  is int)
         #unless tipos correctos
         if not tiposCorrectos:
             return False
-
+        
 
         #Dos tareas identicas de una historia no tiene sentido
         estaEnBd       = self.existeTarea(descripcion,idHistoria)
-        
         longCharValido = (len(descripcion) <= 500)
         
         if (not estaEnBd) and (longCharValido):
+       
             newObj = Tarea(descripcion,idHistoria,nombreCategoria, peso)
             self.session.add(newObj)
             self.session.commit()
@@ -221,7 +220,7 @@ class clsTarea():
             return i.descripcion
 
     def existeTarea(self,descripcion,idHistoria):
-        
+       
         if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
         
@@ -273,7 +272,7 @@ class clsTarea():
         result = self.session.query(Categoria)
         i=1
         for row in result:
-            res+=[ {'key':i, 'value':row.nombreCategoria, 'peso':row.peso},]
+            res+=[ {'key':row.nombreCategoria, 'value':row.nombreCategoria, 'peso':row.peso},]
             i=i+1
         
         return res
@@ -307,7 +306,7 @@ class clsTarea():
             return False
 
         self.session.query(Tarea).filter(Tarea.idTarea == idTarea).\
-            update({'descripcion' : descripcion },{'nombreCategoria' : nombreCategoria },{'peso' : peso })
+            update({'descripcion' : descripcion ,'nombreCategoria' : nombreCategoria ,'peso' : peso })
         self.session.commit()
         return True
 
