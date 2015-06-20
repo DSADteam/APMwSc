@@ -94,12 +94,13 @@ def AModifTarea():
     results = [{'label':'/VHistoria', 'msg':['Tarea modificada']}, {'label':'/VTarea', 'msg':['No se pudo modificar esta tarea.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    
-    idHistoria = params['idHistoria']
+    idHistoria = int(session['idHistoria'])
+    idTarea = int(session['idTarea'])
+    #idHistoria = params['idHistoria']
     res['label'] = res['label'] + '/' + repr(idHistoria)
 
     tat=clsTarea(session=sessionDB,engine=engine)
-    x=tat.modificar(idHistoria,descripcion=params['descripcion'],nombreCategoria=params['categoria'],peso=params['peso'])
+    x=tat.modificar(idTarea,descripcion=params['descripcion'],nombreCategoria=params['categoria'],peso=params['peso'])
     if not x:
         res=results[1]
         res['label'] = res['label'] + '/' + str(params['idTarea'])
