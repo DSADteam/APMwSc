@@ -7,12 +7,13 @@ import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
 sys.path.append(dir)
 
-from app.scrum.encrypt import clsAccessControl
 
 
 ident = Blueprint('ident', __name__)
 
 from base import *
+
+from app.scrum.encrypt import clsAccessControl
 from app.scrum.actor import clsActor
 
 @ident.route('/ident/AIdentificar', methods=['POST'])
@@ -50,12 +51,21 @@ def ARegistrar():
     #POST/PUT parameters
     params = request.get_json()
     results = [{'label':'/VLogin', 'msg':['Felicitaciones, Ya estás registrado en la aplicación']}, {'label':'/VRegistro', 'msg':['Error al tratar de registrarse']}, ]
-    res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
     print("Esto es lo que tengo para registrar: ")
     print(params)
+
+    idActor =  params['actorScrum'] #Debe ser buscado el actor
+
     reg=clsDBUser(session=sessionDB,engine=engine)
-    reg.insertar(fullname, username, password,password2, email, idActor)
+    status = reg.insertar(params['nombre'], params['usuario'], params['clave'],params['clave2'], params['correo'], 3)
+
+    if status:
+        res = results[0]
+    else:
+        res = results[1]
+    
 
     #Action code ends here
     if "actor" in res:
@@ -89,11 +99,15 @@ def VRegistro():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+    oActor = clsActor(engine,DBSession)
+
     res['fUsuario_opcionesActorScrum'] = [
-      {'key':'SM','value':'Maestro Scrum'},
-      {'key':'PO','value':'Dueño de producto'},
-      {'key':'DV','value':'Miembro del equipo de desarrollo'},
+      {'key':1,'value':'Maestro Scrum'},
+      {'key':2,'value':'Dueño de producto'},
+      {'key':3,'value':'Miembro del equipo de desarrollo'},
     ]
+
+    res['fUsuario_opcionesActorScrum'] = oActor.listarActores(showAsKeyValue=True)
 
     #Action code ends here
     return json.dumps(res)

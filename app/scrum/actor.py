@@ -213,14 +213,19 @@ class clsActor():
                 print("Empty query!")
         return res
 
+    #Agregar busqueda de actor por nombre
+
     
-    def listarActores(self):
+    def listarActores(self,showAsKeyValue=False):
         
         res = []
         result = self.engine.execute("select * from \"Actores\";")
         if result!="":
             for row in result:
-                res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
+                if showAsKeyValue:
+                    res.append({'key':row.idActor,'value':row.descripcion})
+                else:
+                    res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
             else:
                 print("Empty query!")
         
