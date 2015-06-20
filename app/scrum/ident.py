@@ -24,6 +24,8 @@ def AIdentificar():
     #Action code goes here, res should be a list with a label and a message
     log=clsLogin(session=sessionDB,engine=engine)
     resp=log.check_password(params.get('usuario'),params.get('clave'))
+    
+    #Hacer chequeo del tipo de usuario
     if resp:
         res=results[0]
     else:
@@ -50,7 +52,10 @@ def ARegistrar():
     results = [{'label':'/VLogin', 'msg':['Felicitaciones, Ya estás registrado en la aplicación']}, {'label':'/VRegistro', 'msg':['Error al tratar de registrarse']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-
+    print("Esto es lo que tengo para registrar: ")
+    print(params)
+    reg=clsDBUser(session=sessionDB,engine=engine)
+    reg.insertar(fullname, username, password,password2, email, idActor)
 
     #Action code ends here
     if "actor" in res:
@@ -84,6 +89,11 @@ def VRegistro():
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
 
+    res['fUsuario_opcionesActorScrum'] = [
+      {'key':'SM','value':'Maestro Scrum'},
+      {'key':'PO','value':'Dueño de producto'},
+      {'key':'DV','value':'Miembro del equipo de desarrollo'},
+    ]
 
     #Action code ends here
     return json.dumps(res)
@@ -97,6 +107,20 @@ class clsLogin():
         else:
             self.engine  = engine  #Necesario para realizar consultas e insertar
             self.session = session #Necesario para insertar/borrar columnas
+
+    """ NO NEED
+    def insertar(self,idActor,clave,clave2,nombre,correo,username):
+        oAccessControl = clsAccessControl()
+        criptedPass    = oAccessControl.encript(clave)
+        clavesCorretas = oAccessControl.check_password(clave2)
+
+        if not clavesCorretas:
+            return False 
+
+        newUser = dbuser(nombre,username,criptedPass,correo,idActor)
+        self.session.add(newuser)
+        self.session.commit()
+    """
 
     def encriptar(self, value):
         encri=clsAccessControl()
@@ -136,13 +160,14 @@ class clsDBUser():
         Inserta un nuevo usuario a la base de datos
     ''' 
         
-    def insertar(self, fullname, username, password, email, idActor):
+    def insertar(self, fullname, username, password,password2, email, idActor):
        cript=clsAccessControl()
        act=clsActor(engine=engine,session=sessionDB)
        passToUse=cript.encript(password)
        verif=self.buscar(username)=="" and act.existeActor(idActor=idActor)!=""
        verif=verif and 0<len(fullname)<=50 and 0<len(username)<=16 and 0<len(password)<=16
        verif=verif and 0<len(email)<=30 and passToUse!=""
+       verif=verif and password == password2
        if verif:
            if passToUse!="":
                newuser = dbuser(fullname, username, passToUse, email, idActor) 
