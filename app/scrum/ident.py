@@ -53,13 +53,16 @@ def ARegistrar():
     results = [{'label':'/VLogin', 'msg':['Felicitaciones, Ya estás registrado en la aplicación']}, {'label':'/VRegistro', 'msg':['Error al tratar de registrarse']}, ]
     
     #Action code goes here, res should be a list with a label and a message
-    print("Esto es lo que tengo para registrar: ")
-    print(params)
 
     idActor =  params['actorScrum'] #Debe ser buscado el actor
 
     reg=clsDBUser(session=sessionDB,engine=engine)
-    status = reg.insertar(params['nombre'], params['usuario'], params['clave'],params['clave2'], params['correo'], 3)
+    status = reg.insertar(params['nombre'],
+                          params['usuario'], 
+                          params['clave'],
+                          params['clave2'], 
+                          params['correo'], 
+                          params['actorScrum'])
 
     if status:
         res = results[0]
@@ -122,20 +125,6 @@ class clsLogin():
             self.engine  = engine  #Necesario para realizar consultas e insertar
             self.session = session #Necesario para insertar/borrar columnas
 
-    """ NO NEED
-    def insertar(self,idActor,clave,clave2,nombre,correo,username):
-        oAccessControl = clsAccessControl()
-        criptedPass    = oAccessControl.encript(clave)
-        clavesCorretas = oAccessControl.check_password(clave2)
-
-        if not clavesCorretas:
-            return False 
-
-        newUser = dbuser(nombre,username,criptedPass,correo,idActor)
-        self.session.add(newuser)
-        self.session.commit()
-    """
-
     def encriptar(self, value):
         encri=clsAccessControl()
         return encri.encript(value)
@@ -178,7 +167,7 @@ class clsDBUser():
        cript=clsAccessControl()
        act=clsActor(engine=engine,session=sessionDB)
        passToUse=cript.encript(password)
-       verif=self.buscar(username)=="" and act.existeActor(idActor=idActor)!=""
+       verif=self.buscar(username)==""
        verif=verif and 0<len(fullname)<=50 and 0<len(username)<=16 and 0<len(password)<=16
        verif=verif and 0<len(email)<=30 and passToUse!=""
        verif=verif and password == password2

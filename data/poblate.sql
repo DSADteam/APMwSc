@@ -14,9 +14,9 @@ INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Crear repositorio vol
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Documentar cosas',5);
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Ir a la playa',5);
 
-INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',1);
-INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',1);
-INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('DV','Miembro del equipo de desarrollo',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('SM','Maestro Scru,',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('PO','Dueño del producto',1);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',2);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',2);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',2);
