@@ -185,9 +185,9 @@ class clsTarea():
 
        
         tiposCorrectos = (type(descripcion) is str) and \
-                         (type(idHistoria)  is int) #and \
-                         #(type(nombreCategoria) is str) and \
-                         #(type(peso)  is int)
+                         (type(idHistoria)  is int) and \
+                         (type(nombreCategoria) is str) and \
+                         (type(peso)  is int)
         #unless tipos correctos
         if not tiposCorrectos:
             return False
