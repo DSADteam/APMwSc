@@ -255,6 +255,23 @@ class Tarea(db.Model):
         self.descripcion = descripcion
         self.idHistoria  = idHistoria
 
+
+class Categoria(db.Model):
+    
+    __tablename__    = 'Categorias'
+    nombreCategoria  = db.Column(String(50),primary_key = True,nullable=False)
+    peso             = db.Column(Integer, nullable=False)
+    
+    
+    ''' Metodo init
+        Constructor de Categorias de Tareas
+    ''' 
+    
+    def __init__(self,nombreCategoria,peso):
+        
+        self.nombreCategoria = nombreCategoria
+        self.peso  = peso
+
 from app.scrum.ident import ident
 app.register_blueprint(ident)
 from app.scrum.prod import prod
@@ -273,6 +290,8 @@ from app.scrum.historias import historias
 app.register_blueprint(historias)
 from app.scrum.tareas import tareas
 app.register_blueprint(tareas)
+from app.scrum.cates import cates
+app.register_blueprint(cates)
 
 if __name__ == '__main__':
     app.config.update(

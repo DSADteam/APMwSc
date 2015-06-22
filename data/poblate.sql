@@ -122,3 +122,9 @@ INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Ser vagos como M'      
 
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (7,1);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (8,2);
+
+INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Crear Interfaz',3);
+INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Integrar ModeloVistaControlador',6);
+INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Limpiar codigo',2);
+INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Calentar sillas',1);
+
