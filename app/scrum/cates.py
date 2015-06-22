@@ -24,6 +24,8 @@ def ACrearCategoria():
     results = [{'label':'/VCategorias', 'msg':['Categoría creada.']}, {'label':'/VCategorias', 'msg':['Error al intentar crear categoría.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
+    cates = clsCategoria(engine,sessionDB)
+    cates.insertar(params['nombre'],params['peso'])
 
 
     #Action code ends here
@@ -114,7 +116,7 @@ def VCategorias():
       {'idCategoria':3, 'peso':3, 'nombre':'Reparación del motor' },
     ]
     cates = clsCategoria(engine,sessionDB)
-    res['data0'] = cates.listarCategorias()
+    res['data0'] = cates.listarTodo()
 
     #Action code ends here
     return json.dumps(res)
@@ -158,7 +160,23 @@ class clsCategoria():
         else:
             return False
 
-    def listarCategorias(self):
+    def listarTodo(self):
+        res=[]
+        
+
+        result = self.session.query(Categoria)
+        i=1
+        for row in result:
+            res+=[
+                    {'idCategoria'  :row.idCategoria, 
+                     'nombre'       :row.nombreCategoria, 
+                     'peso'         :row.peso},
+                 ]
+            i=i+1
+        
+        return res
+
+    def listarKeyValue(self):
         res=[]
         
 

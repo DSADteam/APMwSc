@@ -259,8 +259,9 @@ class Tarea(db.Model):
 class Categoria(db.Model):
     
     __tablename__    = 'Categorias'
-    nombreCategoria  = db.Column(String(50),primary_key = True,nullable=False)
-    peso             = db.Column(Integer, nullable=False)
+    idCategoria      = db.Column(Integer,   primary_key = True)
+    nombreCategoria  = db.Column(String(50),unique      = True,nullable=False)
+    peso             = db.Column(Integer,   nullable    = False)
     
     
     ''' Metodo init
