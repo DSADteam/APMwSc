@@ -110,21 +110,22 @@ INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,4);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,6);
 
 
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Ponerle peperoni a todo"    ',1);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Comprar combo de ser posible',1);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Surfear sin reglas'          ,2);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Esperar la ola'              ,2);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Hacer brownies felices'      ,3);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Tatuaje en la espalda como la abuela',3);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Comprar unicornios'          ,4);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Echar codigo como locos y sufrir',5);
-INSERT INTO "Tareas" (descripcion,"idHistoria") VALUES ('Ser vagos como M'            ,6);
-
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (7,1);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (8,2);
+
 
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Crear Interfaz',3);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Integrar ModeloVistaControlador',6);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Limpiar codigo',2);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Calentar sillas',1);
 
+
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ponerle peperoni a todo"    ',1,'Juniors',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar combo de ser posible',1,'Juniors',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Surfear sin reglas'          ,2,'Juniors',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Esperar la ola'              ,2,'Juniors',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Hacer brownies felices'      ,3,'Juniors',3);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Tatuaje en la espalda como la abuela',3,'Juniors',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar unicornios'          ,4,'Juniors',4);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Echar codigo como locos y sufrir',5,'Juniors',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ser vagos como M'            ,6,'Juniors',1);

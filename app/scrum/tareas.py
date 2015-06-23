@@ -17,7 +17,7 @@ tareas = Blueprint('tareas', __name__)
 
 from base import *
 from app.scrum.historias import clsActor
-
+#from app.scrum.cates import clsCategoria
 
 
 
@@ -33,7 +33,9 @@ def ACrearTarea():
     print(idHistoria)
 
     tar=clsTarea(session=sessionDB, engine = engine)
-    x=tar.insertar(idHistoria,params['descripcion'])
+    print(params['categoria'])
+    print('CATEGORIA ARRIBA')
+    x=tar.insertar(idHistoria,descripcion=params['descripcion'],nombreCategoria=params['categoria'],peso=params['peso'])
     
     if not x:
         res=results[1]
@@ -57,7 +59,7 @@ def ACrearTarea():
 def AElimTarea():
     #POST/PUT parameters
     params = request.get_json()
-    results = [{'label':'/VHistoria', 'msg':['Historia borrada']}, {'label':'/VTarea', 'msg':['No se pudo eliminar esta tarea']}, ]
+    results = [{'label':'/VHistoria', 'msg':['Tarea borrada']}, {'label':'/VTarea', 'msg':['No se pudo eliminar esta tarea']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
 
@@ -92,12 +94,13 @@ def AModifTarea():
     results = [{'label':'/VHistoria', 'msg':['Tarea modificada']}, {'label':'/VTarea', 'msg':['No se pudo modificar esta tarea.']}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
-    
-    idHistoria = params['idHistoria']
+    idHistoria = int(session['idHistoria'])
+    idTarea = int(session['idTarea'])
+    #idHistoria = params['idHistoria']
     res['label'] = res['label'] + '/' + repr(idHistoria)
 
     tat=clsTarea(session=sessionDB,engine=engine)
-    x=tat.modificar(params['idTarea'],params['descripcion'])
+    x=tat.modificar(idTarea,descripcion=params['descripcion'],nombreCategoria=params['categoria'],peso=params['peso'])
     if not x:
         res=results[1]
         res['label'] = res['label'] + '/' + str(params['idTarea'])
@@ -118,6 +121,7 @@ def VCrearTarea():
     #GET parameter
     idHistoria = int(request.args['idHistoria'])
     res = {}
+    tar=clsTarea(session=sessionDB, engine = engine)
     if "actor" in session:
         res['actor']=session['actor']   
     #Action code goes here, res should be a JSON structure
@@ -127,6 +131,7 @@ def VCrearTarea():
       return json.dumps(res)
     res['usuario'] = session['usuario']['nombre']
     res['idHistoria']=idHistoria
+    res['fTarea_opcionesCategoria'] = tar.listarCategorias()
     aux=sessionDB.query(Historia).filter(Historia.idHistoria == idHistoria)
     for u in aux:
         aux=u.codigo
@@ -146,6 +151,7 @@ def VTarea():
     #GET parameter
     idTarea = request.args['idTarea']
     res = {}
+    tar=clsTarea(session=sessionDB, engine = engine)
     if "actor" in session:
         res['actor']=session['actor']
     #Action code goes here, res should be a JSON structure
@@ -155,6 +161,7 @@ def VTarea():
       return json.dumps(res)
     res['usuario'] = session['usuario']
     res['codHistoria'] = session['codHistoria']
+    res['fTarea_opcionesCategoria'] = tar.listarCategorias()
     tat=clsTarea(session=sessionDB,engine=engine)
     res['fTarea']  = tat.mostraTarea(idTarea)
     session['idTarea'] = idTarea
@@ -172,27 +179,28 @@ class clsTarea():
         self.engine  = engine
         self.session = session
 
-    def insertar(self,idHistoria,descripcion):
+    def insertar(self,idHistoria,descripcion,nombreCategoria, peso):
 
         if(descripcion==''):
             return False
 
-
+       
         tiposCorrectos = (type(descripcion) is str) and \
-                         (type(idHistoria)  is int)
-
+                         (type(idHistoria)  is int) and \
+                         (type(nombreCategoria) is str) and \
+                         (type(peso)  is int)
         #unless tipos correctos
         if not tiposCorrectos:
             return False
-
+        
 
         #Dos tareas identicas de una historia no tiene sentido
         estaEnBd       = self.existeTarea(descripcion,idHistoria)
-        
         longCharValido = (len(descripcion) <= 500)
         
         if (not estaEnBd) and (longCharValido):
-            newObj = Tarea(descripcion,idHistoria)
+       
+            newObj = Tarea(descripcion,idHistoria,nombreCategoria, peso)
             self.session.add(newObj)
             self.session.commit()
             return True
@@ -213,7 +221,7 @@ class clsTarea():
             return i.descripcion
 
     def existeTarea(self,descripcion,idHistoria):
-        
+       
         if not((type(descripcion) is str) and (type(idHistoria) is int)) :
             return False
         
@@ -252,13 +260,22 @@ class clsTarea():
         if result!="":
             for row in result:
                 #Conjeturas, no se que lleva esto en historias
-                res.append({'idTarea':row.idTarea,'descripcion':row.descripcion})
+                res.append({'idTarea':row.idTarea,'descripcion':row.descripcion,'nombreCategoria' : row.nombreCategoria ,'peso' : row.peso})
             else:
                 print("Empty query!")
         
         return res
+  
+    def listarCategorias(self):
+        res=[]
+        
 
-
+        result = self.session.query(Categoria)
+        for row in result:
+            res+=[ {'key':row.nombreCategoria, 'value':row.nombreCategoria, 'peso':row.peso},]
+        
+        return res
+ 
     def eliminar(self,idTarea=None):
         
         if not(type(idTarea) is int):
@@ -273,12 +290,12 @@ class clsTarea():
 
 
     #Funcion que permite actualizar la descripcion
-    def modificar(self,idTarea=None,descripcion=None):
+    def modificar(self,idTarea=None,descripcion=None,nombreCategoria=None, peso=None):
         
         tipoid=(idTarea!=None) and (type(idTarea) is int) 
-        tipodesc= (type(descripcion) is str) 
+        otrostipos= (type(descripcion) is str) and (type(nombreCategoria) is str) and (type(peso) is int)
 
-        if not (tipoid and tipodesc):
+        if not (tipoid and otrostipos):
             return False
         
         if(len(descripcion)>500): 
@@ -288,7 +305,7 @@ class clsTarea():
             return False
 
         self.session.query(Tarea).filter(Tarea.idTarea == idTarea).\
-            update({'descripcion' : descripcion })
+            update({'descripcion' : descripcion ,'nombreCategoria' : nombreCategoria ,'peso' : peso })
         self.session.commit()
         return True
 

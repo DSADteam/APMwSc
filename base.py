@@ -194,7 +194,7 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
 
-    def __init__(self,codigo, idProducto,idAccion,tipo,prioridad,idHistoriaPadre=None):
+    def __init__(self,codigo, idProducto,idAccion,tipo,peso,prioridad,idHistoriaPadre=None):
         self.codigo      = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
@@ -241,19 +241,39 @@ class ActoresHistoria(db.Model):
 
 class Tarea(db.Model):
     
-    __tablename__ = 'Tareas'
-    idTarea       = db.Column(Integer, primary_key = True)
-    descripcion   = db.Column(String(500), unique = False, nullable=False)
-    idHistoria    = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
-
+    __tablename__    = 'Tareas'
+    idTarea          = db.Column(Integer, primary_key = True)
+    descripcion      = db.Column(String(500), unique = False, nullable=False)
+    idHistoria       = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
+    nombreCategoria  = db.Column(String(100), db.ForeignKey('Categorias.nombreCategoria'), unique = False)
+    peso             = db.Column(Integer, nullable=False)
     ''' Metodo init
         Constructor de Tareas de una historia
     ''' 
     
-    def __init__(self,descripcion,idHistoria):
+    def __init__(self,descripcion,idHistoria,nombreCategoria,peso):
         
         self.descripcion = descripcion
         self.idHistoria  = idHistoria
+        self.nombreCategoria  = nombreCategoria
+        self.peso  = peso
+
+class Categoria(db.Model):
+    
+    __tablename__    = 'Categorias'
+    nombreCategoria  = db.Column(String(100),primary_key = True,nullable=False)
+    peso             = db.Column(Integer, nullable=False)
+    
+    
+    ''' Metodo init
+        Constructor de Categorias de Tareas
+    ''' 
+    
+    def __init__(self,nombreCategoria,peso):
+        
+        self.nombreCategoria = nombreCategoria
+        self.peso  = peso
+
 
 
 class Categoria(db.Model):

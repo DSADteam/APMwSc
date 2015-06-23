@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+
 #Agregando proyect root
 import sys
 import os
@@ -17,6 +18,7 @@ from sqlalchemy.sql.expression import text
 #Definicion de blueprint y bd
 cates = Blueprint('cates', __name__)
 from base import *
+
 
 @cates.route('/cates/ACrearCategoria', methods=['POST'])
 def ACrearCategoria():
@@ -119,6 +121,7 @@ def VCategorias():
       {'idCategoria':3, 'peso':3, 'nombre':'Reparación del motor' },
     ]
 
+
     cates = clsCategoria(engine,sessionDB)
     res['data0'] = cates.listarTodo()
 
@@ -166,36 +169,7 @@ class clsCategoria():
             return False
 
     def listarTodo(self):
-        res=[]
-        
+    #Action code ends here
+    return json.dumps(res)
 
-        result = self.session.query(Categoria)
-        i=1
-        for row in result:
-            res+=[
-                    {'idCategoria'  :row.idCategoria, 
-                     'nombre'       :row.nombreCategoria, 
-                     'peso'         :row.peso},
-                 ]
-            i=i+1
-        
-        return res
-
-    def listarKeyValue(self):
-        res=[]
-        
-
-        result = self.session.query(Categoria)
-        i=1
-        for row in result:
-            res+=[
-                    {'key'  :row.nombreCategoria, 
-                     'value':row.nombreCategoria, 
-                     'peso' :row.peso},
-                 ]
-            i=i+1
-        
-        return res
-
-#Use case code ends here
 
