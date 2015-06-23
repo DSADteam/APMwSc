@@ -103,7 +103,7 @@ def VCategorias():
 
     #Action code ends here
     return json.dumps(res)
-
+'''
 def listarCategorias(self):
         res=[]
         
@@ -113,7 +113,7 @@ def listarCategorias(self):
             res+=[ {'key':row.nombreCategoria, 'value':row.nombreCategoria, 'peso':row.peso},]
         
         return res
-
+'''
 
 
 

@@ -17,7 +17,7 @@ tareas = Blueprint('tareas', __name__)
 
 from base import *
 from app.scrum.historias import clsActor
-
+#from app.scrum.cates import clsCategoria
 
 
 
@@ -265,7 +265,7 @@ class clsTarea():
                 print("Empty query!")
         
         return res
-    '''
+  
     def listarCategorias(self):
         res=[]
         
@@ -275,7 +275,7 @@ class clsTarea():
             res+=[ {'key':row.nombreCategoria, 'value':row.nombreCategoria, 'peso':row.peso},]
         
         return res
-    '''
+ 
     def eliminar(self,idTarea=None):
         
         if not(type(idTarea) is int):

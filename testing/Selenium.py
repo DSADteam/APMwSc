@@ -18,7 +18,7 @@ class Seltest(unittest.TestCase):
     def test_sel(self):
         driver = self.driver
         driver.get(self.base_url)
-        
+       
         input()
         driver.find_element_by_link_text("Registrarse").click()
         input()
@@ -41,7 +41,7 @@ class Seltest(unittest.TestCase):
         input()
         driver.find_element_by_xpath("//button[@type='submit']").click()
         input()
-        
+
         driver.find_element_by_id("fLogin_usuario").clear()
         driver.find_element_by_id("fLogin_usuario").send_keys("robertor")
         input()
@@ -50,7 +50,7 @@ class Seltest(unittest.TestCase):
         input()
         driver.find_element_by_xpath("//button[@type='submit']").click()
         input()
-        
+       
         driver.find_element_by_link_text("Categorías de tareas").click()
         input()
         driver.find_element_by_id("fCategoria_nombre").clear()
@@ -63,7 +63,7 @@ class Seltest(unittest.TestCase):
         input()
         driver.find_element_by_link_text("Regresar").click()
         input()
-        
+       
         driver.find_element_by_link_text("+Producto").click()
         input()
         driver.find_element_by_id("fPila_nombre").clear()
@@ -152,7 +152,9 @@ class Seltest(unittest.TestCase):
         driver.find_element_by_xpath("(//a[contains(text(),'Ver')])[9]").click()
         input()
         driver.find_element_by_link_text("-objetivo").click()
+        input()
         driver.find_element_by_link_text("Historias").click()
+        input()
         driver.find_element_by_link_text("Detalles").click()
         input()
         
