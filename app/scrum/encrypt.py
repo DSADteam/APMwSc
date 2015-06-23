@@ -57,8 +57,11 @@ class clsAccessControl(object):
    
 
     def check_password(self, oPassworkEncript, oCheckPassword):
-            oPassworkEncript, salt = oPassworkEncript.split(':')
-            return oPassworkEncript == hashlib.sha256(salt.encode() + oCheckPassword.encode()).hexdigest()
+        oPassworkEncript, salt = oPassworkEncript.split(':')
+        # print("Probando iguadldad de ") NO SE QUE APSA AQUI
+        # print(oPassword)
+        # print(oCheckPassword)
+        return oPassworkEncript == hashlib.sha256(salt.encode() + oCheckPassword.encode()).hexdigest()
     
     def length_password(self, user_password):
         # uuid es usado para generar numeros random

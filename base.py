@@ -258,22 +258,6 @@ class Tarea(db.Model):
         self.nombreCategoria  = nombreCategoria
         self.peso  = peso
 
-class Categoria(db.Model):
-    
-    __tablename__    = 'Categorias'
-    nombreCategoria  = db.Column(String(100),primary_key = True,nullable=False)
-    peso             = db.Column(Integer, nullable=False)
-    
-    
-    ''' Metodo init
-        Constructor de Categorias de Tareas
-    ''' 
-    
-    def __init__(self,nombreCategoria,peso):
-        
-        self.nombreCategoria = nombreCategoria
-        self.peso  = peso
-
 
 
 class Categoria(db.Model):
