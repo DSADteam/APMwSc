@@ -265,19 +265,17 @@ class clsTarea():
                 print("Empty query!")
         
         return res
-    
+    '''
     def listarCategorias(self):
         res=[]
         
 
         result = self.session.query(Categoria)
-        i=1
         for row in result:
             res+=[ {'key':row.nombreCategoria, 'value':row.nombreCategoria, 'peso':row.peso},]
-            i=i+1
         
         return res
-
+    '''
     def eliminar(self,idTarea=None):
         
         if not(type(idTarea) is int):

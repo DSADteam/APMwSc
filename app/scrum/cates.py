@@ -104,6 +104,15 @@ def VCategorias():
     #Action code ends here
     return json.dumps(res)
 
+def listarCategorias(self):
+        res=[]
+        
+
+        result = self.session.query(Categoria)
+        for row in result:
+            res+=[ {'key':row.nombreCategoria, 'value':row.nombreCategoria, 'peso':row.peso},]
+        
+        return res
 
 
 
