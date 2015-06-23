@@ -14,9 +14,9 @@ INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Crear repositorio vol
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Documentar cosas',5);
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('Ir a la playa',5);
 
-INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('DV','Miembro del equipo de desarrollo',1);
-INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('SM','Maestro Scru,',1);
-INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('PO','Dueño del producto',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',1);
+INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',1);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Developer','Desarrolador de proyecto',2);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Scrum Master','Guia del grupo',2);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('Product Owner','Dueno del producto',2);
@@ -113,19 +113,17 @@ INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (6,6);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (7,1);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (8,2);
 
-
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Crear Interfaz',3);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Integrar ModeloVistaControlador',6);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Limpiar codigo',2);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Calentar sillas',1);
 
-
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ponerle peperoni a todo"    ',1,'Crear Interfaz',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar combo de ser posible',1,'Crear Interfaz',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Surfear sin reglas'          ,2,'Crear Interfaz',1);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Esperar la ola'              ,2,'Crear Interfaz',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Hacer brownies felices'      ,3,'Crear Interfaz',3);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Tatuaje en la espalda como la abuela',3,'Crear Interfaz',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar unicornios'          ,4,'Crear Interfaz',4);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Echar codigo como locos y sufrir',5,'Crear Interfaz',1);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ser vagos como M'            ,6,'Crear Interfaz',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ponerle peperoni a todo"    ',1,'Limpiar codigo',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar combo de ser posible',1,'Limpiar codigo',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Surfear sin reglas'          ,2,'Limpiar codigo',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Esperar la ola'              ,2,'Limpiar codigo',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Hacer brownies felices'      ,3,'Limpiar codigo',3);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Tatuaje en la espalda como la abuela',3,'Limpiar codigo',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar unicornios'          ,4,'Limpiar codigo',5);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Echar codigo como locos y sufrir',5,'Limpiar codigo',1);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ser vagos como M'            ,6,'Limpiar codigo',1);
