@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-'''
-Created on 10/06/2015
- 
-@author: DSAD :)
-'''
-
 import sys
 import os
 

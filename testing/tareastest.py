@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-'''
-Created on 10/06/2015
- 
-@author: DSAD :)
-'''
-
 import sys
 import os
 
@@ -29,7 +23,6 @@ class tareaTester(unittest.TestCase):
 
         # Sesion de prueba
         self.tar = clsTarea(engine,sessionDB)
-        #self.cate = clsCategoria(engine,sessionDB)
         #Tarea creada para modificaciones
 
         # Clase producto auxiliar para pruebas
@@ -248,14 +241,6 @@ class tareaTester(unittest.TestCase):
         tPeso = 4
         self.tar.modificar(self.idTarModificable,tDescripcion2, tNombreCategoria, tPeso)
         self.assertTrue(self.tar.existeTarea(tDescripcion2,self.histId))
-
-    # #Modificar la categoria
-    # def testModifCategoria(self):
-    #     tDescripcion2 = 'Esperar la ola'
-    #     tNombreCategoria = 'Limpiar codigo22'
-    #     tPeso = 2
-    #     self.tar.modificar(self.idTarModificable,tDescripcion2, tNombreCategoria, tPeso)
-    #     self.assertTrue(self.tar.existeTarea(tDescripcion2,self.histId))
 
    #  #Casos Esquina
 

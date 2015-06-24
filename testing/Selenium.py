@@ -181,8 +181,6 @@ class Seltest(unittest.TestCase):
         
         assert "No results found." not in driver.page_source
         
-    
-   
 
 if __name__ == "__main__":
     unittest.main()
