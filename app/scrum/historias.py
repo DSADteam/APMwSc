@@ -229,7 +229,6 @@ def VHistoria():
     #   'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
 
     if(oProd.getEscala(session['idPila']) == "cualitativo"):
-        print("Soy cualitativo")
         res['fHistoria_opcionesPrioridad'] = [
           {'key':1, 'value':'Alta'},
           {'key':7, 'value':'Media'},
@@ -357,6 +356,7 @@ def VDesempeno():
     #Action code goes here, res should be a JSON structure
 
     res['idHistoria'] = int(idHistoria) 
+    res['hola'] = 2
 
     #Action code ends here
     return json.dumps(res)
@@ -714,8 +714,6 @@ class clsHistoria():
             
             prioridad=row.prioridad
 
-            print("tengo que hacer conversion porque")
-            print(conversion)
             if conversion:
                 if prioridad<=6:
                     prioridad='Alta'
