@@ -323,6 +323,21 @@ def VPrioridades():
     #Action code ends here
     return json.dumps(res)
 
+
+@historias.route('/historias/VDesempeno')
+def VDesempeno():
+    #GET parameter
+    idHistoria = request.args['idHistoria']
+    res = {}
+    if "actor" in session:
+        res['actor']=session['actor']
+    #Action code goes here, res should be a JSON structure
+
+    res['idHistoria'] = int(idHistoria) 
+
+    #Action code ends here
+    return json.dumps(res)
+
 #Use case code starts here
 
 class clsHistoria():
