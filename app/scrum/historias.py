@@ -85,7 +85,8 @@ def AModifHistoria():
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     idHistoria = int(session['idHistoria'])
-
+    print('parametroooos')
+    print(params)
     #session.pop("idHistoria", None)
 
     idPila = int(session['idPila'])
@@ -224,9 +225,6 @@ def VHistoria():
     res['fHistoria_opcionesTiposHistoria'] = [
       {'key':1,'value':'Opcional'},
       {'key':2,'value':'Obligatoria'}]
-        
-    #res['fHistoria'] = {'super':0, 
-    #   'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
 
     if(oProd.getEscala(session['idPila']) == "cualitativo"):
         res['fHistoria_opcionesPrioridad'] = [
@@ -383,7 +381,7 @@ class clsHistoria():
 
 
             res['prioridad']=row.prioridad
-            if row.tipo=='Opcional':
+            if row.tipo=='opcional':
                 res['tipo']=1
             else:
                 res['tipo']=2   
@@ -478,27 +476,35 @@ class clsHistoria():
                            and idAccion != None and prioridad != None and idHistoria!=None
         if not nulidadesValidas:
             return False
-        
+        print('PASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 1')
         tiposCorrectos = (type(codigo)     is str) and \
                          (type(idProducto) is int) and \
                          (type(idHistoria) is int) and \
-                         (type(tipo)       is str) and \
+                         (type(tipo)       is int ) and \
                          (type(idAccion)   is int) and \
                          (type(idPapa)     is int  or   idPapa   == None) and \
                          (type(prioridad)     is int or str)    
-        
+        print('PASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 2')
+        print(type(codigo)     is str)
+        print(type(idProducto) is int)
+        print((type(idHistoria) is int) )
+        print((type(tipo)       is int) )
+        print((type(idAccion)   is int))
+        print((type(idPapa)     is int  or   idPapa   == None))
+        print((type(prioridad)     is int or str))
+
         if tiposCorrectos:
             pass
         else:
             return False
-
+        print('PASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 3')
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
 
         #Protecciones de funcion
         stringsVacios    = codigo == '' or tipo == ''
         estaEnDb         = self.existeHistoria(codigo=codigo,idProducto=idProducto)
         existeProducto   = producto.count() > 0
-        longCharValido   = (len(codigo) <= 500) and (len(tipo) <= 500)
+        longCharValido   = (len(codigo) <= 500) and (tipo ==1 or tipo ==2)
         tieneLoops       = self.tieneLoops(idProducto,idPapa,codigo)
         rangoVal         = ((prioridad >=1) and (prioridad<=20))
         
@@ -521,7 +527,10 @@ class clsHistoria():
             self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
                 update({'idHistoriaPadre':idPapa})
             self.session.commit()
-
+        if tipo==1:
+            tipo='opcional'
+        else:
+            tipo='obligatoria'
         self.session.query(Historia).filter(Historia.idHistoria == idHistoria).\
             update({'tipo':tipo})
         self.session.commit()
