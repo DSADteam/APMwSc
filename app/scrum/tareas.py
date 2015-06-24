@@ -184,7 +184,9 @@ class clsTarea():
         if(descripcion==''):
             return False
 
-       
+        if (nombreCategoria==''):
+            return False
+            
         tiposCorrectos = (type(descripcion) is str) and \
                          (type(idHistoria)  is int) and \
                          (type(nombreCategoria) is str) and \

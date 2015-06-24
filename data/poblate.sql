@@ -118,7 +118,7 @@ INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Integrar ModeloVistaC
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Limpiar codigo',2);
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Calentar sillas',1);
 
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ponerle peperoni a todo"    ',1,'Limpiar codigo',2);
+INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ponerle peperoni a todo'     ,1,'Limpiar codigo',2);
 INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar combo de ser posible',1,'Limpiar codigo',2);
 INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Surfear sin reglas'          ,2,'Limpiar codigo',1);
 INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Esperar la ola'              ,2,'Limpiar codigo',2);

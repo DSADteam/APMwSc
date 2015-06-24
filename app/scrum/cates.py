@@ -140,7 +140,8 @@ class clsCategoria():
         if not tiposCorrectos:
             return False
 
-
+        if (nombreCategoria==''):
+            return False
        
         valoresValido = (nombreCategoria != '') and (peso >= 0) 
 
@@ -191,5 +192,15 @@ class clsCategoria():
             i=i+1
         
         return res
+
+    def existeCategoria(self,nombreCategoria):
+       
+        if not(type(nombreCategoria) is str):
+            return False
+        
+        result = self.session.query(Categoria).\
+        filter(Categoria.nombreCategoria == nombreCategoria)
+        
+        return result.count() > 0
 
 #Use case code ends here
