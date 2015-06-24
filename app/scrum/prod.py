@@ -31,14 +31,12 @@ def ACrearProducto():
     
     #Action code goes here, res should be a list with a label and a message
 
-    print(params)
-    print("AQUI FUE")
-
     escala = "cualitativo" if (params['escala'] == 1) else "cuantitativo"
-    print(escala)
     prd=clsProducto(session=sessionDB,engine=engine)
 
-    itWorked = prd.insertar(nombre=params['descripcion'],escala=escala,descripcion=params['nombre'])
+
+    itWorked = prd.insertar(nombre=params['nombre'],escala=escala,descripcion=params['descripcion'])
+
     res = results[0] if itWorked else results[1]
 
     #Action code ends here
@@ -177,11 +175,11 @@ class clsProducto():
             self.engine  = engine  #Necesario para realizar consultas e insertar
             self.session = session #Necesario para insertar/borrar columnas
 
+
     ''' Funcion insertar
         Funcion para insertar un producto. Indice agregado automaticamente
     '''
     def insertar(self,nombre,descripcion,escala):
-
         #Verificaciones de entrada
         tiposCorrectos = (type(nombre) is str) and (type(escala) is str) and\
                          ((type(descripcion) is str) or descripcion == None)             

@@ -323,5 +323,16 @@ class clsActor():
             return True
         else:
             return False
-        
+
+    ''' Funcion obtener
+        Funcion que permite entrega el nombre de un actor, dado su id
+    '''
+    def obtenerNombre(self,idActor):
+        result = self.session.query(Actor).filter(Actor.idActor == idActor)
+
+        for row in result:
+            return row.nombre
+
+        return False
+
 #Use case code ends here

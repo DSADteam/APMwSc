@@ -3,7 +3,7 @@ INSERT INTO "Productos" (nombre,descripcion,escala) VALUES ('Ingenieria en Compu
 
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('logearme en la pagina',1);
 INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('crear un actor nuevo',1);
-INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('seleccionar tareas por peso',2);
+INSERT INTO "Acciones" (descripcion,"idProducto") VALUES ('seleccionar tareas por peso',5);
 
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('desarrollador','Miembro del equipo de desarrollo',1);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('maestroScrum','Maestro Scrum',1);
@@ -11,7 +11,6 @@ INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('duenoProducto',
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('desarrollador','Miembro del equipo de desarrollo',2);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('maestroScrum','Maestro Scrum',2);
 INSERT INTO "Actores" (nombre,descripcion,"idProducto") VALUES ('duenoProducto','Dueño de producto',2);
-
 
 
 --Claves para todos es HOLAhol4! encriptado
@@ -48,17 +47,6 @@ INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (1,2);
 INSERT INTO "ActoresHistorias" ("idHistoria","idActor") VALUES (1,3);
 
 INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('implementacion',3);
-INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('Limpiar codigo',4);
+INSERT INTO "Categorias" ("nombreCategoria",peso) VALUES ('integracion',4);
 
-
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ponerle peperoni a todo'     ,1,'Limpiar codigo',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar combo de ser posible',1,'Limpiar codigo',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Surfear sin reglas'          ,1,'Limpiar codigo',1);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Esperar la ola'              ,1,'Limpiar codigo',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Hacer brownies felices'      ,1,'Limpiar codigo',3);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Tatuaje en la espalda como la abuela',1,'Limpiar codigo',2);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Comprar unicornios'          ,1,'Limpiar codigo',5);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Echar codigo como locos y sufrir',1,'Limpiar codigo',1);
-INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('Ser vagos como M'            ,1,'Limpiar codigo',1);
 INSERT INTO "Tareas" (descripcion,"idHistoria","nombreCategoria",peso) VALUES ('crear scrum master',1,'implementacion',4);
-
