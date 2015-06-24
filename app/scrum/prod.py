@@ -30,6 +30,9 @@ def ACrearProducto():
     res = results[0]
     
     #Action code goes here, res should be a list with a label and a message
+    if "actor" in session:
+        print("si vale, yo tengo un actor")
+        print(actor)
 
     print(params)
     print("AQUI FUE")
