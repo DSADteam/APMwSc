@@ -86,8 +86,6 @@ def AModifHistoria():
     idHistoria = int(session['idHistoria'])
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
-    print('MIRAAAME MIRAAAME')
-    print(params['super'])
     x=his.modificar(
                 idHistoria=idHistoria,
                 codigo=params['codigo'],
@@ -335,13 +333,14 @@ def VPrioridades():
 # Clase historia
 class clsHistoria():
     
-    #Metodo init
     def __init__(self,engine=None,session=None):
         
         self.engine  = engine
         self.session = session
      
-    #Funcion que inserta una historia 
+    ''' Funcion insertar
+        Funcion que inserta una historia 
+    '''
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
 
         #No nulidad
@@ -392,7 +391,9 @@ class clsHistoria():
         else:
             return False
     
-    # Funcion que modifica las prioridades de una historia
+    ''' Funcion modificarPrioridades
+         Funcion que modifica las prioridades de una historia
+    '''
     def modificarPrioridades(self,idHistorias,prioridades):
 
         for i in range(len(idHistorias)):
@@ -400,7 +401,9 @@ class clsHistoria():
                  update({'prioridad' : prioridades[i] })
             self.session.commit()
 
-    # Funcion que actualiza una historia
+    ''' Funcion modificar
+        Funcion que actualiza una historia
+    '''
     def modificar(
                     self,
                     idHistoria=None,
@@ -485,7 +488,9 @@ class clsHistoria():
 
         return True
     
-    #Funcion para obtener el id de la historia    
+    ''' Funcion obtId
+        Funcion para obtener el id de la historia    
+    '''
     def obtId(self,codigo=None,idProducto=None):
         
         if codigo==None or idProducto==None:
@@ -496,7 +501,9 @@ class clsHistoria():
         for i in res:
             return i.idHistoria
 
-    #Funcion para obtener el codigo de la historia
+    ''' Funcion obtCode
+        Funcion para obtener el codigo de la historia
+    '''
     def obtCode(self,idHistoria=None):
         
         if idHistoria==None:
@@ -506,7 +513,9 @@ class clsHistoria():
         for i in res:
             return i.codigo
     
-    #Funcion para asociar actores a una historia    
+    ''' Funcion asociarActores
+        Funcion para asociar actores a una historia    
+    '''
     def asociarActores(self,idActores=None,idHistoria=None):
         if idActores==[] or idHistoria==None or idActores==None:
             return False
@@ -523,7 +532,9 @@ class clsHistoria():
             
         return True
     
-    #Funcion para asociar objetivos a una historia
+    ''' Funcion asociarObjetivos
+        Funcion para asociar objetivos a una historia
+    '''
     def asociarObjetivos(self,idObjetivos=None,idHistoria=None):
         if idObjetivos==[] or idHistoria==None or idObjetivos==None:
             return False
@@ -540,7 +551,9 @@ class clsHistoria():
             
         return True
 
-    # Funcion que verifica si es una epica
+    ''' Funcion tieneLoops
+         Funcion que verifica si es una epica
+    '''
     def tieneLoops(self,idProducto=None,idPapa=None,codigo=None):
         
         if idProducto==None or codigo==None or idPapa==None:
@@ -556,7 +569,9 @@ class clsHistoria():
                 idPapa=(res.first()).idHistoria
         return False
     
-    # Funcion que verifica la existencia de una historia    
+    ''' Funcion existeHistoria
+         Funcion que verifica la existencia de una historia    
+    '''
     def existeHistoria(self,codigo,idProducto):
         
         #Verificaciones de entrada
@@ -568,7 +583,9 @@ class clsHistoria():
         else:
             return False
 
-    # Funcion que lista las prioriades
+    ''' Funcion listarPrioridades
+         Funcion que lista las prioriades
+    '''
     def listarPrioridades(self,idProducto):
         res=[]
         conversion=False
@@ -591,7 +608,9 @@ class clsHistoria():
         
         return res
     
-    # Funcion que lista las historias ordenadad por prioridades
+    ''' Funcion listarHistoriasprod
+         Funcion que lista las historias ordenadad por prioridades
+    '''
     def listarHistoriasprod(self,idProducto): 
         
         res = []
@@ -684,13 +703,17 @@ class clsHistoria():
 
         return res
     
-    # Funcion que limpia las historias de la base de datos    
+    ''' Funcion borrarFilas
+        Funcion que limpia las historias de la base de datos    
+    '''
     def borrarFilas(self):
         
         self.session.query(Historia).delete()
         self.session.commit()
 
-    #Funcion que permite eliminar la historia
+    ''' Funcion eliminar
+        Funcion que permite eliminar la historia
+    '''
     def eliminar(self,idHistoria):
 
         # Desasociando viejos

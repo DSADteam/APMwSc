@@ -28,7 +28,6 @@ def ACrearActor():
     idPila = str(session['idPila'])
 
     act=clsActor(session=sessionDB,engine=engine)
-    print(params['nombre']+params['descripcion']+'wiiiiiiiiiiiiiiiiiii')
     x=act.insertar(nombre=params['nombre'],descripcion=params['descripcion'],idProducto=int(idPila))
     if not x:
         res=results[1]
@@ -154,13 +153,14 @@ def VCrearActor():
 # Clase Actor
 class clsActor():
     
-    #Metodo init
     def __init__(self,engine=None,session=None):
         
         self.engine  = engine
         self.session = session
     
-    # Funcion que inserta un actor    
+    ''' Funcion insertar
+         Funcion que inserta un actor    
+    '''
     def insertar(self,nombre=None,descripcion=None,idProducto=None):
         
         #Verificaciones de entrada
@@ -190,7 +190,9 @@ class clsActor():
         else:
             return False
     
-    # Funcion que verifica la existencia de un actor    
+    ''' Funcion existeActor
+         Funcion que verifica la existencia de un actor a partir de su descripcion o de su nombre    
+    '''
     def existeActor(self,nombre=None,descripcion=None):
         
         # Verificaciones de entrada
@@ -214,18 +216,21 @@ class clsActor():
 
         return result.count() > 0
 
-    # Funcion que muestra actores
+    ''' Funcion mostrarActor
+        Funcion que muestra actores
+    '''
     def mostrarActor(self,idActor):
         
         result = self.session.query(Actor).filter(Actor.idActor == idActor)
         if result!="":
             for row in result:
                 res = {'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion}
-            else:
-                print("Empty query!")
+            
         return res
 
-    # Funcion que lista actores
+    ''' Funcion listarActores
+        Funcion que lista actores
+    '''
     def listarActores(self,showAsKeyValue=False):
         
         res = []
@@ -236,12 +241,12 @@ class clsActor():
                     res.append({'key':row.idActor,'value':row.descripcion})
                 else:
                     res.append({'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
-        
+            
         return res
     
-    # Funcion que lista los actores de un producto            
+    ''' Funcion listarActoresprod
+        Funcion que lista los actores de un producto            
+    '''
     def listarActoresprod(self,idProducto):
         
         res = []
@@ -249,18 +254,20 @@ class clsActor():
         if result!="":
             for row in result:
                 res.append({'idActor':row.idActor,'nombre':row.nombre,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
-        
+            
         return res
 
-    #Funcion que limpia de actores la base de datos
+    ''' Funcion borrarFilas
+        Funcion que limpia de actores la base de datos
+    '''
     def borrarFilas(self):
         
         self.session.query(Actor).delete()
         self.session.commit()
     
-    # Funcion para obtener el id del producto asociado a un actor
+    ''' Funcion getProdId
+        Funcion para obtener el id del producto asociado a un actor
+    '''
     def getProdId(self,idActor):
         
         result = self.session.query(Actor).filter(Actor.idActor == idActor)
@@ -268,7 +275,9 @@ class clsActor():
             x=row.idProducto
         return x
 
-    #Funcion que permite actualizar un nombre y descripcion
+    ''' Funcion modificar
+        Funcion que permite actualizar un nombre y descripcion
+    '''
     def modificar(self,id=None,nombre=None,descripcion=None):
         
         #Verificaciones de entrada
@@ -296,7 +305,9 @@ class clsActor():
         else:
             return False
 
-    #Funcion que permite eliminar el actor
+    ''' Funcion eliminar
+        Funcion que permite eliminar el actor
+    '''
     def eliminar(self,idActor):
 
         usuariosAfectados = self.session.query(dbuser).filter(dbuser.idActor == idActor)

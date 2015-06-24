@@ -121,12 +121,13 @@ def VCategorias():
 # Clase categoria
 class clsCategoria():
     
-    # Metodo init
     def __init__(self,engine=None,session=None):
         self.engine  = engine
         self.session = session
     
-    # Funcion que inserta una categoria    
+    ''' Funcion insertar
+         Funcion que inserta una categoria    
+    '''
     def insertar(self,nombreCategoria,peso):
         
         #Verificaciones de entrada
@@ -155,7 +156,9 @@ class clsCategoria():
         else:
             return False
 
-    #Funcion que lista las categorias
+    ''' Funcion listarTodo
+        Funcion que lista las categorias
+    '''
     def listarTodo(self):
         res=[]
         
@@ -171,7 +174,9 @@ class clsCategoria():
         
         return res
 
-    #Funcion que lista las categorias
+    ''' Funcion listarKeyValue
+        Funcion que lista las categorias
+    '''
     def listarKeyValue(self):
         res=[]
         

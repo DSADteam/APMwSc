@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 '''
-Created on 24/9/2014
-@author: Jean Carlos
-Modified by: Nabil Marquez and Meggie Sanchez
+Encriptacion de password
+
 '''
 
 import uuid

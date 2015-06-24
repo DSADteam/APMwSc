@@ -141,13 +141,14 @@ def VCrearAccion():
 # Calse Accion
 class clsAccion():
     
-    # Metodo init
     def __init__(self,engine=None,session=None):
         
         self.engine  = engine
         self.session = session
     
-    # Funcion que inserta una accion    
+    ''' Funcion insertar
+        Funcion que inserta una accion    
+    '''
     def insertar(self,descripcion=None,idProducto=None):
         
         #Verificaciones de entrada
@@ -173,7 +174,9 @@ class clsAccion():
         else:
             return False
     
-    # Funcion que verifica la existencia de una accion    
+    ''' Funcion existeAccion
+        Funcion que verifica la existencia de una accion a partir de su descripcion
+    '''
     def existeAccion(self,descripcion=None):
         
         #Verificaciones de entrada
@@ -190,18 +193,20 @@ class clsAccion():
         
         return result.count() > 0
 
-    # Funcion que muestra las acciones
+    ''' Funcion mostrarAccion
+         Funcion que muestra las acciones
+    '''
     def mostrarAccion(self,idAccion):
         
         result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
         if result!="":
             for row in result:
                 res = {'idAccion':row.idAccion,'descripcion':row.descripcion}
-            else:
-                print("Empty query!")
         return res    
 
-    # Funcion para obtener id de accion
+    ''' Funcion obtenerId
+        Funcion para obtener id de accion a partir de su descripcion
+    '''
     def obtenerId(self,descripcion):
         
         res = -1
@@ -213,7 +218,9 @@ class clsAccion():
             
         return res
 
-    # Funcion que lista todas las acciones
+    ''' Funcion listarAcciones
+         Funcion que lista todas las acciones
+    '''
     def listarAcciones(self):
         
         res = []
@@ -221,10 +228,10 @@ class clsAccion():
         if result!="":
             for row in result:
                 res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
-    
-    # Funcion que lista las acciones de un producto            
+            
+    ''' Funcion listarAccionesprod
+         Funcion que lista las acciones de un producto            
+    '''
     def listarAccionesprod(self,idProducto):
         
         res = []
@@ -237,13 +244,17 @@ class clsAccion():
         
         return res
     
-    # Funcion para limpiar las acciones de la base de datos
+    ''' Funcion borrarFilas
+        Funcion para limpiar las acciones de la base de datos
+    '''
     def borrarFilas(self):
         
         self.session.query(Accion).delete()
         self.session.commit()
 
-    #Funcion que permite actualizar la descripcion
+    ''' Funcion modificar
+        Funcion que permite actualizar la descripcion
+    '''
     def modificar(self,id=None,descripcion=None):
         
         # Verificaciones de entrada
@@ -266,7 +277,9 @@ class clsAccion():
         else:
             return False
         
-    #Funcion que permite eliminar la accion
+    ''' Funcion eliminar
+        Funcion que permite eliminar la accion
+    '''
     def eliminar(self,idAccion):
 
         # Verificaciones de entrada
