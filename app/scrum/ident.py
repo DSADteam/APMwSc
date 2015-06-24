@@ -26,6 +26,7 @@ def AIdentificar():
     log=clsLogin(session=sessionDB,engine=engine)
     resp=log.check_password(params.get('usuario'),params.get('clave'))
     
+
     if resp:
         res=results[0]
     else:
@@ -100,12 +101,12 @@ def VRegistro():
     oActor = clsActor(engine,DBSession)
 
     res['fUsuario_opcionesActorScrum'] = [
-      {'key':1,'value':'Maestro Scrum'},
-      {'key':2,'value':'Dueño de producto'},
-      {'key':3,'value':'Miembro del equipo de desarrollo'},
+      {'key':1,'value':'Miembro del equipo de desarrollo'},
+      {'key':2,'value':'Maestro Scrum'},
+      {'key':3,'value':'Dueño de producto'},
     ]
 
-    res['fUsuario_opcionesActorScrum'] = oActor.listarActores(showAsKeyValue=True)
+    #res['fUsuario_opcionesActorScrum'] = oActor.listarActores(showAsKeyValue=True)
 
     #Action code ends here
     
@@ -147,7 +148,7 @@ class clsLogin():
         usr=clsDBUser(session=sessionDB,engine=engine)
         passw=usr.buscar(username).split() #Obteniendo el hash de la db
         if passw!=[]:
-            result = self.engine.execute("select * from \"Actores\" where \"idActor\"="+passw[4]+" and nombre='Product Owner';")
+            result = self.engine.execute("select * from \"Actores\" where \"idActor\"="+passw[4]+";")
             count=0
             for row in result:
                 count+=1
