@@ -339,6 +339,7 @@ def VDesempeno():
     #Action code goes here, res should be a JSON structure
 
     res['idHistoria'] = int(idHistoria) 
+    res['hola'] = 2
 
     #Action code ends here
     return json.dumps(res)
