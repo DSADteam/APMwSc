@@ -298,4 +298,13 @@ class clsActor():
             return True
         else:
             return False
+
+    def obtenerNombre(self,idActor):
+        result = self.session.query(Actor).filter(Actor.idActor == idActor)
+
+        for row in result:
+            return row.nombre
+
+        return False
+
 #Use case code ends here

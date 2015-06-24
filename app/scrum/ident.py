@@ -20,19 +20,29 @@ from app.scrum.actor import clsActor
 def AIdentificar():
     #POST/PUT parameters
     params = request.get_json()
-    results = [{'label':'/VProductos', 'msg':['Bienvenido dueño de producto'], "actor":"duenoProducto"}, {'label':'/VMaestroScrum', 'msg':['Bienvenido Maestro Scrum'], "actor":"maestroScrum"}, {'label':'/VDesarrollador', 'msg':['Bienvenido Desarrollador'], "actor":"desarrollador"}, {'label':'/VLogin', 'msg':['Datos de identificación incorrectos']}, ]
+    results = [{'label':'/VProductos', 'msg':['Bienvenido dueño de producto'], "actor":"duenoProducto"}, 
+               {'label':'/VMaestroScrum', 'msg':['Bienvenido Maestro Scrum'], "actor":"maestroScrum"}, 
+               {'label':'/VDesarrollador', 'msg':['Bienvenido Desarrollador'], "actor":"desarrollador"}, 
+               {'label':'/VLogin', 'msg':['Datos de identificación incorrectos'], "actor":"invalido"}, ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     log=clsLogin(session=sessionDB,engine=engine)
     resp=log.check_password(params.get('usuario'),params.get('clave'))
     
     #Hacer chequeo del tipo de usuario
-    if resp:
-        res=results[0]
-    else:
-        res=results[3]
 
     us = clsDBUser(engine,sessionDB)
+
+    actor = us.obtenerActor(params.get('usuario'))
+
+    for i in results:
+        res = i
+        if i["actor"] == actor:
+            session['actor'] = actor
+            break
+
+
+
     nombre = us.obtenerNombre(params.get('usuario'))
     session['usuario'] = {'nombre': nombre } 
 
@@ -249,6 +259,25 @@ class clsDBUser():
                 self.session.query(dbuser).filter(dbuser.username == iusername).\
                     update({'idActor' : (idActor) }) 
                 self.session.commit()
+
+    ''' Metodo obtenerActor
+        Permite buscar el nombre de actor asociado al usuario dado
+    ''' 
+    def obtenerActor(self,username):
+        res = self.session.query(dbuser).filter(dbuser.username == username)
+
+        idActor = -1
+
+        for row in res:
+            idActor = row.idActor
+
+        if idActor == -1:
+            return "Failed"
+        else:
+            oActor = clsActor(self.engine,self.session)
+            res = oActor.obtenerNombre(idActor)
+            return res
+
 
 
 #Use case code starts here
