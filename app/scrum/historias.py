@@ -227,7 +227,6 @@ def VHistoria():
     #   'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
 
     if(oProd.getEscala(session['idPila']) == "cualitativo"):
-        print("Soy cualitativo")
         res['fHistoria_opcionesPrioridad'] = [
           {'key':1, 'value':'Alta'},
           {'key':7, 'value':'Media'},
@@ -666,8 +665,6 @@ class clsHistoria():
             
             prioridad=row.prioridad
 
-            print("tengo que hacer conversion porque")
-            print(conversion)
             if conversion:
                 if prioridad<=6:
                     prioridad='Alta'
