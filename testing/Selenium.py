@@ -71,7 +71,7 @@ class Seltest(unittest.TestCase):
         input()
         driver.find_element_by_id("fPila_descripcion").click()
         driver.find_element_by_id("fPila_descripcion").clear()
-        driver.find_element_by_id("fPila_descripcion").send_keys("un nuevo producto)
+        driver.find_element_by_id("fPila_descripcion").send_keys("un nuevo producto")
         input()
         Select(driver.find_element_by_id("fPila_escala")).select_by_visible_text("Alta/Media/Baja")
         input()
@@ -157,8 +157,65 @@ class Seltest(unittest.TestCase):
         driver.find_element_by_link_text("Historias").click()
         input()
         
+        
+        
+        driver.find_element_by_link_text("Cambiar prioridades").click()
+        input()
+        Select(driver.find_element_by_id("fPrioridades_prioridad")).select_by_visible_text("Alta")
+        input()
+        Select(driver.find_element_by_xpath("(//select[@id='fPrioridades_prioridad'])[2]")).select_by_visible_text("Alta")
+        input()
+        Select(driver.find_element_by_xpath("(//select[@id='fPrioridades_prioridad'])[3]")).select_by_visible_text("Alta")
+        input()
+        driver.find_element_by_xpath("//button[@type='submit']").click()
+        input()
+        
+        driver.find_element_by_link_text("Crear").click()
+        input()
+        driver.find_element_by_id("fHistoria_codigo").clear()
+        input()
+        driver.find_element_by_id("fHistoria_codigo").send_keys("hidtorianueva")
+        input()
+        Select(driver.find_element_by_id("fHistoria_super")).select_by_visible_text("Historia2")
+        input()
+        Select(driver.find_element_by_xpath("(//select[@id='fHistoria_actores'])[1]")).select_by_visible_text("Scrum Master") 
+        input()
+        Select(driver.find_element_by_id("fHistoria_tipo")).select_by_visible_text("Opcional")
+        input()
+        Select(driver.find_element_by_id("fHistoria_accion")).select_by_visible_text("AaAccion")
+        input()
+        Select(driver.find_element_by_xpath("(//select[@id='fHistoria_objetivos'])[1]")).select_by_visible_text("ser reconocido como usuario valido")
+        input()
+        Select(driver.find_element_by_id("fHistoria_prioridad")).select_by_visible_text("Alta")
+        input()
+        driver.find_element_by_xpath("//button[@type='submit']").click()
+        
+        
         driver.find_element_by_link_text("Detalles").click()
         input()
+        
+        
+        driver.find_element_by_id("fHistoria_codigo").clear()
+        input()
+        driver.find_element_by_id("fHistoria_codigo").send_keys("hidtorianueva")
+        input()
+        Select(driver.find_element_by_id("fHistoria_super")).select_by_visible_text("Historia2")
+        input()
+        Select(driver.find_element_by_xpath("(//select[@id='fHistoria_actores'])[1]")).select_by_visible_text("Scrum Master") 
+        input()
+        Select(driver.find_element_by_id("fHistoria_tipo")).select_by_visible_text("Opcional")
+        input()
+        Select(driver.find_element_by_id("fHistoria_accion")).select_by_visible_text("AaAccion")
+        input()
+        Select(driver.find_element_by_xpath("(//select[@id='fHistoria_objetivos'])[1]")).select_by_visible_text("ser reconocido como usuario valido")
+        input()
+        Select(driver.find_element_by_id("fHistoria_prioridad")).select_by_visible_text("Alta")
+        input()
+        driver.find_element_by_xpath("//button[@type='submit']").click()
+        
+        
+        
+        
         
         driver.find_element_by_link_text("+tarea").click()
         input()
