@@ -19,6 +19,7 @@ from base import *
 
 @actor.route('/actor/ACrearActor', methods=['POST'])
 def ACrearActor():
+   
     #POST/PUT parameters
     params = request.get_json()
     results = [{'label':'/VProducto', 'msg':['Actor creado']}, {'label':'/VCrearActor', 'msg':['Error al crear actor']}, ]
@@ -43,9 +44,11 @@ def ACrearActor():
 
 @actor.route('/actor/AElimActor')
 def AElimActor():
+    
     #GET parameter
     results = [{'label':'/VProducto', 'msg':['Actor eliminado']}, {'label':'/VActor', 'msg':['No se pudo eliminar este actor']}, {'label': '/VActor', 'msg' : ["Hay usuarios asociado al actor, no es posible eliminar"]} , ]
     res = results[0]
+  
     #Action code goes here, res should be a list with a label and a message
 
     idActor = session['idActor']
@@ -60,6 +63,7 @@ def AElimActor():
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -69,10 +73,12 @@ def AElimActor():
 
 @actor.route('/actor/AModifActor', methods=['POST'])
 def AModifActor():
+    
     #POST/PUT parameters
     params = request.get_json()
     results = [{'label':'/VProducto', 'msg':['Actor actualizado']}, {'label':'/VActor', 'msg':['Error al modificar actor']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
     if 'usuario' not in session:
       res['logout'] = '/'
@@ -89,6 +95,7 @@ def AModifActor():
         res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -103,6 +110,7 @@ def VActor():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structur
 
     if 'usuario' not in session:
@@ -118,6 +126,7 @@ def VActor():
     session['idActor'] = idActor
 
     #Action code ends here
+   
     return json.dumps(res)
 
 
@@ -127,51 +136,52 @@ def VCrearActor():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+   
     #Action code goes here, res should be a JSON structure
 
     if 'usuario' not in session:
       res['logout'] = '/'
       return json.dumps(res)
-      
-
-
+    
     res['idPila'] = session['idPila']
 
     #Action code ends here
+    
     return json.dumps(res)
 
 #Use case code starts here
 
+# Clase Actor
 class clsActor():
     
+    #Metodo init
     def __init__(self,engine=None,session=None):
         
         self.engine  = engine
         self.session = session
-        
+    
+    # Funcion que inserta un actor    
     def insertar(self,nombre=None,descripcion=None,idProducto=None):
-
+        
+        #Verificaciones de entrada
         tiposCorrectos = (type(descripcion) is str) and \
                          (type(nombre) is str)      and \
                          (type(idProducto) is int)
 
         if not tiposCorrectos:
             return False
-
-
        
         comentarioNulo = (nombre == None) or (descripcion == None) or\
         (idProducto==None) or (nombre == '') or (descripcion == '') 
         if comentarioNulo:
             return False
-
-        #estaEnBd       = self.existeActor(nombre=nombre)
         
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
         existeProducto = producto.count() > 0
 
         longCharValido = (len(nombre) <= 50) and (len(descripcion) <= 500)
-
+        
+        # Insertar el actor
         if (longCharValido) and (not comentarioNulo) and existeProducto:
             newAct = Actor(nombre,descripcion,idProducto)
             self.session.add(newAct)
@@ -179,9 +189,11 @@ class clsActor():
             return True
         else:
             return False
-        
+    
+    # Funcion que verifica la existencia de un actor    
     def existeActor(self,nombre=None,descripcion=None):
-        # No veo esto necesario, no en existe... solo en insertar
+        
+        # Verificaciones de entrada
         nombreStr   = (type(nombre) is str)      or nombre==None
         descriptStr = (type(descripcion) is str) or descripcion==None
         
@@ -189,7 +201,8 @@ class clsActor():
             pass
         else:
             return False
-
+        
+        #Filtrar actores
         if(nombre!=None and descripcion==None):
             result = self.session.query(Actor).filter(Actor.nombre == nombre)
         elif(nombre==None and descripcion!=None):
@@ -201,11 +214,10 @@ class clsActor():
 
         return result.count() > 0
 
-
+    # Funcion que muestra actores
     def mostrarActor(self,idActor):
+        
         result = self.session.query(Actor).filter(Actor.idActor == idActor)
-        print("Este es el resultado ")
-        print(result)
         if result!="":
             for row in result:
                 res = {'nombre':row.nombre,'idActor':row.idActor,'descripcion':row.descripcion}
@@ -213,9 +225,7 @@ class clsActor():
                 print("Empty query!")
         return res
 
-    #Agregar busqueda de actor por nombre
-
-    
+    # Funcion que lista actores
     def listarActores(self,showAsKeyValue=False):
         
         res = []
@@ -230,11 +240,11 @@ class clsActor():
                 print("Empty query!")
         
         return res
-                
+    
+    # Funcion que lista los actores de un producto            
     def listarActoresprod(self,idProducto):
         
         res = []
-        #result = self.engine.execute("select * from \"Actores\" where \'idProducto\'="+str(idProducto)+" ;")
         result = self.session.query(Actor).filter(Actor.idProducto == idProducto)
         if result!="":
             for row in result:
@@ -244,11 +254,13 @@ class clsActor():
         
         return res
 
+    #Funcion que limpia de actores la base de datos
     def borrarFilas(self):
         
         self.session.query(Actor).delete()
         self.session.commit()
     
+    # Funcion para obtener el id del producto asociado a un actor
     def getProdId(self,idActor):
         
         result = self.session.query(Actor).filter(Actor.idActor == idActor)
@@ -259,6 +271,7 @@ class clsActor():
     #Funcion que permite actualizar un nombre y descripcion
     def modificar(self,id=None,nombre=None,descripcion=None):
         
+        #Verificaciones de entrada
         if(id==None):
             return False
         if type(id) is str:
@@ -290,7 +303,8 @@ class clsActor():
 
         if (idActor==None) or (usuariosAfectados.count() > 0) :
             return False
-
+        
+        # Desasociando historias
         self.session.query(ActoresHistoria).filter(ActoresHistoria.idActor == idActor).delete()
 
         result = self.session.query(Actor).filter(Actor.idActor == idActor).delete()
@@ -298,4 +312,5 @@ class clsActor():
             return True
         else:
             return False
+        
 #Use case code ends here

@@ -14,14 +14,13 @@ class clsAccessControl(object):
     def __init__(self):
         ohast=''
 
-    
     def matchRegex(self,value,regularExpression):
         lc = re.compile(regularExpression)
         x= lc.findall(value)
         return x!=[] 
     
-
     def encript(self, value):
+        
         # Inicializacion
         oHash=""    
         # Verificar la longitud del password
@@ -58,9 +57,6 @@ class clsAccessControl(object):
 
     def check_password(self, oPassworkEncript, oCheckPassword):
         oPassworkEncript, salt = oPassworkEncript.split(':')
-        # print("Probando iguadldad de ") NO SE QUE APSA AQUI
-        # print(oPassword)
-        # print(oCheckPassword)
         return oPassworkEncript == hashlib.sha256(salt.encode() + oCheckPassword.encode()).hexdigest()
     
     def length_password(self, user_password):
@@ -76,7 +72,7 @@ if __name__ == "__main__":
         oPassword = input('Por favor ingrese su password: ')
         #Se crea un objeto tipo clsAccessControl
         oAccessControl=clsAccessControl()
-            #Para validar el passwork introducido
+        #Para validar el passwork introducido
         oCheckPassword = input('Para verificar su password, ingreselo nuevamente: ')
         if oAccessControl.check_password(oPassworkEncript, oCheckPassword):
             print('Ha introducido el password correcto')
