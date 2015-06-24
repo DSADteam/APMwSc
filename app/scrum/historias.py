@@ -32,7 +32,10 @@ def ACrearHistoria():
 
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
+
+
     y=his.insertar(codigo=params['codigo'],idAccion=int(params['accion']),tipo=params['tipo'],idProducto=idPila, prioridad = params['prioridad'])
+    
     if not y:
         res=results[1]
     else:
@@ -42,7 +45,7 @@ def ACrearHistoria():
 
     res['label'] = res['label'] + '/' + str(idPila)
     #Datos de prueba
-    #res['label'] = res['label'] + '/1'
+
 
     #Action code ends here
     if "actor" in res:
@@ -87,8 +90,7 @@ def AModifHistoria():
 
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
-    print('MIRAAAME MIRAAAME')
-    print(params['super'])
+
     x=his.modificar(
                 idHistoria=idHistoria,
                 codigo=params['codigo'],
@@ -221,10 +223,11 @@ def VHistoria():
     res['fHistoria_opcionesTiposHistoria'] = [
       {'key':'1','value':'Opcional'},
       {'key':'2','value':'Obligatoria'}]
-    res['fHistoria'] = {'super':0, 
-       'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
+    #res['fHistoria'] = {'super':0, 
+    #   'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
 
     if(oProd.getEscala(session['idPila']) == "cualitativo"):
+        print("Soy cualitativo")
         res['fHistoria_opcionesPrioridad'] = [
           {'key':1, 'value':'Alta'},
           {'key':7, 'value':'Media'},
@@ -243,6 +246,8 @@ def VHistoria():
     session['idHistoria'] = request.args['idHistoria']
 
     res['idHistoria']     = session['idHistoria']
+    print("regresando a ")
+    print(session['idHistoria'])
     session['codHistoria']= hist.obtCode(int(session['idHistoria']))    
 
 
@@ -354,6 +359,7 @@ class clsHistoria():
                            and idAccion != None and prioridad != None
         if not nulidadesValidas:
             return False
+
         
         tiposCorrectos = (type(codigo)     is str) and \
                          (type(idProducto) is int) and \
@@ -366,6 +372,7 @@ class clsHistoria():
             pass
         else:
             return False
+
 
         producto = self.session.query(Producto).filter(Producto.idProducto == idProducto)
 
@@ -389,6 +396,8 @@ class clsHistoria():
             return False
         
         if esValido:
+            print("la prioridad que yo agrego es ")
+            print(prioridad)
             newHis = Historia(codigo,idProducto,idAccion,tipo,prioridad,idPapa)
             self.session.add(newHis)
             self.session.commit()
@@ -592,6 +601,7 @@ class clsHistoria():
         res = []
         orden = []
         conversion=False
+
         
         #Revisando escala de producto
         result = self.session.query(Producto).filter(Producto.idProducto == idProducto)
@@ -655,6 +665,8 @@ class clsHistoria():
             
             prioridad=row.prioridad
 
+            print("tengo que hacer conversion porque")
+            print(conversion)
             if conversion:
                 if prioridad<=6:
                     prioridad='Alta'
@@ -662,6 +674,7 @@ class clsHistoria():
                     prioridad='Media'
                 else:
                     prioridad='Baja'
+
                     
             tareasAsociadas = self.session.query(Tarea).\
                             filter(Tarea.idHistoria == row.idHistoria)

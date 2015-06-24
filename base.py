@@ -184,7 +184,7 @@ class Historia(db.Model):
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
     idAccion        = db.Column(Integer, db.ForeignKey('Acciones.idAccion'), nullable=True)
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
-    prioridad       = db.Column(Integer, unique = False) #Del 1 al 20
+    prioridad       = db.Column(Integer, unique = False,nullable=False) #Del 1 al 20
 
     #accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
     #producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
