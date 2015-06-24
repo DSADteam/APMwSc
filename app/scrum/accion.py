@@ -47,6 +47,7 @@ def AModifAccion():
     params = request.get_json()
     results = [{'label':'/VProducto', 'msg':['Acción actualizada']}, {'label':'/VAccion', 'msg':['Error al modificar acción']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
 
     idAccion = params['idAccion']
@@ -61,6 +62,7 @@ def AModifAccion():
         res['label'] = res['label'] + '/' + str(session['idPila'])
 
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -73,6 +75,7 @@ def AElimAccion():
     #GET parameter
     results = [{'label':'/VProducto', 'msg':['Accion eliminada']}, {'label':'/VAccion', 'msg':['No se pudo eliminar esta acción']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
 
     idAccion = session['idAccion']
@@ -83,6 +86,7 @@ def AElimAccion():
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -95,6 +99,7 @@ def VAccion():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
 
     if 'usuario' not in session:
@@ -109,10 +114,8 @@ def VAccion():
     res['idPila']       = session['idPila']
     session['idAccion'] = idAccion
     
-    
-    #idAccion = idPila
-
     #Action code ends here
+    
     return json.dumps(res)
 
 @accion.route('/accion/VCrearAccion')
@@ -120,7 +123,9 @@ def VCrearAccion():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
+    
     if 'usuario' not in session:
       res['logout'] = '/'
       return json.dumps(res)
@@ -133,15 +138,20 @@ def VCrearAccion():
 
 #Use case code starts here
 
+# Calse Accion
 class clsAccion():
     
     def __init__(self,engine=None,session=None):
         
         self.engine  = engine
         self.session = session
-        
+    
+    ''' Funcion insertar
+        Funcion que inserta una accion    
+    '''
     def insertar(self,descripcion=None,idProducto=None):
         
+        #Verificaciones de entrada
         if type(descripcion) is int:
             return False
         if isinstance(idProducto, str):
@@ -153,10 +163,9 @@ class clsAccion():
             return False
 
         estaEnBd       = self.existeAccion(descripcion=descripcion)
-        #pr = clsProducto()
-        #estaEnBd = estaEnBd and pr.existeProducto(idProducto)
         longCharValido = (len(descripcion) <= 500)
 
+        #Insertar en la base de datos
         if (not estaEnBd) and (longCharValido) and (not comentarioNulo):
             newAcc = Accion(descripcion,idProducto)
             self.session.add(newAcc)
@@ -164,13 +173,19 @@ class clsAccion():
             return True
         else:
             return False
-        
+    
+    ''' Funcion existeAccion
+        Funcion que verifica la existencia de una accion a partir de su descripcion
+    '''
     def existeAccion(self,descripcion=None):
+        
+        #Verificaciones de entrada
         if type(descripcion) is int:
             return False
         if (descripcion==''):
             return False
         
+        # Filtrar acciones
         if(descripcion!=None):
             result = self.session.query(Accion).filter(Accion.descripcion == descripcion)
         else:
@@ -178,16 +193,22 @@ class clsAccion():
         
         return result.count() > 0
 
+    ''' Funcion mostrarAccion
+         Funcion que muestra las acciones
+    '''
     def mostrarAccion(self,idAccion):
+        
         result = self.session.query(Accion).filter(Accion.idAccion == idAccion)
         if result!="":
             for row in result:
                 res = {'idAccion':row.idAccion,'descripcion':row.descripcion}
-            else:
-                print("Empty query!")
         return res    
 
+    ''' Funcion obtenerId
+        Funcion para obtener id de accion a partir de su descripcion
+    '''
     def obtenerId(self,descripcion):
+        
         res = -1
 
         result = self.session.query(Accion).filter(Accion.descripcion == descripcion)
@@ -197,6 +218,9 @@ class clsAccion():
             
         return res
 
+    ''' Funcion listarAcciones
+         Funcion que lista todas las acciones
+    '''
     def listarAcciones(self):
         
         res = []
@@ -204,13 +228,13 @@ class clsAccion():
         if result!="":
             for row in result:
                 res.append({'idAccion':row.idAccion,'descripcion':row.descripcion})
-            else:
-                print("Empty query!")
-                
+            
+    ''' Funcion listarAccionesprod
+         Funcion que lista las acciones de un producto            
+    '''
     def listarAccionesprod(self,idProducto):
         
         res = []
-        #result = self.engine.execute("select * from \"Acciones\" where idProducto= "+str(idProducto)+" ;")
         result = self.session.query(Accion).filter(Accion.idProducto == idProducto)
         if result!="":
             for row in result:
@@ -220,15 +244,20 @@ class clsAccion():
         
         return res
     
+    ''' Funcion borrarFilas
+        Funcion para limpiar las acciones de la base de datos
+    '''
     def borrarFilas(self):
         
         self.session.query(Accion).delete()
         self.session.commit()
 
-    #Funcion que permite actualizar la descripcion
+    ''' Funcion modificar
+        Funcion que permite actualizar la descripcion
+    '''
     def modificar(self,id=None,descripcion=None):
         
-        
+        # Verificaciones de entrada
         if type(descripcion) is int:
             return False
         if isinstance(id, str):
@@ -239,7 +268,7 @@ class clsAccion():
         if (len(descripcion)>500):
             return False
     
-
+        # Filtrar acciones
         if id and descripcion:
             a= self.session.query(Accion).filter(Accion.idAccion == id).\
                 update({'descripcion' : descripcion })
@@ -247,14 +276,19 @@ class clsAccion():
             return True
         else:
             return False
-    #Funcion que permite eliminar la accion
+        
+    ''' Funcion eliminar
+        Funcion que permite eliminar la accion
+    '''
     def eliminar(self,idAccion):
 
+        # Verificaciones de entrada
         if (idAccion==None):
             return False
             
         result = self.session.query(Historia).filter(Historia.idAccion == idAccion)
-
+        
+        # Eliminar historias asociadas
         for i in result:
         
             idHistoria = i.idHistoria
@@ -272,7 +306,8 @@ class clsAccion():
             self.session.commit()
 
             self.session.query(Historia).filter(Historia.idHistoria == idHistoria).delete()
-
+        
+        # Eliminar accion
         result = self.session.query(Accion).filter(Accion.idAccion == idAccion).delete()
         if result:
             return True

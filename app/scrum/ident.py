@@ -7,8 +7,6 @@ import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
 sys.path.append(dir)
 
-
-
 ident = Blueprint('ident', __name__)
 
 from base import *
@@ -22,11 +20,12 @@ def AIdentificar():
     params = request.get_json()
     results = [{'label':'/VProductos', 'msg':['Bienvenido dueño de producto'], "actor":"duenoProducto"}, {'label':'/VMaestroScrum', 'msg':['Bienvenido Maestro Scrum'], "actor":"maestroScrum"}, {'label':'/VDesarrollador', 'msg':['Bienvenido Desarrollador'], "actor":"desarrollador"}, {'label':'/VLogin', 'msg':['Datos de identificación incorrectos']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
+    
     log=clsLogin(session=sessionDB,engine=engine)
     resp=log.check_password(params.get('usuario'),params.get('clave'))
     
-    #Hacer chequeo del tipo de usuario
     if resp:
         res=results[0]
     else:
@@ -37,14 +36,13 @@ def AIdentificar():
     session['usuario'] = {'nombre': nombre } 
 
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
-
-
 
 @ident.route('/ident/ARegistrar', methods=['POST'])
 def ARegistrar():
@@ -69,16 +67,14 @@ def ARegistrar():
     else:
         res = results[1]
     
-
     #Action code ends here
+   
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
-
-
 
 @ident.route('/ident/VLogin')
 def VLogin():
@@ -93,13 +89,12 @@ def VLogin():
     #Action code ends here
     return json.dumps(res)
 
-
-
 @ident.route('/ident/VRegistro')
 def VRegistro():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
 
     oActor = clsActor(engine,DBSession)
@@ -113,27 +108,41 @@ def VRegistro():
     res['fUsuario_opcionesActorScrum'] = oActor.listarActores(showAsKeyValue=True)
 
     #Action code ends here
+    
     return json.dumps(res)
 
-
+#Clase Login
 class clsLogin():
 
     def __init__(self,engine=None,session=None):
+        
         if(engine==None and session==None):
             print("Error en creacion de objeto")
         else:
             self.engine  = engine  #Necesario para realizar consultas e insertar
             self.session = session #Necesario para insertar/borrar columnas
 
+    ''' Metodo encriptar
+        Encripta el password del usuario
+    '''
     def encriptar(self, value):
+        
         encri=clsAccessControl()
         return encri.encript(value)
-
+    
+    ''' Metodo longitud
+        Retorna la longitud del password
+    '''
     def longitud(self, user_password):
+        
         longi=clsAccessControl()
         return longi.length_password(user_password)
     
+    ''' Metodo check_password
+        Verifica la correctitud del password
+    '''
     def check_password(self, username, trypass):
+        
         decri=clsAccessControl()
         usr=clsDBUser(session=sessionDB,engine=engine)
         passw=usr.buscar(username).split() #Obteniendo el hash de la db
@@ -149,10 +158,14 @@ class clsLogin():
                 return False
         else:
             return False
-        
+
+#Use case code starts here
+
+# Clase Usuario        
 class clsDBUser():
 
     def __init__(self,engine=None,session=None):
+        
         if(engine==None and session==None):
             print("Error en creacion de objeto")
         else:
@@ -161,9 +174,9 @@ class clsDBUser():
 
     ''' Metodo insertar
         Inserta un nuevo usuario a la base de datos
-    ''' 
-        
+    '''    
     def insertar(self, fullname, username, password,password2, email, idActor):
+       
        cript=clsAccessControl()
        act=clsActor(engine=engine,session=sessionDB)
        passToUse=cript.encript(password)
@@ -185,9 +198,9 @@ class clsDBUser():
        
     ''' Metodo buscar
         Busca a traves del nombre un usuario dentro de la base de datos
-    ''' 
-        
+    '''  
     def buscar(self, iusername):
+        
         result = self.engine.execute("select * from dbuser where username=\'"+iusername+"\';")
         out=""
         if result!="":
@@ -201,6 +214,7 @@ class clsDBUser():
         Dado un usuario, busca su nombre asociado
     '''
     def obtenerNombre(self,username):
+        
         query = self.session.query(dbuser).filter(dbuser.username == username).first()
         if query != None:
             return query.fullname
@@ -209,8 +223,7 @@ class clsDBUser():
         
     ''' Metodo eliminar
         Elimina dentro de la base de datos a un usuario
-    ''' 
-            
+    '''     
     def eliminar(self, iusername):
                 
         self.session.query(dbuser).filter(dbuser.username == iusername).delete()
@@ -218,8 +231,7 @@ class clsDBUser():
         
     ''' Metodo listar
         Enlista todos los usarios con su informacion (no password).
-    '''
-        
+    ''' 
     def listar(self):
         
         result = self.engine.execute("select * from dbuser")
@@ -230,8 +242,8 @@ class clsDBUser():
     ''' Metodo modificar
         Modifica algun atributo de un usuario dentro de la base de datos
     ''' 
-        
     def modificar(self, iusername, ifullname = None, ipassword = None, iemail = None, iidActor = None):
+        
         if self.buscar(iusername)!="":
             if ifullname != None:
                 self.session.query(dbuser).filter(dbuser.username == iusername).\
@@ -249,9 +261,5 @@ class clsDBUser():
                 self.session.query(dbuser).filter(dbuser.username == iusername).\
                     update({'idActor' : (idActor) }) 
                 self.session.commit()
-
-
-#Use case code starts here
-
 
 #Use case code ends here

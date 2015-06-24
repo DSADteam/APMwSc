@@ -1,12 +1,11 @@
+# Dependencias
 from flask import Flask, request, session
 from flask.ext.script import Manager, Server
 from random import SystemRandom
 from datetime import timedelta
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Column, Integer, String, ForeignKey
-
 from flask.ext.migrate import Migrate, MigrateCommand
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref, sessionmaker
@@ -45,9 +44,7 @@ def createdb():
     DBSession = sessionmaker(bind = engine)
     session = DBSession()
 
-
 #Application code starts here
-
 app.config['DATABASE'] = {
             'drivername': 'postgres',
             'host': 'localhost',
@@ -60,13 +57,11 @@ app.config['DATABASE'] = {
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
-
 engine = create_engine(URL(**app.config['DATABASE']))
 DBSession = sessionmaker(bind = engine)
 sessionDB = DBSession()
 
 #Clase para pila de productos
-
 class Producto(db.Model):
     
     __tablename__ = 'Productos'
@@ -86,11 +81,10 @@ class Producto(db.Model):
         return engine.execute("select * from \"Products\";")
 
 # Clase Accion
-
 class Accion(db.Model):
     
     __tablename__ = 'Acciones'
-    idAccion      = db.Column(Integer, primary_key = True)
+    idAccion      = db.Column(Integer, primary_key = True) # Autoincremento
     descripcion   = db.Column(String(500), unique = False, nullable=False)
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     producto      = db.relationship('Producto', backref = db.backref('acciones', lazy = 'dynamic'))
@@ -98,14 +92,12 @@ class Accion(db.Model):
     ''' Metodo init
         Constructor de accion
     ''' 
-    
     def __init__(self, descripcion, idProducto):
         
         self.descripcion = descripcion
         self.idProducto  = idProducto
 
 # Clase Actor
-
 class Actor(db.Model):
     
     __tablename__ = 'Actores'
@@ -118,7 +110,6 @@ class Actor(db.Model):
     ''' Metodo init
         Constructor del actor
     ''' 
-    
     def __init__(self, nombre, descripcion, idProducto):
         
         self.nombre      = nombre
@@ -130,11 +121,10 @@ class Actor(db.Model):
         return engine.execute("select * from \"Actores\";")
      
 # Clase Objetivo
-
 class Objetivo(db.Model):
     
     __tablename__ = 'Objetivos'
-    idObjetivo    = db.Column(Integer, primary_key = True)
+    idObjetivo    = db.Column(Integer, primary_key = True) #Autoincremento
     descripcion   = db.Column(String(500), unique = False, nullable=False)
     idProducto    = db.Column(Integer, db.ForeignKey('Productos.idProducto'))
     transversal   = db.Column(String(15), unique = False, nullable=False)
@@ -143,28 +133,25 @@ class Objetivo(db.Model):
     ''' Metodo init
         Constructor del objetivo
     ''' 
-    
     def __init__(self,descripcion, idProducto, transversal):
         
         self.descripcion = descripcion
         self.idProducto  = idProducto
         self.transversal = transversal
 
-# Class User, used at login for now.
-
+# Class User.
 class dbuser(db.Model):
     
     __tablename__ = 'dbuser'
-    fullname      = Column(String(50))
+    fullname      = Column(String(50)) 
     username      = Column(String(16), primary_key = True)
     password      = Column(String(100)) #para que pueda aceptar hash
     email         = Column(String(30))
-    idActor       = Column(Integer, ForeignKey('Actores.idActor'))
+    idActor       = Column(Integer, ForeignKey('Actores.idActor')) # Roll que ocupa
     
     ''' Metodo init
         Constructor del usuario
     ''' 
-    
     def __init__(self, fullname, username, password, email, idActor):
         
         self.fullname = fullname
@@ -174,11 +161,10 @@ class dbuser(db.Model):
         self.idActor  = idActor
      
 # Clase historias de usuarios
-   
 class Historia(db.Model):
     
     __tablename__   = 'Historias'
-    idHistoria      = db.Column(Integer, primary_key = True)
+    idHistoria      = db.Column(Integer, primary_key = True) #Autoincremento
     codigo          = db.Column(String(500), unique = False, nullable=False)
     tipo            = db.Column(String(15), nullable=False)
     idProducto      = db.Column(Integer, db.ForeignKey('Productos.idProducto'), unique = False, nullable=False)
@@ -186,14 +172,9 @@ class Historia(db.Model):
     idHistoriaPadre = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, nullable=True)
     prioridad       = db.Column(Integer, unique = False) #Del 1 al 20
 
-    #accion          = db.relationship('Acciones',   backref = db.backref('accion'   , lazy = 'dynamic'))
-    #producto        = db.relationship('Productos', backref = db.backref('producto', lazy = 'dynamic'))
-    #historia   = db.relationship('Historias', backref = db.backref('historia', lazy = 'dynamic'))
-
     ''' Metodo init
         Constructor de las historias de usuarios
     ''' 
-
     def __init__(self,codigo, idProducto,idAccion,tipo,peso,prioridad,idHistoriaPadre=None):
         self.codigo      = codigo
         self.idProducto  = idProducto
@@ -204,7 +185,6 @@ class Historia(db.Model):
         self.prioridad=prioridad
         
 # Clase para objetivos de una historia
-
 class ObjetivosHistoria(db.Model):
 
     __tablename__ = 'ObjetivosHistorias'
@@ -215,14 +195,12 @@ class ObjetivosHistoria(db.Model):
     ''' Metodo init
         Constructor de Objetivos asociados a Historias
     ''' 
-    
     def __init__(self,idHistoria,idObjetivo):
 
         self.idHistoria = idHistoria
         self.idObjetivo = idObjetivo
 
 # Clase para actores de una historia
-
 class ActoresHistoria(db.Model):
 
     __tablename__   = 'ActoresHistorias'
@@ -233,24 +211,25 @@ class ActoresHistoria(db.Model):
     ''' Metodo init
         Constructor de Actores asociados a Historias
     ''' 
-    
     def __init__(self,idHistoria,idActor):
         
         self.idHistoria = idHistoria
         self.idActor    = idActor
 
+
+# Clase Tareas
 class Tarea(db.Model):
     
     __tablename__    = 'Tareas'
-    idTarea          = db.Column(Integer, primary_key = True)
+    idTarea          = db.Column(Integer, primary_key = True) #Autoincremento
     descripcion      = db.Column(String(500), unique = False, nullable=False)
     idHistoria       = db.Column(Integer, db.ForeignKey('Historias.idHistoria'), unique = False, primary_key=True)
     nombreCategoria  = db.Column(String(100), db.ForeignKey('Categorias.nombreCategoria'), unique = False)
     peso             = db.Column(Integer, nullable=False)
+    
     ''' Metodo init
         Constructor de Tareas de una historia
     ''' 
-    
     def __init__(self,descripcion,idHistoria,nombreCategoria,peso):
         
         self.descripcion = descripcion
@@ -258,20 +237,17 @@ class Tarea(db.Model):
         self.nombreCategoria  = nombreCategoria
         self.peso  = peso
 
-
-
+# Calse Categoria
 class Categoria(db.Model):
     
     __tablename__    = 'Categorias'
-    idCategoria      = db.Column(Integer,   primary_key = True)
+    idCategoria      = db.Column(Integer,   primary_key = True) #Autoincremento
     nombreCategoria  = db.Column(String(50),unique      = True,nullable=False)
     peso             = db.Column(Integer,   nullable    = False)
-    
     
     ''' Metodo init
         Constructor de Categorias de Tareas
     ''' 
-    
     def __init__(self,nombreCategoria,peso):
         
         self.nombreCategoria = nombreCategoria

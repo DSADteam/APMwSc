@@ -23,20 +23,20 @@ def ACrearCategoria():
     params = request.get_json()
     results = [{'label':'/VCategorias', 'msg':['Categoría creada.']}, {'label':'/VCategorias', 'msg':['Error al intentar crear categoría.']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
+    
     cates = clsCategoria(engine,sessionDB)
     cates.insertar(params['nombre'],params['peso'])
 
-
     #Action code ends here
+
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
-
-
 
 @cates.route('/cates/AElimCategoria')
 def AElimCategoria():
@@ -44,18 +44,18 @@ def AElimCategoria():
     idCategoria = request.args['idCategoria']
     results = [{'label':'/VCategorias', 'msg':['Categoría eliminada.']}, {'label':'/VCategorias', 'msg':['Error al intentar eliminar categoría.']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
 
 
     #Action code ends here
+   
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
         else:
             session['actor'] = res['actor']
     return json.dumps(res)
-
-
 
 @cates.route('/cates/AModifCategoria', methods=['POST'])
 def AModifCategoria():
@@ -74,8 +74,6 @@ def AModifCategoria():
             session['actor'] = res['actor']
     return json.dumps(res)
 
-
-
 @cates.route('/cates/VCategoria')
 def VCategoria():
     #GET parameter
@@ -92,12 +90,9 @@ def VCategoria():
     res['idCategoria'] = int(idCategoria)
     res['fCategoria'] = {'idCategoria':1, 'peso':3, 
                          'nombre':'Reparacíon edl motor'}
-
-
+    
     #Action code ends here
     return json.dumps(res)
-
-
 
 @cates.route('/cates/VCategorias')
 def VCategorias():
@@ -121,28 +116,27 @@ def VCategorias():
     #Action code ends here
     return json.dumps(res)
 
-
-
-
-
 #Use case code starts here
+
+# Clase categoria
 class clsCategoria():
     
     def __init__(self,engine=None,session=None):
         self.engine  = engine
         self.session = session
-        
+    
+    ''' Funcion insertar
+         Funcion que inserta una categoria    
+    '''
     def insertar(self,nombreCategoria,peso):
-
+        
+        #Verificaciones de entrada
         tiposCorrectos = (type(nombreCategoria) is str) and \
                          (type(peso) is int)      
 
         if not tiposCorrectos:
             return False
 
-        if (nombreCategoria==''):
-            return False
-       
         valoresValido = (nombreCategoria != '') and (peso >= 0) 
 
         if not valoresValido:
@@ -152,7 +146,8 @@ class clsCategoria():
         existeProducto = producto.count() > 0
 
         longCharValido = (len(nombreCategoria) <= 50)
-
+        
+        # Insertar categoria
         if  longCharValido and (not existeProducto):
             newCat = Categoria(nombreCategoria,peso)
             self.session.add(newCat)
@@ -161,10 +156,12 @@ class clsCategoria():
         else:
             return False
 
+    ''' Funcion listarTodo
+        Funcion que lista las categorias
+    '''
     def listarTodo(self):
         res=[]
         
-
         result = self.session.query(Categoria)
         i=1
         for row in result:
@@ -177,10 +174,12 @@ class clsCategoria():
         
         return res
 
+    ''' Funcion listarKeyValue
+        Funcion que lista las categorias
+    '''
     def listarKeyValue(self):
         res=[]
         
-
         result = self.session.query(Categoria)
         i=1
         for row in result:

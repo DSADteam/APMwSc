@@ -19,9 +19,6 @@ def VMaestroScrum():
     return json.dumps(res)
 
 
-
-
-
 #Use case code starts here
 
 

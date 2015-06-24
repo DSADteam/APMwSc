@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #Agregando proyect root
-
 import sys
 import os
 dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
@@ -28,6 +27,7 @@ def ACrearHistoria():
     params = request.get_json()
     results = [{'label':'/VHistorias', 'msg':['Historia creada']}, {'label':'/VCrearHistoria', 'msg':['Error al crear historia']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
 
     idPila = int(session['idPila'])
@@ -41,10 +41,9 @@ def ACrearHistoria():
         his.asociarObjetivos(params['objetivos'], idHistoria)
 
     res['label'] = res['label'] + '/' + str(idPila)
-    #Datos de prueba
-    #res['label'] = res['label'] + '/1'
-
+    
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -57,6 +56,7 @@ def AElimHistoria():
     #GET parameter
     results = [{'label':'/VHistorias', 'msg':['Historia eliminada']}, {'label':'/VHistoria', 'msg':['No se pudo eliminar esta historia']}, ]
     res = results[0]
+    
     #Action code goes here, res should be a list with a label and a message
 
     idHistoria = session['idHistoria']
@@ -67,6 +67,7 @@ def AElimHistoria():
     res['label'] = res['label'] + '/' + str(idPila)
 
     #Action code ends here
+    
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -80,15 +81,11 @@ def AModifHistoria():
     params = request.get_json()
     results = [{'label':'/VHistorias', 'msg':['Historia modificada']}, {'label':'/VHistoria', 'msg':['Error al modificar historia']}, ]
     res = results[0]
+   
     #Action code goes here, res should be a list with a label and a message
     idHistoria = int(session['idHistoria'])
-
-    #session.pop("idHistoria", None)
-
     idPila = int(session['idPila'])
     his = clsHistoria(session=sessionDB,engine=engine)
-    print('MIRAAAME MIRAAAME')
-    print(params['super'])
     x=his.modificar(
                 idHistoria=idHistoria,
                 codigo=params['codigo'],
@@ -105,10 +102,8 @@ def AModifHistoria():
         his.asociarActores(params['actores'], idHistoria)
         his.asociarObjetivos(params['objetivos'], idHistoria)
 
-    #Datos de prueba    
-    #res['label'] = res['label'] + '/' + str(idPila)
-
     #Action code ends here
+
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -121,6 +116,7 @@ def VCrearHistoria():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
 
     if 'usuario' not in session:
@@ -165,6 +161,7 @@ def VCrearHistoria():
     res['fHistoria'] = {'super':0}
     
     #Action code ends here
+    
     return json.dumps(res)
 
 @historias.route('/historias/VHistoria')
@@ -172,7 +169,9 @@ def VHistoria():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
+    
     params = request.get_json()
 
     if 'usuario' not in session:
@@ -245,8 +244,8 @@ def VHistoria():
     res['idHistoria']     = session['idHistoria']
     session['codHistoria']= hist.obtCode(int(session['idHistoria']))    
 
-
     #Action code ends here
+
     return json.dumps(res)
 
 @historias.route('/historias/VHistorias')
@@ -254,7 +253,9 @@ def VHistorias():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
+    
     if 'usuario' not in session:
       res['logout'] = '/'
       return json.dumps(res)
@@ -262,10 +263,10 @@ def VHistorias():
     #Datos de prueba
     his=clsHistoria(engine=engine,session=sessionDB)
     res['idPila'] = session['idPila']
-
     res['data0'] = his.listarHistoriasprod(int(session['idPila']))
     
     #Action code ends here
+    
     return json.dumps(res)
 
 @historias.route('/historias/ACambiarPrioridades', methods=['POST'])
@@ -274,9 +275,10 @@ def ACambiarPrioridades():
     params = request.get_json()
     results = [{'label':'/VHistorias', 'msg':['Prioridades reasignadas']}, ]
     res = results[0]
-    #Action code goes here, res should be a list with a label and a message
-    hist=clsHistoria(engine=engine,session=sessionDB)
     
+    #Action code goes here, res should be a list with a label and a message
+    
+    hist=clsHistoria(engine=engine,session=sessionDB)
     idHistorias=[]
     prioridades=[]
     lista=params['lista']
@@ -289,6 +291,7 @@ def ACambiarPrioridades():
     res['label'] = res['label']+ "/"+str(session['idPila'])
 
     #Action code ends here
+
     if "actor" in res:
         if res['actor'] is None:
             session.pop("actor", None)
@@ -303,7 +306,9 @@ def VPrioridades():
     res = {}
     if "actor" in session:
         res['actor']=session['actor']
+    
     #Action code goes here, res should be a JSON structure
+    
     if 'usuario' not in session:
       res['logout'] = '/'
       return json.dumps(res)
@@ -317,14 +322,15 @@ def VPrioridades():
 
     aux = his.listarHistoriasprod(int(session['idPila']))
     
-    
     res['fPrioridades'] = { 'idPila':session['idPila'], 'lista': aux}
 
     #Action code ends here
+   
     return json.dumps(res)
 
 #Use case code starts here
 
+# Clase historia
 class clsHistoria():
     
     def __init__(self,engine=None,session=None):
@@ -332,14 +338,18 @@ class clsHistoria():
         self.engine  = engine
         self.session = session
      
+    ''' Funcion insertar
+        Funcion que inserta una historia 
+    '''
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
 
-        #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
+        #No nulidad
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
                            and idAccion != None and prioridad != None
         if not nulidadesValidas:
             return False
         
+        #Verificaciones de entrada
         tiposCorrectos = (type(codigo)     is str) and \
                          (type(idProducto) is int) and \
                          (type(tipo)       is str) and \
@@ -380,7 +390,10 @@ class clsHistoria():
             return True
         else:
             return False
-
+    
+    ''' Funcion modificarPrioridades
+         Funcion que modifica las prioridades de una historia
+    '''
     def modificarPrioridades(self,idHistorias,prioridades):
 
         for i in range(len(idHistorias)):
@@ -388,6 +401,9 @@ class clsHistoria():
                  update({'prioridad' : prioridades[i] })
             self.session.commit()
 
+    ''' Funcion modificar
+        Funcion que actualiza una historia
+    '''
     def modificar(
                     self,
                     idHistoria=None,
@@ -398,14 +414,13 @@ class clsHistoria():
                     idAccion=None,
                     prioridad=None):
 
-
-
-        #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
+        #No nulidad
         nulidadesValidas = idProducto!=None and tipo != None and codigo != None \
                            and idAccion != None and prioridad != None and idHistoria!=None
         if not nulidadesValidas:
             return False
         
+        #Verificaciones de entrada
         tiposCorrectos = (type(codigo)     is str) and \
                          (type(idProducto) is int) and \
                          (type(idHistoria) is int) and \
@@ -472,8 +487,12 @@ class clsHistoria():
         self.session.commit()
 
         return True
-        
+    
+    ''' Funcion obtId
+        Funcion para obtener el id de la historia    
+    '''
     def obtId(self,codigo=None,idProducto=None):
+        
         if codigo==None or idProducto==None:
             return -1
         
@@ -482,14 +501,21 @@ class clsHistoria():
         for i in res:
             return i.idHistoria
 
+    ''' Funcion obtCode
+        Funcion para obtener el codigo de la historia
+    '''
     def obtCode(self,idHistoria=None):
+        
         if idHistoria==None:
             return -1
         
         res  = self.session.query(Historia).filter(Historia.idHistoria == idHistoria)
         for i in res:
             return i.codigo
-        
+    
+    ''' Funcion asociarActores
+        Funcion para asociar actores a una historia    
+    '''
     def asociarActores(self,idActores=None,idHistoria=None):
         if idActores==[] or idHistoria==None or idActores==None:
             return False
@@ -505,7 +531,10 @@ class clsHistoria():
             self.session.commit()
             
         return True
-
+    
+    ''' Funcion asociarObjetivos
+        Funcion para asociar objetivos a una historia
+    '''
     def asociarObjetivos(self,idObjetivos=None,idHistoria=None):
         if idObjetivos==[] or idHistoria==None or idObjetivos==None:
             return False
@@ -522,6 +551,9 @@ class clsHistoria():
             
         return True
 
+    ''' Funcion tieneLoops
+         Funcion que verifica si es una epica
+    '''
     def tieneLoops(self,idProducto=None,idPapa=None,codigo=None):
         
         if idProducto==None or codigo==None or idPapa==None:
@@ -529,8 +561,6 @@ class clsHistoria():
 
         res  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.idHistoria == idPapa)
         
-
-
         while (res.first()).idHistoriaPadre!=None:
             if (res.first()).codigo!=codigo:
                 return True
@@ -538,9 +568,13 @@ class clsHistoria():
                 res  = self.session.query(Historia).filter(Historia.idProducto == idProducto and Historia.idHistoria == idPapa)
                 idPapa=(res.first()).idHistoria
         return False
-        
+    
+    ''' Funcion existeHistoria
+         Funcion que verifica la existencia de una historia    
+    '''
     def existeHistoria(self,codigo,idProducto):
-        #comentarioNulo = ((codigo == None) or (idProducto==None))
+        
+        #Verificaciones de entrada
         tiposCorrectos = (type(codigo) is str) and (type(idProducto) is int) 
         
         if tiposCorrectos:
@@ -549,6 +583,9 @@ class clsHistoria():
         else:
             return False
 
+    ''' Funcion listarPrioridades
+         Funcion que lista las prioriades
+    '''
     def listarPrioridades(self,idProducto):
         res=[]
         conversion=False
@@ -571,8 +608,10 @@ class clsHistoria():
         
         return res
     
-    def listarHistoriasprod(self,idProducto): #Ordenar por prioridad
-                                              #Eliminar verificacion de transversalidad.
+    ''' Funcion listarHistoriasprod
+         Funcion que lista las historias ordenadad por prioridades
+    '''
+    def listarHistoriasprod(self,idProducto): 
         
         res = []
         orden = []
@@ -607,13 +646,10 @@ class clsHistoria():
                     pass
                 i+=1
 
-                #soon.. verificar si es la ultima columna y cambiar como por un y
-
             if (row.tipo == "obligatorio") :
                 enunciado += " puedo "
             else:
                 enunciado += " podria "
-
 
             accionEncontrada = self.session.query(Historia,Accion).\
                             filter(Historia.idHistoria == row.idHistoria).\
@@ -666,13 +702,18 @@ class clsHistoria():
             pass
 
         return res
-        
+    
+    ''' Funcion borrarFilas
+        Funcion que limpia las historias de la base de datos    
+    '''
     def borrarFilas(self):
         
         self.session.query(Historia).delete()
         self.session.commit()
 
-    #Funcion que permite eliminar la historia
+    ''' Funcion eliminar
+        Funcion que permite eliminar la historia
+    '''
     def eliminar(self,idHistoria):
 
         # Desasociando viejos
