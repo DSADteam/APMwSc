@@ -1,0 +1,9 @@
+#!/bin/bash
+PGPASSWORD="safepassword";
+set PGPASSWORD="safepassword";
+export PGPASSWORD;
+python base.py createdb;
+psql -E -U apmwsc -w -q -d apmwsc  -f data/poblate.sql;
+echo "=====DB poblada.======="
+python base.py runserver
+  

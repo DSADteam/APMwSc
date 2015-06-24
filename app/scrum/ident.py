@@ -20,31 +20,38 @@ from app.scrum.actor import clsActor
 def AIdentificar():
     #POST/PUT parameters
     params = request.get_json()
-    results = [{'label':'/VProductos', 'msg':['Bienvenido dueño de producto'], "actor":"duenoProducto"}, 
-               {'label':'/VMaestroScrum', 'msg':['Bienvenido Maestro Scrum'], "actor":"maestroScrum"}, 
-               {'label':'/VDesarrollador', 'msg':['Bienvenido Desarrollador'], "actor":"desarrollador"}, 
-               {'label':'/VLogin', 'msg':['Datos de identificación incorrectos'], "actor":"invalido"}, ]
+    results = [{'label':'/VProductos', 'msg':['Bienvenido dueño de producto.'], "actor":"duenoProducto"}, 
+               {'label':'/VMaestroScrum', 'msg':['Bienvenido Maestro Scrum.'], "actor":"maestroScrum"}, 
+               {'label':'/VDesarrollador', 'msg':['Bienvenido Desarrollador.'], "actor":"desarrollador"}, 
+               {'label':'/VLogin', 'msg':['Datos de identificación incorrectos.'], "actor":None},
+               {'label':'/VLogin', 'msg':['Vista no definida para este actor.'], "actor":None} ]
     res = results[0]
     #Action code goes here, res should be a list with a label and a message
     log=clsLogin(session=sessionDB,engine=engine)
     resp=log.check_password(params.get('usuario'),params.get('clave'))
     
+
+    if resp:
     #Hacer chequeo del tipo de usuario
 
-    us = clsDBUser(engine,sessionDB)
+        us = clsDBUser(engine,sessionDB)
 
-    actor = us.obtenerActor(params.get('usuario'))
+        actor = us.obtenerActor(params.get('usuario'))
 
-    for i in results:
-        res = i
-        if i["actor"] == actor:
-            session['actor'] = actor
-            break
+        for i in results:
+            res = i
+            if i["actor"] == actor:
+                session['actor'] = actor
+                break
 
 
 
-    nombre = us.obtenerNombre(params.get('usuario'))
-    session['usuario'] = {'nombre': nombre } 
+        nombre = us.obtenerNombre(params.get('usuario'))
+        session['usuario'] = {'nombre': nombre } 
+
+    else:
+
+        res = results[3]
 
     #Action code ends here
     if "actor" in res:
@@ -148,7 +155,7 @@ class clsLogin():
         usr=clsDBUser(session=sessionDB,engine=engine)
         passw=usr.buscar(username).split() #Obteniendo el hash de la db
         if passw!=[]:
-            result = self.engine.execute("select * from \"Actores\" where \"idActor\"="+passw[4]+" and nombre='Product Owner';")
+            result = self.engine.execute("select * from \"Actores\" where \"idActor\"="+passw[4]+";")
             count=0
             for row in result:
                 count+=1
