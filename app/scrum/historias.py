@@ -197,6 +197,7 @@ def VHistoria():
     for x in aux:
         x['key']=x.pop('idAccion')
         x['value']=x.pop('descripcion')
+        x['id']=x['key']
     res['fHistoria_opcionesAcciones'] = aux
 
     aux=obj.listarObjetivosprodt(int(session['idPila']))
@@ -204,21 +205,26 @@ def VHistoria():
         x['key']=x.pop('idObjetivo')
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesObjetivos'] = aux
+    
+
+    aux=hist.listarcodigoHistoriasprod(int(session['idPila']))
+    for x in aux:
+        x['key']=x.pop('idHistoria')
+        x['value']=x.pop('enunciado')
+        x['id']=x['key']
+    res['fHistoria_opcionesHistorias'] = aux
+
 
     aux=hist.listarHistoriasprod(int(session['idPila']))
 
     for x in aux:
         x['key']=x.pop('idHistoria')
         x['value']=x.pop('enunciado')
-    
-    res['fHistoria_opcionesHistorias'] = [
-      {'key':0,'value':'Ninguna'},
-      {'key':1,'value':'Historia1'},
-      {'key':2,'value':'Historia2'},
-      {'key':3,'value':'Historia3'}]
+        x['id']=x['key']
     res['fHistoria_opcionesTiposHistoria'] = [
       {'key':'1','value':'Opcional'},
       {'key':'2','value':'Obligatoria'}]
+        
     #res['fHistoria'] = {'super':0, 
     #   'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
 
@@ -236,10 +242,26 @@ def VHistoria():
             res['fHistoria_opcionesPrioridad'].append(item)
 
     tar=clsTarea(session=sessionDB,engine=engine)
-
+    
     res['data2'] = tar.listarTareasHistoria(int(request.args['idHistoria']))    
          
     session['idHistoria'] = request.args['idHistoria']
+
+    aux=hist.obtenerDatos(int(session['idHistoria']),res['fHistoria_opcionesHistorias'],res['fHistoria_opcionesAcciones'])
+
+    res['fHistoria'] = {
+    'idHistoria':int(session['idHistoria']), 
+    'idPila':(session['idPila']), 
+    'codigo':hist.obtCode(int(session['idHistoria'])),
+    'actores':aux['actores'], 
+    'accion':aux['accion'], 
+    'objetivos':aux['objetivos'], 
+    'tipo':aux['tipo'],
+    'prioridad':aux['prioridad'],
+    'super':aux['super'], }
+
+    print('SHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOW')
+    print(res)
 
     res['idHistoria']     = session['idHistoria']
     print("regresando a ")
@@ -347,7 +369,51 @@ class clsHistoria():
         
         self.engine  = engine
         self.session = session
-     
+
+    def obtenerDatos(self,idHistoria,papas,acciones):
+        res={}
+        result = self.session.query(Historia).filter(Historia.idHistoria == idHistoria)
+        res['objetivos']=[]
+        res['actores']=[]
+
+
+        for row in result:
+            res['super']=0
+            contador=0
+            for i in papas:
+                if row.idHistoriaPadre==i['id']:
+                    res['super']=contador
+                    break
+                else:
+                    contador+=1
+            res['accion']=[]
+            contador=0
+            for i in acciones:
+                if row.idAccion==i['id']:
+                    res['super']+=contador
+                    break
+                else:
+                    contador+=1
+            res['prioridad']=row.prioridad
+            if row.tipo=='Opcional':
+                res['tipo']=1
+            else:
+                res['tipo']=2   
+            break
+
+        result = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
+
+        for row in result:
+            res['objetivos'].append(row.idObjetivo)
+
+        result = self.session.query(ActoresHistoria).filter(ActoresHistoria.idHistoria == idHistoria)
+
+        for row in result:
+            res['actores'].append(row.idActor)
+
+        return res
+
+
     def insertar(self,codigo=None,idProducto=None,idPapa=None,tipo=None,idAccion=None,prioridad=None):
 
         #No nulidad, estas de no nulidad no se requiere, el type() resuelve eso
