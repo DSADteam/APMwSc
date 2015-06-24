@@ -151,15 +151,11 @@ def VCrearHistoria():
         x['key']=x.pop('idObjetivo')
         x['value']=x.pop('descripcion')
     res['fHistoria_opcionesObjetivos'] = aux
-    aux=hist.listarHistoriasprod(int(session['idPila']))
+    aux=hist.listarcodigoHistoriasprod(int(session['idPila']))
     for x in aux:
         x['key']=x.pop('idHistoria')
         x['value']=x.pop('enunciado')
-    res['fHistoria_opcionesHistorias'] = [
-      {'key':0,'value':'Ninguna'},
-      {'key':1,'value':'Historia1'},
-      {'key':2,'value':'Historia2'},
-      {'key':3,'value':'Historia3'}]
+    res['fHistoria_opcionesHistorias'] = aux
     res['fHistoria_opcionesTiposHistoria'] = [
       {'key':'1','value':'Opcional'},
       {'key':'2','value':'Obligatoria'}]
@@ -694,7 +690,20 @@ class clsHistoria():
             pass
 
         return res
+
+    def listarcodigoHistoriasprod(self,idProducto): #Ordenar por prioridad
+                                              #Eliminar verificacion de transversalidad.
         
+        res = []
+       
+        #Revisando escala de producto
+        result = self.session.query(Historia).filter(Historia.idProducto == idProducto)
+        
+        for row in result:
+            res.append({'idHistoria':row.idHistoria,'enunciado':row.codigo})
+
+        return res
+
     def borrarFilas(self):
         
         self.session.query(Historia).delete()
