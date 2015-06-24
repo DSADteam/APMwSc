@@ -222,8 +222,8 @@ def VHistoria():
         x['value']=x.pop('enunciado')
         x['id']=x['key']
     res['fHistoria_opcionesTiposHistoria'] = [
-      {'key':'1','value':'Opcional'},
-      {'key':'2','value':'Obligatoria'}]
+      {'key':1,'value':'Opcional'},
+      {'key':2,'value':'Obligatoria'}]
         
     #res['fHistoria'] = {'super':0, 
     #   'actor':1, 'accion':2, 'objetivo':3, 'tipo':1}
@@ -261,7 +261,7 @@ def VHistoria():
     'super':aux['super'], }
 
     print('SHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOW')
-    print(res)
+    print(res['fHistoria'])
 
     res['idHistoria']     = session['idHistoria']
     print("regresando a ")
@@ -378,28 +378,15 @@ class clsHistoria():
 
 
         for row in result:
-            res['super']=0
-            contador=0
-            for i in papas:
-                if row.idHistoriaPadre==i['id']:
-                    res['super']=contador
-                    break
-                else:
-                    contador+=1
-            res['accion']=[]
-            contador=0
-            for i in acciones:
-                if row.idAccion==i['id']:
-                    res['super']+=contador
-                    break
-                else:
-                    contador+=1
+            res['super']=row.idHistoriaPadre
+            res['accion']=row.idAccion    
+
+
             res['prioridad']=row.prioridad
             if row.tipo=='Opcional':
                 res['tipo']=1
             else:
                 res['tipo']=2   
-            break
 
         result = self.session.query(ObjetivosHistoria).filter(ObjetivosHistoria.idHistoria == idHistoria)
 
