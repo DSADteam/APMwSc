@@ -398,7 +398,7 @@ class clsHistoria():
         if esValido:
             print("la prioridad que yo agrego es ")
             print(prioridad)
-            newHis = Historia(codigo,idProducto,idAccion,tipo,prioridad,idPapa)
+            newHis = Historia(codigo=codigo,idProducto=idProducto,idAccion=idAccion,tipo=tipo,prioridad=prioridad,idHistoriaPadre=idPapa)
             self.session.add(newHis)
             self.session.commit()
             return True

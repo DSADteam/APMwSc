@@ -194,7 +194,7 @@ class Historia(db.Model):
         Constructor de las historias de usuarios
     ''' 
 
-    def __init__(self,codigo, idProducto,idAccion,tipo,peso,prioridad,idHistoriaPadre=None):
+    def __init__(self,codigo, idProducto,idAccion,tipo,prioridad,idHistoriaPadre=None):
         self.codigo      = codigo
         self.idProducto  = idProducto
         self.idAccion    = idAccion
